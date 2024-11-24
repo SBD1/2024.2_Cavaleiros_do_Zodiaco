@@ -12,7 +12,7 @@ Figura 1 - Logo do desenho
 
 Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo professor Mauricio Serrano. Neste projeto, será desenvolvido um jogo MUD onde os conceitos de bancos de dados serão aplicados. Ao fim do projeto, será entregue um jogo funcional inspirado no famoso desenho Cavaleiros do Zodiaco criado pelo Masami Kurumada.
 
-## Entregas
+## 📁 Entregas
 
 - Modulo 1:
 
@@ -24,6 +24,17 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
 
   - [Diagrama de dados]()
 
+## 🎥 Apresentações
+<center>
+
+| Módulo | Link da gravação             | Data       |
+| ------ | --------------------- ------- | ---------- |
+| 1      | [Apresentação Módulo 1]()    | - |
+| 2      | [Apresentação Módulo 2]()    | - |
+| 3      | [Apresentação Módulo 3]()    | - |
+  
+</center>
+  
 ## Membros do grupo
 
 <center>
