@@ -17,7 +17,8 @@ markdown_extensions:
 site_name: Cavaleiros do Zodiaco
 nav:
     - Início: "index.md"
-    
+    - Módulo 1: "modulo01/der.md"
+    - Apresentação: "apresentacao/modulo1.md"
 
 theme:
   name: material
@@ -29,14 +30,14 @@ theme:
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.top
-    - navigation.footer
+
   palette:
 
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: 'indigo'
-      accent: 'amber'
+      primary: 'amber'
+      accent: 'light-blue'
       toggle:
         icon: material/brightness-7
         name: Mudar para o modo escuro
@@ -44,9 +45,11 @@ theme:
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+      primary: 'amber'
+      accent: 'light-blue'
       toggle:
         icon: material/brightness-4
-        name: Mudar para a preferência do sistema
+        name: Mudar para modo claro
 
   language: pt-BR
   
