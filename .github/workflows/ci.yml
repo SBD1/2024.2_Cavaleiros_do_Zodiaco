@@ -2,7 +2,7 @@ name: ci
 on:
   push:
     branches:
-      - gitpages
+      - main
 permissions:
   contents: write
 jobs:
