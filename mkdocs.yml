@@ -1,0 +1,62 @@
+repo_url: https://github.com/SBD1/2024.2_Cavaleiros_do_Zodiaco
+repo_name: 2024.2_Cavaleiros_do_Zodiaco
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+site_name: Cavaleiros do Zodiaco
+nav:
+    - Início: "index.md"
+    - Módulo 1: "modulo01/der.md"
+    - Apresentação: "apresentacao/modulo1.md"
+
+theme:
+  name: material
+  favicon: assets/images/logo1.png
+  logo: assets/images/logo1.png
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+
+  palette:
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: 'amber'
+      accent: 'light-blue'
+      toggle:
+        icon: material/brightness-7
+        name: Mudar para o modo escuro
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: 'amber'
+      accent: 'light-blue'
+      toggle:
+        icon: material/brightness-4
+        name: Mudar para modo claro
+
+  language: pt-BR
+  
+
+
+
+
+extra:
+  version:
+    provider: mike
