@@ -18,6 +18,7 @@ site_name: Cavaleiros do Zodiaco
 nav:
     - Início: "index.md"
     - Módulo 1: 
+      - Modelo Entidade Relacionamento:  "modulo01/mer.md"
       - Diagrama Entidade Relacionamento: "modulo01/der.md"
       - Modelo Lógico: "modulo01/ml.md"
     - Apresentação: "apresentacao/modulo1.md"
