@@ -1,5 +1,5 @@
 ## Introdução
-Segundo Elmasri e Navathe, a modelagem conceituai é uma fase muito importante no projeto de uma aplicação de banco de dados bem-sucedida.
+Segundo Elmasri e Navathe, a modelagem conceitual é uma fase muito importante no projeto de uma aplicação de banco de dados bem-sucedida.
 
 Sob esse viés, o Modelo Entidade-Relacionamento (ER) é um modelo de dados conceitual popular de alto nível em que esse modelo e suas variações costumam ser utilizados para o projeto conceitual de aplicações de banco de dados, e muitas ferramentas de projeto de banco de dados empregam seus conceitos.
 
@@ -36,7 +36,7 @@ _** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
 
 > Diagrama Entidade Relacionamento Stardew Valley. Disponível em: https://github.com/SBD1/2023.2-Grupo01-StardewValley/blob/main/docs/Entrega-01/DER_StardewValley_v1.0.md. Acesso em 24 de novembro de 2024.
 
-> Diagrama Entidade Relacionamento Stardew Valley. Disponível em: https://github.com/SBD1/2023.2_Fear_and_Hunger/blob/main/docs/modulo_01/assets/DERv/DERv2.3.png. Acesso em 24 de novembro de 2024.
+> Diagrama Entidade Relacionamento Fear and Hunger. Disponível em: https://github.com/SBD1/2023.2_Fear_and_Hunger/blob/main/docs/modulo_01/assets/DERv/DERv2.3.png. Acesso em 24 de novembro de 2024.
 
 ## Histórico de versão
 
