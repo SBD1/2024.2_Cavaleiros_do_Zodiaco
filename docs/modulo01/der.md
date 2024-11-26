@@ -28,6 +28,23 @@ _** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
 
 </center>
 
+
+<center>
+
+**Figura 2 - DER Versão 1.1**
+
+<iframe 
+    frameborder="0" 
+    width="100%" 
+    height="600px" 
+    src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=DER%20V1.1#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1gXPT85k_hdsABKSYvHnIu5JwqM4PP0p4%26export%3Ddownload">
+</iframe>
+
+_** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
+
+</center>
+
+
 ## Referência Bibliográfica
 
 > [1] ELMASRI, Ramez; NAVATHE, Shamkant B. Sistemas de banco de dados. Tradução: Daniel Vieira. Revisão técnica: Enzo Seraphim; Thatyana de Faria Piola Seraphim. 6. ed. São Paulo: Pearson Addison Wesley, 2011. Capítulo 7. Modelagem de dados usando o modelo Entidade-Relacionamento (ER), páginas 131 e 146.
