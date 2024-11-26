@@ -21,6 +21,7 @@ nav:
       - Modelo Entidade Relacionamento:  "modulo01/mer.md"
       - Diagrama Entidade Relacionamento: "modulo01/der.md"
       - Modelo Lógico: "modulo01/ml.md"
+      - Dicionário de Dados: "modulo01/dicionario.md"
     - Apresentação: "apresentacao/modulo1.md"
 
 theme:
