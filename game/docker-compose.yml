@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  banco_de_dados:
+    image: postgres:13.2-alpine
+    container_name: banco_de_dados
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  controlador_de_migrations:
+    image: flyway/flyway:latest
+    container_name: controlador_de_migrations
+    depends_on:
+      - banco_de_dados
+    environment:
+      FLYWAY_URL: jdbc:postgresql://banco_de_dados:5432/${POSTGRES_DB}
+      FLYWAY_USER: ${POSTGRES_USER}
+      FLYWAY_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./migrations:/flyway/sql
+    entrypoint: ["flyway", "migrate"]
+
+  aplicacao:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aplicacao
+    volumes:
+      - ./src:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - controlador_de_migrations
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: banco_de_dados 
+      POSTGRES_PORT: 5432
+    command: >
+      python3 /app/main.py
+
+
+
+volumes:
+  postgres_data:
