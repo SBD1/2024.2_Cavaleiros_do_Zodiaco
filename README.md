@@ -34,7 +34,32 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
 | 3      | [Apresentação Módulo 3]()    | - |
   
 </center>
-  
+## Como Rodar o Jogo
+
+1. Certifique-se de que o Docker está instalado e funcionando corretamente.
+
+2. Navegue para o diretório `game`:
+
+   ```
+   cd game
+
+   ```
+
+3. Inicie o ambiente com o Docker:
+
+  ```
+   docker-compose up --build
+  ```
+4. O ambiente irá:
+   - Subir o banco de dados PostgreSQL.
+   - Aplicar as migrações com o Flyway.
+   - Iniciar a aplicação Python com suporte a live reload.
+
+5. Após os containers estarem em execução, a aplicação estará pronta para uso.
+
+Se houver problemas, utilize o comando docker-compose logs para verificar os logs dos containers.
+
+
 ## Membros do grupo
 
 <center>
