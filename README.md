@@ -34,6 +34,7 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
 | 3      | [Apresentação Módulo 3]()    | - |
   
 </center>
+
 ## Como Rodar o Jogo
 
 1. Certifique-se de que o Docker está instalado e funcionando corretamente.
