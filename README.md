@@ -51,14 +51,6 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
   ```
    docker-compose up --build
   ```
-4. O ambiente irá:
-   - Subir o banco de dados PostgreSQL.
-   - Aplicar as migrações com o Flyway.
-   - Iniciar a aplicação Python com suporte a live reload.
-
-5. Após os containers estarem em execução, a aplicação estará pronta para uso.
-
-Se houver problemas, utilize o comando docker-compose logs para verificar os logs dos containers.
 
 
 ## Membros do grupo
