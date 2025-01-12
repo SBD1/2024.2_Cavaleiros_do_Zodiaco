@@ -39,6 +39,21 @@ _** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
 
 </center>
 
+<center>
+
+**Figura 3 - Modelo Lógico Versão 2.0**
+
+<iframe 
+    frameborder="0" 
+    style="width:100%;height:3681px;" 
+    src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=ML%202.0.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1hUV4A207ZG3Q_N4f5JBv5bikWGEmd3as%26export%3Ddownload">
+
+</iframe>
+
+_** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
+
+</center>
+
 
 ## Referência Bibliográfica
 
@@ -55,3 +70,4 @@ _** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
 | Data       | Descrição                       | Autor                                       |
 | ---------- | ------------------------------- | ------------------------------------------- |
 | 24/11/2024 | Versão inicial do Modelo Lógico | [Pedro Lucas](https://github.com/lucasdray) |
+| 12/01/2024 | Versão 2.0 do ML                | [Pedro Lucas](https://github.com/lucasdray) |
