@@ -1,0 +1,24 @@
+CREATE TABLE Cavaleiro (
+    id_cavaleiro INTEGER PRIMARY KEY,
+    id_classe INTEGER NOT NULL,
+    id_elemento INTEGER NOT NULL,
+    nome VARCHAR NOT NULL,
+    nivel INTEGER NOT NULL,
+    hp_max INTEGER NOT NULL,
+    magia_max INTEGER NOT NULL,
+    velocidade_base INTEGER NOT NULL,
+    ataque_fisico_base INTEGER NOT NULL,
+    ataque_magico_base INTEGER NOT NULL
+);
+ 
+
+
+
+ 
+ALTER TABLE Cavaleiro ADD CONSTRAINT FK_Cavaleiro_2
+    FOREIGN KEY (id_classe)
+    REFERENCES Classe (id_classe);
+ 
+ALTER TABLE Cavaleiro ADD CONSTRAINT FK_Cavaleiro_3
+    FOREIGN KEY (id_elemento)
+    REFERENCES Elemento (id_elemento);
