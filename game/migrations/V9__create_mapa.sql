@@ -1,15 +1,15 @@
 CREATE TABLE Santuario (
-    id_santuario INTEGER PRIMARY KEY,
+    id_santuario SERIAL PRIMARY KEY,
     id_missao_requisito INTEGER,
     id_missao_proximo_santuario INTEGER,
-    nome VARCHAR NOT NULL,
+    nome VARCHAR UNIQUE NOT NULL,
     descricao VARCHAR,
     nivel_recomendado INTEGER NOT NULL
 );
  
 CREATE TABLE Casa (
-    id_casa INTEGER PRIMARY KEY,
-    id_santuario INTEGER,
+    id_casa SERIAL PRIMARY KEY,
+    id_santuario INTEGER NOT NULL,
     id_missao_requisito INTEGER,
     id_missao_proxima_casa INTEGER,
     nome VARCHAR NOT NULL,
@@ -18,8 +18,8 @@ CREATE TABLE Casa (
 );
 
 CREATE TABLE Sala (
-    id_sala INTEGER PRIMARY KEY,
-    id_casa INTEGER,
+    id_sala SERIAL PRIMARY KEY,
+    id_casa INTEGER NOT NULL,
     nome VARCHAR NOT NULL,
     id_sala_norte INTEGER,
     id_sala_sul INTEGER,

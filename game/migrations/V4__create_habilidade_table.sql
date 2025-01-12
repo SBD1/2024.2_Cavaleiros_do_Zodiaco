@@ -1,5 +1,5 @@
 CREATE TABLE Habilidade (
-    id_habilidade INTEGER PRIMARY KEY,
+    id_habilidade SERIAL PRIMARY KEY,
     classe_habilidade INTEGER,
     elemento_habilidade INTEGER,
     nome VARCHAR,

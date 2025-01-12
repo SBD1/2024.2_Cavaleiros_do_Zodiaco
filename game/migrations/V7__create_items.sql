@@ -1,5 +1,5 @@
 CREATE TABLE Tipo_Item (
-    id_item INTEGER PRIMARY KEY,
+    id_item SERIAL PRIMARY KEY,
     tipo_item INTEGER NOT NULL
 );
 
@@ -20,22 +20,22 @@ CREATE TABLE Armadura (
  
 CREATE TABLE Material (
     id_material INTEGER PRIMARY KEY,
-    nome VARCHAR,
-    preco_venda INTEGER,
+    nome VARCHAR UNIQUE NOT NULL,
+    preco_venda INTEGER NOT NULL,
     descricao VARCHAR
 );
  
 CREATE TABLE Item_Missao (
     id_item INTEGER PRIMARY KEY,
-    nome VARCHAR,
+    nome VARCHAR UNIQUE NOT NULL,
     descricao VARCHAR
 );
  
 CREATE TABLE Consumivel (
     id_item INTEGER PRIMARY KEY,
-    nome VARCHAR,
+    nome VARCHAR UNIQUE NOT NULL,
     descricao VARCHAR,
-    preco_venda INTEGER,
+    preco_venda INTEGER NOT NULL,
     saude_restaurada INTEGER,
     magia_restaurada INTEGER,
     saude_maxima INTEGER,
@@ -45,9 +45,9 @@ CREATE TABLE Consumivel (
 CREATE TABLE Livro (
     id_item INTEGER PRIMARY KEY,
     id_habilidade INTEGER,
-    nome VARCHAR,
+    nome VARCHAR UNIQUE NOT NULL,
     descricao VARCHAR,
-    preco_venda INTEGER
+    preco_venda INTEGER NOT NULL
 );
 
 ALTER TABLE Armadura ADD CONSTRAINT FK_Armadura_2

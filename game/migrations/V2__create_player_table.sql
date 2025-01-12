@@ -1,17 +1,17 @@
 CREATE TABLE Player (
-    id_player INTEGER PRIMARY KEY,
+    id_player SERIAL PRIMARY KEY,
     id_elemento INTEGER,
-    nome VARCHAR UNIQUE,
-    nivel INTEGER,
-    xp_acumulado INTEGER,
-    hp_max INTEGER,
-    magia_max INTEGER,
-    hp_atual INTEGER,
-    magia_atual INTEGER,
-    velocidade INTEGER,
-    ataque_fisico_base INTEGER,
-    ataque_magico_base INTEGER,
-    id_sala_safe INTEGER
+    nome VARCHAR UNIQUE NOT NULL,
+    nivel INTEGER NOT NULL,
+    xp_acumulado INTEGER NOT NULL,
+    hp_max INTEGER NOT NULL,
+    magia_max INTEGER NOT NULL,
+    hp_atual INTEGER NOT NULL,
+    magia_atual INTEGER NOT NULL,
+    velocidade INTEGER NOT NULL,
+    ataque_fisico_base INTEGER NOT NULL,
+    ataque_magico_base INTEGER NOT NULL,
+    id_sala_safe INTEGER NOT NULL
 );
  
 ALTER TABLE Player ADD CONSTRAINT FK_Player_2

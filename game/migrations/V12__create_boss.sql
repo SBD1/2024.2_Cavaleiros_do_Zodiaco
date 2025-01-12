@@ -1,5 +1,5 @@
 CREATE TABLE Boss (
-    id_boss INTEGER PRIMARY KEY,
+    id_boss SERIAL PRIMARY KEY,
     id_sala INTEGER NOT NULL,
     nome INTEGER NOT NULL,
     nivel INTEGER NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE Boss (
     velocidade INTEGER NOT NULL,
     ataque_fisico_base INTEGER NOT NULL,
     ataque_magico_base INTEGER NOT NULL,
-    dinheiro INTEGER,
+    dinheiro INTEGER NOT NULL,
     fala_inicio VARCHAR,
     fala_derrotar_player VARCHAR,
     fala_derrotado VARCHAR,

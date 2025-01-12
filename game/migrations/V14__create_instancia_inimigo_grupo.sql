@@ -1,12 +1,12 @@
 CREATE TABLE Grupo_inimigo (
-    id_grupo INTEGER PRIMARY KEY,
+    id_grupo SERIAL PRIMARY KEY,
     id_sala INTEGER
 );
  
 
 CREATE TABLE Instancia_Inimigo (
+    id_instancia SERIAL,
     id_inimigo INTEGER,
-    id_instancia INTEGER,
     id_grupo INTEGER,
     hp_atual INTEGER NOT NULL,
     magia_atual INTEGER NOT NULL,

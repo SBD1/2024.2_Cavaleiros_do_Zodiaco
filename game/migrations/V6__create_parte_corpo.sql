@@ -6,7 +6,7 @@ CREATE TYPE enum_parte_corpo as ENUM ('c', 't', 'b', 'p'); /* c = cabeça, t = t
 
 CREATE TABLE Parte_Corpo (
     id_parte_corpo enum_parte_corpo PRIMARY KEY,
-    nome VARCHAR NOT NULL,
+    nome VARCHAR UNIQUE NOT NULL,
     defesa_magica INTEGER NOT NULL,
     defesa_fisica INTEGER NOT NULL,
     chance_acerto INTEGER NOT NULL,

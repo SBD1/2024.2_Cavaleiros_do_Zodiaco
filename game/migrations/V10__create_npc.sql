@@ -25,7 +25,7 @@ CREATE TABLE Npc_Mercador (
     id_npc_mercador INTEGER PRIMARY KEY,
     id_sala INTEGER NOT NULL,
     nome VARCHAR NOT NULL,
-    descricao INTEGER,
+    descricao VARCHAR,
     dialogo_inicial VARCHAR,
     dialogo_vender VARCHAR,
     dialogo_comprar VARCHAR,

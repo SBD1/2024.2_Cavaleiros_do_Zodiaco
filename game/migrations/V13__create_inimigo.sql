@@ -1,5 +1,5 @@
 CREATE TABLE Inimigo (
-    id_inimigo INTEGER PRIMARY KEY,
+    id_inimigo SERIAL PRIMARY KEY,
     id_classe INTEGER NOT NULL,
     id_elemento INTEGER NOT NULL,
     nome VARCHAR NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE Inimigo (
     velocidade INTEGER NOT NULL,
     ataque_fisico_base INTEGER NOT NULL,
     ataque_magico_base INTEGER NOT NULL,
-    dinheiro INTEGER,
+    dinheiro INTEGER NOT NULL,
     fala_inicio VARCHAR
 );
  
