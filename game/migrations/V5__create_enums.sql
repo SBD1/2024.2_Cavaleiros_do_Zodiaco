@@ -1,0 +1,2 @@
+CREATE TYPE tipo_item as ENUM ('a', 'm', 'i', 'c', 'l'); /* a = armadura, m = material, i = item_missao, c = consumivel, l = livro */
+CREATE TYPE parte_corpo as ENUM ('c', 't', 'b', 'p'); /* c = cabeça, t = tronco, b = braços, p = pernas */
