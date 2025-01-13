@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 from rich.console import Console
 from pyfiglet import Figlet
 
+# Variável global para armazenar o ID do jogador selecionado
+selected_player_id = None
+
 # Carregar as variáveis do .env
 load_dotenv(dotenv_path="../.env")
 
@@ -23,9 +26,8 @@ def get_db_connection():
 
 def get_player_status(player_id):
     """Executa a função 'get_player_info' no PostgreSQL para obter o status do jogador."""
-    connection = None  # Inicializa a variável como None
+    connection = None
     try:
-        # Conexão com o banco de dados (substitua pelos seus dados fixos)
         connection = psycopg2.connect(
             dbname="cdz",
             user="user",
@@ -33,9 +35,7 @@ def get_player_status(player_id):
             host="localhost",
             port="5432"
         )
-
         with connection.cursor() as cursor:
-            # Chama a função 'get_player_info' no PostgreSQL
             cursor.execute("SELECT get_player_info(%s);", (player_id,))
             result = cursor.fetchone()
 
@@ -43,15 +43,12 @@ def get_player_status(player_id):
                 return result[0]  # Retorna a string formatada
             else:
                 return "Jogador não encontrado."
-
     except Exception as e:
         print(f"Erro ao executar consulta: {e}")
         return None
     finally:
-        # Fecha a conexão apenas se ela foi aberta
         if connection is not None:
             connection.close()
-
 
 def fetch_one(query, params=()):
     """Executa uma consulta SQL que retorna um único resultado."""
@@ -68,31 +65,265 @@ def fetch_one(query, params=()):
     finally:
         connection.close()
 
+def listar_jogadores():
+    """Chama a função 'listar_jogadores_formatados' no PostgreSQL e retorna os jogadores como string formatada."""
+    connection = None
+    try:
+        connection = psycopg2.connect(
+            dbname="cdz",
+            user="user",
+            password="password",
+            host="localhost",
+            port="5432"
+        )
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT listar_jogadores_formatados();")
+            resultado = cursor.fetchone()
 
-def exibir_logo(console):
-    """Exibe o logo do jogo buscando do banco de dados."""
-    query = "SELECT texto FROM Texto WHERE nome_texto = %s"
-    params = ("logo",)
-    
-    resultado = fetch_one(query, params)
-    if resultado:
-        logo = resultado[0]
-        console.print(logo)
-    else:
-        console.print("[bold red]Logo não encontrado no banco de dados.[/bold red]")
+            if resultado and resultado[0]:
+                print("\n=== Jogadores Disponíveis ===")
+                print(resultado[0])  # Exibe a string formatada
+            else:
+                print("Nenhum jogador disponível.")
+    except Exception as e:
+        print(f"Erro ao listar jogadores: {e}")
+    finally:
+        if connection:
+            connection.close()
 
+def selecionar_jogador_e_mostrar_status():
+    """Permite ao usuário selecionar um jogador pelo nome e exibe o status."""
+    global selected_player_id  # Usar a variável global
+    listar_jogadores()
+
+    nome_jogador = input("\nDigite o nome do jogador que deseja selecionar: ").strip()
+
+    connection = None
+    try:
+        connection = psycopg2.connect(
+            dbname="cdz",
+            user="user",
+            password="password",
+            host="localhost",
+            port="5432"
+        )
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT id_player FROM player WHERE nome = %s;", (nome_jogador,))
+            resultado = cursor.fetchone()
+
+            if resultado:
+                selected_player_id = resultado[0]  # Salva o ID na variável global
+                print(f"\nJogador '{nome_jogador}' selecionado com sucesso!")
+                status = get_player_status(selected_player_id)
+                if status:
+                    print("\n=== Status do Jogador Selecionado ===")
+                    print(status)
+                else:
+                    print("Não foi possível recuperar o status do jogador.")
+            else:
+                print(f"Jogador '{nome_jogador}' não encontrado.")
+    except Exception as e:
+        print(f"Erro ao selecionar jogador: {e}")
+    finally:
+        if connection:
+            connection.close()
 
 def exibir_introducao(console):
-    """Exibe a introdução do jogo buscando do banco de dados."""
-    query = "SELECT texto FROM Texto WHERE nome_texto = %s"
-    params = ("introducao",)
+    """Exibe o texto da introdução do jogo buscando no banco de dados."""
+    connection = None
+    try:
+        connection = psycopg2.connect(
+            dbname="cdz",
+            user="user",
+            password="password",
+            host="localhost",
+            port="5432"
+        )
+        with connection.cursor() as cursor:
+            # Consulta o texto com nome_texto = 'introducao'
+            cursor.execute("SELECT texto FROM public.texto WHERE nome_texto = %s;", ('introducao',))
+            resultado = cursor.fetchone()
+
+            if resultado and resultado[0]:
+                introducao = resultado[0]
+                console.print(introducao, style="bold")
+            else:
+                console.print("[bold red]Introdução não encontrada no banco de dados.[/bold red]")
+    except Exception as e:
+        console.print(f"[bold red]Erro ao buscar introdução: {e}[/bold red]")
+    finally:
+        if connection:
+            connection.close()
+
+def mostrar_menu_acoes(console):
+    """Exibe o menu de ações disponíveis para o jogador."""
+    while True:
+        console.print("\n[bold cyan]Menu de Ações:[/bold cyan]")
+        console.print("1. Ver Mapa (Salas Disponíveis)")
+        console.print("2. Ver Sala Atual")
+        console.print("3. Mudar de Sala")
+        console.print("4. Sair do Menu de Ações")
+
+        escolha = input("Escolha uma ação: ").strip()
+
+        if escolha == "1":
+            ver_salas_disponiveis(console)
+        elif escolha == "2":
+            ver_sala_atual(console)
+        elif escolha == "3":
+            mudar_de_sala(console)
+        elif escolha == "4":
+            console.print("[bold green]Saindo do Menu de Ações...[/bold green]")
+            break
+        else:
+            console.print("[bold red]Opção inválida. Tente novamente.[/bold red]")
+
+
+def ver_salas_disponiveis(console):
+    """Mostra as salas conectadas disponíveis para o jogador."""
+    global selected_player_id
+    if selected_player_id is None:
+        console.print("[bold red]Nenhum jogador foi selecionado![/bold red]")
+        return
+
+    connection = None
+    try:
+        connection = psycopg2.connect(
+            dbname="cdz",
+            user="user",
+            password="password",
+            host="localhost",
+            port="5432"
+        )
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM get_salas_conectadas(%s);", (selected_player_id,))
+            salas = cursor.fetchall()
+
+            if salas:
+                console.print("\n[bold cyan]Salas Disponíveis:[/bold cyan]")
+                for sala in salas:
+                    console.print(f"Opção Sala: {sala[0]}, Nome: {sala[1]}")
+            else:
+                console.print("[bold yellow]Nenhuma sala conectada disponível.[/bold yellow]")
+    except Exception as e:
+        console.print(f"[bold red]Erro ao buscar salas disponíveis: {e}[/bold red]")
+    finally:
+        if connection:
+            connection.close()
+
+def mudar_de_sala(console):
+    """Permite ao jogador mudar de sala."""
+    global selected_player_id
+    if selected_player_id is None:
+        console.print("[bold red]Nenhum jogador foi selecionado![/bold red]")
+        return
+
+    ver_salas_disponiveis(console)
+    id_sala = input("\nDigite o ID da sala para a qual deseja se mover: ").strip()
+
+    # Converta o ID da sala para inteiro
+    try:
+        id_sala = int(id_sala)
+    except ValueError:
+        console.print("[bold red]O ID da sala deve ser um número válido![/bold red]")
+        return
+
+    connection = None
+    try:
+        connection = psycopg2.connect(
+            dbname="cdz",
+            user="user",
+            password="password",
+            host="localhost",
+            port="5432"
+        )
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT setar_nova_sala(%s, %s);", (selected_player_id, id_sala))
+            connection.commit()  # Confirma a transação
+
+            # Buscar o nome da sala para o feedback
+            nome_sala = get_nome_sala(id_sala)
+            if nome_sala:
+                console.print(f"[bold green]Movido para a sala '{nome_sala}' com sucesso![/bold green]")
+            else:
+                console.print("[bold yellow]Movido para a sala, mas o nome não foi encontrado.[/bold yellow]")
+    except Exception as e:
+        console.print(f"[bold red]Erro ao mudar de sala: {e}[/bold red]")
+    finally:
+        if connection:
+            connection.close()
+            
+def get_nome_sala(id_sala):
+    """Retorna o nome da sala com base no ID."""
+    connection = None
+    try:
+        connection = psycopg2.connect(
+            dbname="cdz",
+            user="user",
+            password="password",
+            host="localhost",
+            port="5432"
+        )
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT get_nome_sala(%s);", (id_sala,))
+            resultado = cursor.fetchone()
+
+            if resultado and resultado[0]:
+                return resultado[0]  # Retorna o nome da sala
+            else:
+                return None
+    except Exception as e:
+        print(f"Erro ao buscar o nome da sala: {e}")
+        return None
+    finally:
+        if connection:
+            connection.close()
+
+def ver_sala_atual(console):
+    """Exibe a sala atual do jogador."""
+    global selected_player_id
+    if selected_player_id is None:
+        console.print("[bold red]Nenhum jogador foi selecionado![/bold red]")
+        return
+
+    connection = None
+    try:
+        connection = psycopg2.connect(
+            dbname="cdz",
+            user="user",
+            password="password",
+            host="localhost",
+            port="5432"
+        )
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT get_sala_atual(%s);", (selected_player_id,))
+            resultado = cursor.fetchone()
+
+            if resultado and resultado[0]:
+                console.print("\n[bold cyan]Sala Atual:[/bold cyan]")
+                console.print(resultado[0], style="bold")
+            else:
+                console.print("[bold yellow]Sala atual não encontrada para o jogador selecionado.[/bold yellow]")
+    except Exception as e:
+        console.print(f"[bold red]Erro ao buscar a sala atual: {e}[/bold red]")
+    finally:
+        if connection:
+            connection.close()
+
+
+def iniciar_jogo(console):
+    """Inicia o jogo com o jogador selecionado."""
+    global selected_player_id  # Acessa a variável global
+    if selected_player_id is None:
+        console.print("\n[bold red]Nenhum jogador foi selecionado! Por favor, selecione um jogador primeiro.[/bold red]")
+        return
+
+    # Exibe a introdução antes de começar o jogo
+    exibir_introducao(console)
+
+    # Mostra o menu de ações
+    mostrar_menu_acoes(console)
     
-    resultado = fetch_one(query, params)
-    if resultado:
-        introducao = resultado[0]
-        console.print(introducao)
-    else:
-        console.print("[bold red]Introdução não encontrada no banco de dados.[/bold red]")
 
 def run():
     """Menu principal do jogo."""
@@ -101,63 +332,29 @@ def run():
         print("1. Adicionar Novo Jogador")
         print("2. Listar Jogadores")
         print("3. Selecionar Jogador e Mostrar Status")
+        print("4. Iniciar Jogo")
         print("5. Sair")
 
         escolha = input("Escolha uma opção: ").strip()
-        
-        if escolha == "3":
-            # Exibe o status do jogador com ID 1
-            player_id = 1
-            status = get_player_status(player_id)
-            if status:
-                print("\n=== Status do Jogador ===")
-                print(status)
-            else:
-                print("\n[ERRO] Não foi possível recuperar o status do jogador.")
+
+        if escolha == "2":
+            listar_jogadores()
+        elif escolha == "3":
+            selecionar_jogador_e_mostrar_status()
+        elif escolha == "4":
+            console = Console()
+            iniciar_jogo(console)
         elif escolha == "5":
             print("Saindo do jogo...")
             break
         else:
             print("Opção inválida. Tente novamente.")
 
-
-def get_player_info(player_id):
-    """Chama a stored procedure para recuperar informações do jogador formatadas como string."""
-    try:
-        # Configuração da conexão (fixa, conforme sua preferência)
-        connection = psycopg2.connect(
-            dbname="cdz",
-            user="user",
-            password="password",
-            host="postgres",
-            port="5432"
-        )
-
-        with connection.cursor() as cursor:
-            # Chamar a stored procedure
-            cursor.execute("SELECT get_player_info(%s);", (player_id,))
-            result = cursor.fetchone()
-
-            if result and result[0]:
-                return result[0]  # Retorna a string formatada
-            else:
-                return "Jogador não encontrado."
-
-    except Exception as e:
-        print(f"Erro ao executar consulta: {e}")
-        return None
-    finally:
-        if connection:
-            connection.close()
-
 def main():
     console = Console()
     figlet = Figlet(font="slant")
     console.print(figlet.renderText("Cavaleiros do Zodiaco"), style="bold cyan")
     run()
-    exibir_logo(console)
-    exibir_introducao(console)
-
 
 if __name__ == "__main__":
     main()
