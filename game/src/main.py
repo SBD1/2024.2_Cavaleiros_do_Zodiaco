@@ -3,6 +3,8 @@ import os
 from dotenv import load_dotenv
 from rich.console import Console
 from pyfiglet import Figlet
+from termcolor import colored
+
 
 # Variável global para armazenar o ID do jogador selecionado
 selected_player_id = None
@@ -324,7 +326,20 @@ def iniciar_jogo(console):
     # Mostra o menu de ações
     mostrar_menu_acoes(console)
     
+def logo_print():
+    figlet = Figlet(font='slant')
+    text = "Cavaleiros do Zodiaco"
+    ascii_art = figlet.renderText(text)
 
+    # Alterna as cores vermelho e amarelo
+    colored_ascii_art = ''.join(
+        colored(char, 'red') if i % 2 == 0 else colored(char, 'yellow')
+        for i, char in enumerate(ascii_art)
+    )
+
+    print(colored_ascii_art)
+
+        
 def run():
     """Menu principal do jogo."""
     while True:
@@ -351,9 +366,7 @@ def run():
             print("Opção inválida. Tente novamente.")
 
 def main():
-    console = Console()
-    figlet = Figlet(font="slant")
-    console.print(figlet.renderText("Cavaleiros do Zodiaco"), style="bold cyan")
+    logo_print()
     run()
 
 if __name__ == "__main__":
