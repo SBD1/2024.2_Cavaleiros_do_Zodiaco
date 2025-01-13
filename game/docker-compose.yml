@@ -12,6 +12,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "user"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
 
   controlador_de_migrations:
     image: flyway/flyway:latest
@@ -25,28 +30,6 @@ services:
     volumes:
       - ./migrations:/flyway/sql
     entrypoint: ["flyway", "migrate"]
-
-  aplicacao:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: aplicacao
-    volumes:
-      - ./src:/app
-    ports:
-      - "8000:8000"
-    depends_on:
-      - controlador_de_migrations
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST: banco_de_dados 
-      POSTGRES_PORT: 5432
-    command: >
-      python3 /app/main.py
-
-
 
 volumes:
   postgres_data:

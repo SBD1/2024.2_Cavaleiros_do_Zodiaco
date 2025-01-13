@@ -1,3 +1,5 @@
 psycopg2-binary
 watchdog
 rich
+pyfiglet
+python-dotenv
