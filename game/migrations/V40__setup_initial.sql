@@ -72,33 +72,36 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION get_player_info(player_id INT)
-RETURNS TEXT AS $$
+CREATE OR REPLACE FUNCTION public.get_player_info(player_id integer)
+RETURNS text
+LANGUAGE plpgsql
+AS $function$
 BEGIN
     RETURN (
         SELECT STRING_AGG(
             FORMAT(
-                'Nome: %s\nNível: %s\nXP Acumulado: %s\nHP Máximo: %s\nMagia Máxima: %s\nHP Atual: %s\nMagia Atual: %s\nVelocidade: %s\nAtaque Físico Base: %s\nAtaque Mágico Base: %s\nElemento: %s\n',
-                p.nome,
-                p.nivel,
-                p.xp_acumulado,
-                p.hp_max,
-                p.magia_max,
-                p.hp_atual,
-                p.magia_atual,
-                p.velocidade,
-                p.ataque_fisico_base,
-                p.ataque_magico_base,
+                'Nome: %s %sNível: %s%sXP Acumulado: %s%sHP Máximo: %s%sMagia Máxima: %s%sHP Atual: %s%sMagia Atual: %s%sVelocidade: %s%sAtaque Físico Base: %s%sAtaque Mágico Base: %s%sElemento: %s',
+                p.nome, E'\n',
+                p.nivel, E'\n',
+                p.xp_acumulado, E'\n',
+                p.hp_max, E'\n',
+                p.magia_max, E'\n',
+                p.hp_atual, E'\n',
+                p.magia_atual, E'\n',
+                p.velocidade, E'\n',
+                p.ataque_fisico_base, E'\n',
+                p.ataque_magico_base, E'\n',
                 e.nome
             ),
-            ''
+            E'\n'  -- Delimitador entre os registros (caso haja mais de um)
         )
         FROM player p
         INNER JOIN elemento e ON e.id_elemento = p.id_elemento
         WHERE p.id_player = player_id
     );
 END;
-$$ LANGUAGE plpgsql;
+$function$;
+
 
 CREATE OR REPLACE FUNCTION listar_jogadores_formatados()
 RETURNS TEXT AS $$
@@ -106,12 +109,12 @@ BEGIN
     RETURN (
         SELECT STRING_AGG(
             FORMAT(
-                'Nome: %s\nNível: %s\nElemento: %s\n',
+                'Nome: %s Nível: %s Elemento: %s ',
                 p.nome,
                 p.nivel,
                 e.nome
             ),
-            '\n'  -- Delimitador entre as entradas
+            E'\n'  -- Delimitador entre as entradas
         )
         FROM 
             player p
