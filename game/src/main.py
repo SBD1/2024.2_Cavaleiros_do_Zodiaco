@@ -99,7 +99,7 @@ def selecionar_jogador_e_mostrar_status():
     listar_jogadores()
 
     nome_jogador = input("\nDigite o nome do jogador que deseja selecionar: ").strip()
-
+    limpar_terminal()
     connection = None
     try:
         connection = psycopg2.connect(
@@ -120,6 +120,7 @@ def selecionar_jogador_e_mostrar_status():
                 if status:
                     print("\n=== Status do Jogador Selecionado ===")
                     print(status)
+                    print("=====================================\n")
                 else:
                     print("Não foi possível recuperar o status do jogador.")
             else:
@@ -166,8 +167,9 @@ def mostrar_menu_acoes(console):
         console.print("3. Mudar de Sala")
         console.print("4. Sair do Menu de Ações")
 
-        escolha = input("Escolha uma ação: ").strip()
-
+        console.print("\n [bold blue] Escolha uma ação: [/bold blue]", end="")
+        escolha = input().strip()
+        
         if escolha == "1":
             ver_salas_disponiveis(console)
         elif escolha == "2":
@@ -175,7 +177,9 @@ def mostrar_menu_acoes(console):
         elif escolha == "3":
             mudar_de_sala(console)
         elif escolha == "4":
-            console.print("[bold green]Saindo do Menu de Ações...[/bold green]")
+            console.print("\n[bold blue]Saindo do Menu de Ações...[/bold blue]")
+            console.print("\n[bold green]Pressione ENTER para continuar...[/bold green]")
+            input()
             break
         else:
             console.print("[bold red]Opção inválida. Tente novamente.[/bold red]")
@@ -186,6 +190,7 @@ def ver_salas_disponiveis(console):
     global selected_player_id
     if selected_player_id is None:
         console.print("[bold red]Nenhum jogador foi selecionado![/bold red]")
+        
         return
 
     connection = None
@@ -225,35 +230,35 @@ def mudar_de_sala(console):
 
     # Converta o ID da sala para inteiro
     try:
-        id_sala = int(id_sala)
+        try:
+            connection = psycopg2.connect(
+                dbname="cdz",
+                user="user",
+                password="password",
+                host="localhost",
+                port="5432"
+            )
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT mover_party(%s, %s);", (selected_player_id, id_sala))
+                connection.commit()  # Confirma a transação
+
+                # Buscar o nome da sala para o feedback
+                nome_sala = get_nome_sala(id_sala)
+                if nome_sala:
+                    console.print(f"[bold green]Movido para a sala '{nome_sala}' com sucesso![/bold green]")
+                else:
+                    console.print("[bold yellow]Movido para a sala, mas o nome não foi encontrado.[/bold yellow]")
+        except Exception as e:
+            console.print(f"[bold red]Erro ao mudar de sala: {e}[/bold red]")
+        finally:
+            if connection:
+                connection.close()
     except ValueError:
         console.print("[bold red]O ID da sala deve ser um número válido![/bold red]")
         return
 
     connection = None
-    try:
-        connection = psycopg2.connect(
-            dbname="cdz",
-            user="user",
-            password="password",
-            host="localhost",
-            port="5432"
-        )
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT setar_nova_sala(%s, %s);", (selected_player_id, id_sala))
-            connection.commit()  # Confirma a transação
-
-            # Buscar o nome da sala para o feedback
-            nome_sala = get_nome_sala(id_sala)
-            if nome_sala:
-                console.print(f"[bold green]Movido para a sala '{nome_sala}' com sucesso![/bold green]")
-            else:
-                console.print("[bold yellow]Movido para a sala, mas o nome não foi encontrado.[/bold yellow]")
-    except Exception as e:
-        console.print(f"[bold red]Erro ao mudar de sala: {e}[/bold red]")
-    finally:
-        if connection:
-            connection.close()
+    
             
 def get_nome_sala(id_sala):
     """Retorna o nome da sala com base no ID."""
@@ -318,6 +323,8 @@ def iniciar_jogo(console):
     global selected_player_id  # Acessa a variável global
     if selected_player_id is None:
         console.print("\n[bold red]Nenhum jogador foi selecionado! Por favor, selecione um jogador primeiro.[/bold red]")
+        console.print("\n[bold green]Pressione ENTER para continuar...[/bold green]")
+        input()
         return
 
     # Exibe a introdução antes de começar o jogo
@@ -339,10 +346,16 @@ def logo_print():
 
     print(colored_ascii_art)
 
-        
+def limpar_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    logo_print()
+
+
 def run():
     """Menu principal do jogo."""
     while True:
+        console = Console()
+        limpar_terminal()
         print("\nMenu:")
         print("1. Adicionar Novo Jogador")
         print("2. Listar Jogadores")
@@ -351,13 +364,21 @@ def run():
         print("5. Sair")
 
         escolha = input("Escolha uma opção: ").strip()
-
-        if escolha == "2":
+        if escolha == "1":
+            limpar_terminal()
+            console.print("[bold red]Não é possivel no momento[/bold red]")
+            console.print("[bold green]Pressione ENTER para continuar...[/bold green]")
+            input()
+        elif escolha == "2":
             listar_jogadores()
+            console.print("[bold green]Pressione ENTER para continuar...[/bold green]")
+            input()
         elif escolha == "3":
             selecionar_jogador_e_mostrar_status()
+            console.print("[bold green]Pressione ENTER para continuar...[/bold green]")
+            input()
         elif escolha == "4":
-            console = Console()
+            limpar_terminal()
             iniciar_jogo(console)
         elif escolha == "5":
             print("Saindo do jogo...")
@@ -366,7 +387,6 @@ def run():
             print("Opção inválida. Tente novamente.")
 
 def main():
-    logo_print()
     run()
 
 if __name__ == "__main__":
