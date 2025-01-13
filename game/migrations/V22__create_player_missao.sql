@@ -1,5 +1,3 @@
-
-CREATE TYPE enum_status_missao as ENUM ('c','i','ni'); /* c = completo, i=iniciado,ni=não iniciado*/
 CREATE TABLE Player_Missao (
     id_player INTEGER,
     id_missao INTEGER,
