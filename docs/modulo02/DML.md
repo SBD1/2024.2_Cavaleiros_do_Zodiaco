@@ -5,6 +5,7 @@
 | Versão | Data | Modificação | Autor |
 | --- | --- | --- | --- |
 | 0.1 | 11/12/2023 | Criação do Documento | Vinícius Rufino |
+| 1.0 | 11/12/2023 | Finalização do documento | [Lucas Avelar](https://github.com/LucasAvelar2711) |
 
 ```sql
 ALTER TABLE santuario RENAME TO saga;
