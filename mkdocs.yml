@@ -26,7 +26,9 @@ nav:
       - Data Definition Language: "modulo02/DDL.md"
       - Data Manipulation Language: "modulo02/DML.md"
       - Data Query Language: "modulo02/DQL.md"
-    - Apresentação: "apresentacao/modulo1.md"
+    - Apresentação: 
+      - Modulo 01: "apresentacao/modulo1.md"
+      - Modulo 02: "apresentacao/modulo2.md"
 
 theme:
   name: material
