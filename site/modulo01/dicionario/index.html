@@ -1,0 +1,3791 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ml/">
+      
+      
+        <link rel="next" href="../../modulo02/DDL/">
+      
+      
+      <link rel="icon" href="../../assets/images/logo1.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>Dicionário de Dados - Cavaleiros do Zodiaco</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dicionario-de-dados" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Cavaleiros do Zodiaco" class="md-header__button md-logo" aria-label="Cavaleiros do Zodiaco" data-md-component="logo">
+      
+  <img src="../../assets/images/logo1.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Cavaleiros do Zodiaco
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dicionário de Dados
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="light-blue"  aria-label="Mudar para o modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Mudar para o modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="light-blue"  aria-label="Mudar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/SBD1/2024.2_Cavaleiros_do_Zodiaco" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    2024.2_Cavaleiros_do_Zodiaco
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../mer/" class="md-tabs__link">
+          
+  
+  Módulo 1
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../modulo02/DDL/" class="md-tabs__link">
+          
+  
+  Módulo 2
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../apresentacao/modulo1/" class="md-tabs__link">
+        
+  
+    
+  
+  Apresentação
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Cavaleiros do Zodiaco" class="md-nav__button md-logo" aria-label="Cavaleiros do Zodiaco" data-md-component="logo">
+      
+  <img src="../../assets/images/logo1.png" alt="logo">
+
+    </a>
+    Cavaleiros do Zodiaco
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/SBD1/2024.2_Cavaleiros_do_Zodiaco" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    2024.2_Cavaleiros_do_Zodiaco
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Início
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Módulo 1
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Módulo 1
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Modelo Entidade Relacionamento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../der/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Diagrama Entidade Relacionamento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Modelo Lógico
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Dicionário de Dados
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Dicionário de Dados
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tabelas-e-relacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabelas e Relações
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tabelas e Relações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tabela-npc_ferreiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Npc_Ferreiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-npc_quest" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Npc_Quest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-npc_mercador" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Npc_Mercador
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tabela-cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Cavaleiro
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tabela: Cavaleiro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tabela-boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Boss
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-grupo_inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Grupo_inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-instancia_inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Instancia_Inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-inventario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Inventario
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-armadura_instancia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Armadura_Instancia
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-item_a_venda" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Item_a_venda
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-party" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Party
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-instancia_cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Instancia_Cavaleiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-elemento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Elemento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-progresso_player" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Progresso_Player
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-receita" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Receita
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-player_missao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Player_Missao
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-xp_necessaria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Xp_Necessaria
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-material_receita" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Material_Receita
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-habilidade_player" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Habilidade_Player
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-habilidade_cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Habilidade_Cavaleiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-habilidade_boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Habilidade_Boss
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-parte_corpo_boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Parte_Corpo_Boss
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-parte_corpo_cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Parte_Corpo_Cavaleiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-player" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Player
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-parte_corpo_player" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Parte_Corpo_Player
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-elemento_boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Elemento_Boss
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-habilidade_inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Habilidade_Inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-item_armazenado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Item_Armazenado
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-item_grupo_inimigo_dropa" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Item_grupo_inimigo_dropa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-classe" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Classe
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-habilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Habilidade
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-tipo_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Tipo_Item
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-armadura" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Armadura
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-material" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Material
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-item_missao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Item_Missao
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-consumivel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Consumivel
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-livro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Livro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-missao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Missao
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-santuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Santuario
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-casa" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Casa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-sala" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Sala
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relacionamentos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relacionamentos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Relacionamentos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tipo-tipo_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tipo: tipo_item
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipo-parte_corpo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tipo: parte_corpo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipo-enum_tipo_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tipo: enum_tipo_item
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipo-enum_parte_corpo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tipo: enum_parte_corpo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Módulo 2
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Módulo 2
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modulo02/DDL/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Definition Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modulo02/DML/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Manipulation Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modulo02/DQL/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Query Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../apresentacao/modulo1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Apresentação
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tabelas-e-relacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabelas e Relações
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tabelas e Relações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tabela-npc_ferreiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Npc_Ferreiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-npc_quest" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Npc_Quest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-npc_mercador" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Npc_Mercador
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tabela-cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Cavaleiro
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tabela: Cavaleiro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tabela-boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Boss
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-grupo_inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Grupo_inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-instancia_inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Instancia_Inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-inventario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Inventario
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-armadura_instancia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Armadura_Instancia
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-item_a_venda" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Item_a_venda
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-party" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Party
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-instancia_cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Instancia_Cavaleiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-elemento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Elemento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-progresso_player" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Progresso_Player
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-receita" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Receita
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-player_missao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Player_Missao
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-xp_necessaria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Xp_Necessaria
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-material_receita" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Material_Receita
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-habilidade_player" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Habilidade_Player
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-habilidade_cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Habilidade_Cavaleiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-habilidade_boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Habilidade_Boss
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-parte_corpo_boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Parte_Corpo_Boss
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-parte_corpo_cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Parte_Corpo_Cavaleiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-player" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Player
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-parte_corpo_player" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Parte_Corpo_Player
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-elemento_boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Elemento_Boss
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-habilidade_inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Habilidade_Inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-item_armazenado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Item_Armazenado
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-item_grupo_inimigo_dropa" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Item_grupo_inimigo_dropa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-classe" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Classe
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-habilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Habilidade
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-tipo_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Tipo_Item
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-armadura" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Armadura
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-material" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Material
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-item_missao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Item_Missao
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-consumivel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Consumivel
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-livro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Livro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-missao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Missao
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-santuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Santuario
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-casa" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Casa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabela-sala" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tabela: Sala
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relacionamentos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relacionamentos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Relacionamentos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tipo-tipo_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tipo: tipo_item
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipo-parte_corpo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tipo: parte_corpo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipo-enum_tipo_item" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tipo: enum_tipo_item
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipo-enum_parte_corpo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tipo: enum_parte_corpo
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="dicionario-de-dados">Dicionário de Dados</h1>
+<h2 id="tabelas-e-relacoes">Tabelas e Relações</h2>
+<h3 id="tabela-npc_ferreiro">Tabela: <strong>Npc_Ferreiro</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_npc_ferreiro</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_sala</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_sala</code>) REFERENCES <code>Sala(id_sala)</code></td>
+</tr>
+<tr>
+<td><code>id_missao_desbloqueia</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_missao_desbloqueia</code>) REFERENCES <code>Missao(id_missao)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dialogo_inicial</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dialogo_reparar</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dialogo_upgrade</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-npc_quest">Tabela: <strong>Npc_Quest</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_npc_quest</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_sala</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_sala</code>) REFERENCES <code>Sala(id_sala)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dialogo_inicial</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dialogo_recusa</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-npc_mercador">Tabela: <strong>Npc_Mercador</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_npc_mercador</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_sala</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_sala</code>) REFERENCES <code>Sala(id_sala)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dialogo_inicial</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dialogo_vender</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dialogo_comprar</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dialogo_sair</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tabela-cavaleiro">Tabela: <strong>Cavaleiro</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_cavaleiro</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_classe</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_classe</code>) REFERENCES <code>Classe(id_classe)</code></td>
+</tr>
+<tr>
+<td><code>id_elemento</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_elemento</code>) REFERENCES <code>Elemento(id_elemento)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>UNIQUE, NOT NULL</td>
+</tr>
+<tr>
+<td><code>nivel</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>hp_max</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>magia_max</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>velocidade_base</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_fisico_base</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_magico_base</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-boss">Tabela: <strong>Boss</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_boss</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_sala</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_sala</code>) REFERENCES <code>Sala(id_sala)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>nivel</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>xp_acumulado</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>hp_max</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>hp_atual</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>magia_max</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>magia_atual</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>velocidade</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_fisico_base</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_magico_base</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>dinheiro</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>fala_inicio</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fala_derrotar_player</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fala_derrotado</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fala_condicao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-inimigo">Tabela: <strong>Inimigo</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_inimigo</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_classe</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_classe</code>) REFERENCES <code>Classe(id_classe)</code></td>
+</tr>
+<tr>
+<td><code>id_elemento</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_elemento</code>) REFERENCES <code>Elemento(id_elemento)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>nivel</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>xp_acumulado</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>hp_max</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>magia_max</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>velocidade</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_fisico_base</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_magico_base</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>dinheiro</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>fala_inicio</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-grupo_inimigo">Tabela: <strong>Grupo_inimigo</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_grupo</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_sala</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_sala</code>) REFERENCES <code>Sala(id_sala)</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-instancia_inimigo">Tabela: <strong>Instancia_Inimigo</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_instancia</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_inimigo</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_inimigo</code>) REFERENCES <code>Inimigo(id_inimigo)</code></td>
+</tr>
+<tr>
+<td><code>id_grupo</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_grupo</code>) REFERENCES <code>Grupo_inimigo(id_grupo)</code></td>
+</tr>
+<tr>
+<td><code>hp_atual</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>magia_atual</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>defesa_fisica_bonus</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+<tr>
+<td><code>defesa_magica_bonus</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-inventario">Tabela: <strong>Inventario</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_player</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY, FOREIGN KEY (<code>id_player</code>) REFERENCES <code>Player(id_player)</code></td>
+</tr>
+<tr>
+<td><code>dinheiro</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-armadura_instancia">Tabela: <strong>Armadura_Instancia</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_armadura</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_armadura</code>, <code>id_parte_corpo_armadura</code>) REFERENCES <code>Armadura(id_armadura, id_parte_corpo)</code></td>
+</tr>
+<tr>
+<td><code>id_parte_corpo_armadura</code></td>
+<td>enum_parte_corpo</td>
+<td>FOREIGN KEY (<code>id_armadura</code>, <code>id_parte_corpo_armadura</code>) REFERENCES <code>Armadura(id_armadura, id_parte_corpo)</code></td>
+</tr>
+<tr>
+<td><code>id_instancia</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_inventario</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_inventario</code>) REFERENCES <code>Inventario(id_player)</code></td>
+</tr>
+<tr>
+<td><code>raridade_armadura</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>defesa_magica</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>defesa_fisica</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_magico</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_fisico</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>durabilidade_max</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>preco_venda</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-item_a_venda">Tabela: <strong>Item_a_venda</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_item</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>preco_compra</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>level_minimo</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-party">Tabela: <strong>Party</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_player</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_sala</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-instancia_cavaleiro">Tabela: <strong>Instancia_Cavaleiro</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_instancia_cavaleiro</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_cavaleiro</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_cavaleiro</code>) REFERENCES <code>Cavaleiro(id_cavaleiro)</code></td>
+</tr>
+<tr>
+<td><code>id_party</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_party</code>) REFERENCES <code>Party(id_player)</code></td>
+</tr>
+<tr>
+<td><code>nivel</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>xp_atual</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>hp_max</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>magia_max</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>hp_atual</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>magia_atual</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>velocidade</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_fisico</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_magico</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-elemento">Tabela: <strong>Elemento</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_elemento</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>UNIQUE, NOT NULL</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fraco_contra</code></td>
+<td>INTEGER</td>
+<td>(Possível chave estrangeira)</td>
+</tr>
+<tr>
+<td><code>forte_contra</code></td>
+<td>INTEGER</td>
+<td>(Possível chave estrangeira)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-progresso_player">Tabela: <strong>Progresso_Player</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_player</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_player</code>) REFERENCES <code>Player(id_player)</code></td>
+</tr>
+<tr>
+<td><code>id_boss</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_boss</code>) REFERENCES <code>Boss(id_boss)</code></td>
+</tr>
+<tr>
+<td><code>id_cavaleiro</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_cavaleiro</code>) REFERENCES <code>Cavaleiro(id_cavaleiro)</code></td>
+</tr>
+<tr>
+<td><code>status_derrotado</code></td>
+<td>BOOLEAN</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-receita">Tabela: <strong>Receita</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_item_gerado</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-player_missao">Tabela: <strong>Player_Missao</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_player</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_player</code>) REFERENCES <code>Player(id_player)</code></td>
+</tr>
+<tr>
+<td><code>id_missao</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_missao</code>) REFERENCES <code>Missao(id_missao)</code></td>
+</tr>
+<tr>
+<td><code>status_missao</code></td>
+<td>enum_status_missao</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-xp_necessaria">Tabela: <strong>Xp_Necessaria</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nivel</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>xp_necessaria</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-material_receita">Tabela: <strong>Material_Receita</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_receita</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_receita</code>) REFERENCES <code>Receita(id_item_gerado)</code></td>
+</tr>
+<tr>
+<td><code>id_material</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_material</code>) REFERENCES <code>Material(id_material)</code></td>
+</tr>
+<tr>
+<td><code>quantidade</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-habilidade_player">Tabela: <strong>Habilidade_Player</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_player</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_player</code>) REFERENCES <code>Player(id_player)</code></td>
+</tr>
+<tr>
+<td><code>id_habilidade</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_habilidade</code>) REFERENCES <code>Habilidade(id_habilidade)</code></td>
+</tr>
+<tr>
+<td><code>slot</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-habilidade_cavaleiro">Tabela: <strong>Habilidade_Cavaleiro</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_cavaleiro</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_cavaleiro</code>) REFERENCES <code>Cavaleiro(id_cavaleiro)</code></td>
+</tr>
+<tr>
+<td><code>id_habilidade</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_habilidade</code>) REFERENCES <code>Habilidade(id_habilidade)</code></td>
+</tr>
+<tr>
+<td><code>slot</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-habilidade_boss">Tabela: <strong>Habilidade_Boss</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_boss</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_boss</code>) REFERENCES <code>Boss(id_boss)</code></td>
+</tr>
+<tr>
+<td><code>id_habilidade</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_habilidade</code>) REFERENCES <code>Habilidade(id_habilidade)</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-parte_corpo_boss">Tabela: <strong>Parte_Corpo_Boss</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_boss</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_boss</code>) REFERENCES <code>Boss(id_boss)</code></td>
+</tr>
+<tr>
+<td><code>parte_corpo</code></td>
+<td>enum_parte_corpo</td>
+<td>FOREIGN KEY (<code>parte_corpo</code>) REFERENCES <code>Parte_Corpo(id_parte_corpo)</code></td>
+</tr>
+<tr>
+<td><code>defesa_fisica</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>defesa_magica</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>chance_acerto_base</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>chance_acerto_critico</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-parte_corpo_cavaleiro">Tabela: <strong>Parte_Corpo_Cavaleiro</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_cavaleiro</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_cavaleiro</code>) REFERENCES <code>Cavaleiro(id_cavaleiro)</code></td>
+</tr>
+<tr>
+<td><code>parte_corpo</code></td>
+<td>enum_parte_corpo</td>
+<td>FOREIGN KEY (<code>parte_corpo</code>) REFERENCES <code>Parte_Corpo(id_parte_corpo)</code></td>
+</tr>
+<tr>
+<td><code>id_instancia_cavaleiro</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_instancia_cavaleiro</code>) REFERENCES <code>Instancia_Cavaleiro(id_instancia_cavaleiro)</code></td>
+</tr>
+<tr>
+<td><code>defesa_fisica_bonus</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>defesa_magico_bonus</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>chance_acerto_base</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>chance_acerto_critico</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-player">Tabela: <strong>Player</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_player</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_elemento</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_elemento</code>) REFERENCES <code>Elemento(id_elemento)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>UNIQUE, NOT NULL</td>
+</tr>
+<tr>
+<td><code>nivel</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>xp_acumulado</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>hp_max</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>magia_max</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>hp_atual</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>magia_atual</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>velocidade</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_fisico_base</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>ataque_magico_base</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>id_sala_safe</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-parte_corpo_player">Tabela: <strong>Parte_Corpo_Player</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_player</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_player</code>) REFERENCES <code>Player(id_player)</code></td>
+</tr>
+<tr>
+<td><code>parte_corpo</code></td>
+<td>enum_parte_corpo</td>
+<td>FOREIGN KEY (<code>parte_corpo</code>) REFERENCES <code>Parte_Corpo(id_parte_corpo)</code></td>
+</tr>
+<tr>
+<td><code>armadura_equipada</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>armadura_equipada</code>) REFERENCES <code>Armadura(id_armadura)</code></td>
+</tr>
+<tr>
+<td><code>instancia_armadura_equipada</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>instancia_armadura_equipada</code>) REFERENCES <code>Armadura_Instancia(id_instancia)</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-elemento_boss">Tabela: <strong>Elemento_Boss</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_elemento</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_elemento</code>) REFERENCES <code>Elemento(id_elemento)</code></td>
+</tr>
+<tr>
+<td><code>id_boss</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_boss</code>) REFERENCES <code>Boss(id_boss)</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-habilidade_inimigo">Tabela: <strong>Habilidade_Inimigo</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_habilidade</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_habilidade</code>) REFERENCES <code>Habilidade(id_habilidade)</code></td>
+</tr>
+<tr>
+<td><code>id_player</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_player</code>) REFERENCES <code>Inimigo(id_inimigo)</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-item_armazenado">Tabela: <strong>Item_Armazenado</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_inventario</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_inventario</code>) REFERENCES <code>Inventario(id_player)</code></td>
+</tr>
+<tr>
+<td><code>id_item</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_item</code>) REFERENCES <code>Tipo_Item(id_item)</code></td>
+</tr>
+<tr>
+<td><code>quantidade</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-item_grupo_inimigo_dropa">Tabela: <strong>Item_grupo_inimigo_dropa</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_item</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_item</code>) REFERENCES <code>Tipo_Item(id_item)</code></td>
+</tr>
+<tr>
+<td><code>id_grupo_inimigo</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_grupo_inimigo</code>) REFERENCES <code>Grupo_inimigo(id_grupo)</code></td>
+</tr>
+<tr>
+<td><code>quantidade</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-classe">Tabela: <strong>Classe</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_classe</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>UNIQUE, NOT NULL</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-habilidade">Tabela: <strong>Habilidade</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_habilidade</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>classe_habilidade</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>classe_habilidade</code>) REFERENCES <code>Classe(id_classe)</code></td>
+</tr>
+<tr>
+<td><code>elemento_habilidade</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>elemento_habilidade</code>) REFERENCES <code>Elemento(id_elemento)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>custo</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>frase_uso</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>nivel_necessario</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-tipo_item">Tabela: <strong>Tipo_Item</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_item</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>tipo_item</code></td>
+<td>enum_tipo_item</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-armadura">Tabela: <strong>Armadura</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_armadura</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_parte_corpo</code></td>
+<td>enum_parte_corpo</td>
+<td>FOREIGN KEY (<code>id_parte_corpo</code>) REFERENCES <code>Parte_Corpo(id_parte_corpo)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>raridade_armadura</code></td>
+<td>VARCHAR</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>defesa_magica</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+<tr>
+<td><code>defesa_fisica</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ataque_magico</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ataque_fisico</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+<tr>
+<td><code>durabilidade_max</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+<tr>
+<td><code>preco_venda</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-material">Tabela: <strong>Material</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_material</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>UNIQUE, NOT NULL</td>
+</tr>
+<tr>
+<td><code>preco_venda</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-item_missao">Tabela: <strong>Item_Missao</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_item</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>UNIQUE, NOT NULL</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-consumivel">Tabela: <strong>Consumivel</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_item</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>UNIQUE, NOT NULL</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>preco_venda</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>saude_restaurada</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+<tr>
+<td><code>magia_restaurada</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+<tr>
+<td><code>saude_maxima</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+<tr>
+<td><code>magia_maxima</code></td>
+<td>INTEGER</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-livro">Tabela: <strong>Livro</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_item</code></td>
+<td>INTEGER</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_habilidade</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_habilidade</code>) REFERENCES <code>Habilidade(id_habilidade)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>UNIQUE, NOT NULL</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>preco_venda</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-missao">Tabela: <strong>Missao</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_missao</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_missao_anterior</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_missao_anterior</code>) REFERENCES <code>Missao(id_missao)</code></td>
+</tr>
+<tr>
+<td><code>item_necessario</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>item_necessario</code>) REFERENCES <code>Item_Missao(id_item)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>INTEGER</td>
+<td>UNIQUE, NOT NULL</td>
+</tr>
+<tr>
+<td><code>dialogo_inicial</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dialogo_durante</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dialogo_completa</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-santuario">Tabela: <strong>Santuario</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_santuario</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_missao_requisito</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_missao_requisito</code>) REFERENCES <code>Missao(id_missao)</code></td>
+</tr>
+<tr>
+<td><code>id_missao_proximo_santuario</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_missao_proximo_santuario</code>) REFERENCES <code>Missao(id_missao)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>UNIQUE, NOT NULL</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>nivel_recomendado</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-casa">Tabela: <strong>Casa</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_casa</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_santuario</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_santuario</code>) REFERENCES <code>Santuario(id_santuario)</code></td>
+</tr>
+<tr>
+<td><code>id_missao_requisito</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_missao_requisito</code>) REFERENCES <code>Missao(id_missao)</code></td>
+</tr>
+<tr>
+<td><code>id_missao_proxima_casa</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_missao_proxima_casa</code>) REFERENCES <code>Missao(id_missao)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>descricao</code></td>
+<td>VARCHAR</td>
+<td></td>
+</tr>
+<tr>
+<td><code>nivel_recomendado</code></td>
+<td>INTEGER</td>
+<td>NOT NULL</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tabela-sala">Tabela: <strong>Sala</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Restrições</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_sala</code></td>
+<td>SERIAL</td>
+<td>PRIMARY KEY</td>
+</tr>
+<tr>
+<td><code>id_casa</code></td>
+<td>INTEGER</td>
+<td>FOREIGN KEY (<code>id_casa</code>) REFERENCES <code>Casa(id_casa)</code></td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>VARCHAR</td>
+<td>NOT NULL</td>
+</tr>
+<tr>
+<td><code>id_sala_norte</code></td>
+<td>INTEGER</td>
+<td>(Possivelmente referência para outra sala)</td>
+</tr>
+<tr>
+<td><code>id_sala_sul</code></td>
+<td>INTEGER</td>
+<td>(Possivelmente referência para outra sala)</td>
+</tr>
+<tr>
+<td><code>id_sala_leste</code></td>
+<td>INTEGER</td>
+<td>(Possivelmente referência para outra sala)</td>
+</tr>
+<tr>
+<td><code>id_sala_oeste</code></td>
+<td>INTEGER</td>
+<td>(Possivelmente referência para outra sala)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="relacionamentos">Relacionamentos</h2>
+<ul>
+<li><strong>Instancia_Cavaleiro</strong>:</li>
+<li><code>id_cavaleiro</code> → <code>Cavaleiro(id_cavaleiro)</code></li>
+<li>
+<p><code>id_party</code> → <code>Party(id_player)</code></p>
+</li>
+<li>
+<p><strong>Elemento</strong>:</p>
+</li>
+<li><code>fraco_contra</code> → <code>Elemento(id_elemento)</code></li>
+<li>
+<p><code>forte_contra</code> → <code>Elemento(id_elemento)</code></p>
+</li>
+<li>
+<p><strong>Progresso_Player</strong>:</p>
+</li>
+<li><code>id_player</code> → <code>Player(id_player)</code></li>
+<li><code>id_boss</code> → <code>Boss(id_boss)</code></li>
+<li>
+<p><code>id_cavaleiro</code> → <code>Cavaleiro(id_cavaleiro)</code></p>
+</li>
+<li>
+<p><strong>Receita</strong>:</p>
+</li>
+<li>
+<p>N/A</p>
+</li>
+<li>
+<p><strong>Player_Missao</strong>:</p>
+</li>
+<li><code>id_player</code> → <code>Player(id_player)</code></li>
+<li>
+<p><code>id_missao</code> → <code>Missao(id_missao)</code></p>
+</li>
+<li>
+<p><strong>Xp_Necessaria</strong>:</p>
+</li>
+<li>
+<p>N/A</p>
+</li>
+<li>
+<p><strong>Material_Receita</strong>:</p>
+</li>
+<li><code>id_receita</code> → <code>Receita(id_item_gerado)</code></li>
+<li>
+<p><code>id_material</code> → <code>Material(id_material)</code></p>
+</li>
+<li>
+<p><strong>Habilidade_Player</strong>:</p>
+</li>
+<li><code>id_player</code> → <code>Player(id_player)</code></li>
+<li>
+<p><code>id_habilidade</code> → <code>Habilidade(id_habilidade)</code></p>
+</li>
+<li>
+<p><strong>Habilidade_Cavaleiro</strong>:</p>
+</li>
+<li><code>id_cavaleiro</code> → <code>Cavaleiro(id_cavaleiro)</code></li>
+<li>
+<p><code>id_habilidade</code> → <code>Habilidade(id_habilidade)</code></p>
+</li>
+<li>
+<p><strong>Habilidade_Boss</strong>:</p>
+</li>
+<li><code>id_boss</code> → <code>Boss(id_boss)</code></li>
+<li>
+<p><code>id_habilidade</code> → <code>Habilidade(id_habilidade)</code></p>
+</li>
+<li>
+<p><strong>Parte_Corpo_Boss</strong>:</p>
+</li>
+<li><code>id_boss</code> → <code>Boss(id_boss)</code></li>
+<li>
+<p><code>parte_corpo</code> → <code>Parte_Corpo(id_parte_corpo)</code></p>
+</li>
+<li>
+<p><strong>Parte_Corpo_Cavaleiro</strong>:</p>
+</li>
+<li><code>id_cavaleiro</code> → <code>Cavaleiro(id_cavaleiro)</code></li>
+<li><code>parte_corpo</code> → <code>Parte_Corpo(id_parte_corpo)</code></li>
+<li>
+<p><code>id_instancia_cavaleiro</code> → <code>Instancia_Cavaleiro(id_instancia_cavaleiro)</code></p>
+</li>
+<li>
+<p><strong>Player</strong>:</p>
+</li>
+<li>
+<p><code>id_elemento</code> → <code>Elemento(id_elemento)</code></p>
+</li>
+<li>
+<p><strong>Parte_Corpo_Player</strong>:</p>
+</li>
+<li><code>id_player</code> → <code>Player(id_player)</code></li>
+<li><code>parte_corpo</code> → <code>Parte_Corpo(id_parte_corpo)</code></li>
+<li><code>armadura_equipada</code> → <code>Armadura(id_armadura)</code></li>
+<li>
+<p><code>instancia_armadura_equipada</code> → <code>Armadura_Instancia(id_instancia)</code></p>
+</li>
+<li>
+<p><strong>Elemento_Boss</strong>:</p>
+</li>
+<li><code>id_elemento</code> → <code>Elemento(id_elemento)</code></li>
+<li>
+<p><code>id_boss</code> → <code>Boss(id_boss)</code></p>
+</li>
+<li>
+<p><strong>Habilidade_Inimigo</strong>:</p>
+</li>
+<li><code>id_habilidade</code> → <code>Habilidade(id_habilidade)</code></li>
+<li>
+<p><code>id_player</code> → <code>Inimigo(id_inimigo)</code></p>
+</li>
+<li>
+<p><strong>Item_Armazenado</strong>:</p>
+</li>
+<li><code>id_inventario</code> → <code>Inventario(id_player)</code></li>
+<li>
+<p><code>id_item</code> → <code>Tipo_Item(id_item)</code></p>
+</li>
+<li>
+<p><strong>Item_grupo_inimigo_dropa</strong>:</p>
+</li>
+<li><code>id_item</code> → <code>Tipo_Item(id_item)</code></li>
+<li>
+<p><code>id_grupo_inimigo</code> → <code>Grupo_inimigo(id_grupo)</code></p>
+</li>
+<li>
+<p><strong>Classe</strong>:</p>
+</li>
+<li>
+<p>N/A</p>
+</li>
+<li>
+<p><strong>Habilidade</strong>:</p>
+</li>
+<li><code>classe_habilidade</code> → <code>Classe(id_classe)</code></li>
+<li>
+<p><code>elemento_habilidade</code> → <code>Elemento(id_elemento)</code></p>
+</li>
+<li>
+<p><strong>Tipo_Item</strong>:</p>
+</li>
+<li>
+<p>N/A</p>
+</li>
+<li>
+<p><strong>Armadura</strong>:</p>
+</li>
+<li>
+<p><code>id_parte_corpo</code> → <code>Parte_Corpo(id_parte_corpo)</code></p>
+</li>
+<li>
+<p><strong>Material</strong>:</p>
+</li>
+<li>
+<p>N/A</p>
+</li>
+<li>
+<p><strong>Item_Missao</strong>:</p>
+</li>
+<li>
+<p>N/A</p>
+</li>
+<li>
+<p><strong>Consumivel</strong>:</p>
+</li>
+<li>
+<p>N/A</p>
+</li>
+<li>
+<p><strong>Livro</strong>:</p>
+</li>
+<li>
+<p><code>id_habilidade</code> → <code>Habilidade(id_habilidade)</code></p>
+</li>
+<li>
+<p><strong>Missao</strong>:</p>
+</li>
+<li><code>id_missao_anterior</code> → <code>Missao(id_missao)</code></li>
+<li>
+<p><code>item_necessario</code> → <code>Item_Missao(id_item)</code></p>
+</li>
+<li>
+<p><strong>Santuario</strong>:</p>
+</li>
+<li><code>id_missao_requisito</code> → <code>Missao(id_missao)</code></li>
+<li>
+<p><code>id_missao_proximo_santuario</code> → <code>Missao(id_missao)</code></p>
+</li>
+<li>
+<p><strong>Casa</strong>:</p>
+</li>
+<li><code>id_santuario</code> → <code>Santuario(id_santuario)</code></li>
+<li><code>id_missao_requisito</code> → <code>Missao(id_missao)</code></li>
+<li>
+<p><code>id_missao_proxima_casa</code> → <code>Missao(id_missao)</code></p>
+</li>
+<li>
+<p><strong>Sala</strong>:</p>
+</li>
+<li>
+<p><code>id_casa</code> → <code>Casa(id_casa)</code></p>
+</li>
+<li>
+<p><strong>Npc_Ferreiro</strong>:</p>
+</li>
+<li><code>id_sala</code> → <code>Sala(id_sala)</code></li>
+<li>
+<p><code>id_missao_desbloqueia</code> → <code>Missao(id_missao)</code></p>
+</li>
+<li>
+<p><strong>Npc_Quest</strong>:</p>
+</li>
+<li>
+<p><code>id_sala</code> → <code>Sala(id_sala)</code></p>
+</li>
+<li>
+<p><strong>Npc_Mercador</strong>:</p>
+</li>
+<li>
+<p><code>id_sala</code> → <code>Sala(id_sala)</code></p>
+</li>
+<li>
+<p><strong>Inimigo</strong>:</p>
+</li>
+<li><code>id_elemento</code> → <code>Elemento(id_elemento)</code></li>
+<li>
+<p><code>id_classe</code> → <code>Classe(id_classe)</code></p>
+</li>
+<li>
+<p><strong>Instancia_Inimigo</strong>:</p>
+</li>
+<li><code>id_inimigo</code> → <code>Inimigo(id_inimigo)</code></li>
+<li>
+<p><code>id_grupo</code> → <code>Grupo_inimigo(id_grupo)</code></p>
+</li>
+<li>
+<p><strong>Grupo_inimigo</strong>:</p>
+</li>
+<li>
+<p><code>id_sala</code> → <code>Sala(id_sala)</code></p>
+</li>
+<li>
+<p><strong>Inventario</strong>:</p>
+</li>
+<li>
+<p><code>id_player</code> → <code>Player(id_player)</code></p>
+</li>
+<li>
+<p><strong>Armadura_Instancia</strong>:</p>
+</li>
+<li><code>id_armadura</code>, <code>id_parte_corpo_armadura</code> → <code>Armadura(id_armadura, id_parte_corpo)</code></li>
+<li>
+<p><code>id_inventario</code> → <code>Inventario(id_player)</code></p>
+</li>
+<li>
+<p><strong>Item_a_venda</strong>:</p>
+</li>
+<li>
+<p><code>id_item</code> → <code>Tipo_Item(id_item)</code></p>
+</li>
+<li>
+<p><strong>Party</strong>:</p>
+</li>
+<li><code>id_sala</code> → <code>Sala(id_sala)</code></li>
+</ul>
+<h3 id="tipo-tipo_item">Tipo: <strong>tipo_item</strong></h3>
+<p>Representa os tipos de itens no sistema.</p>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a</code></td>
+<td>armadura</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>material</td>
+</tr>
+<tr>
+<td><code>i</code></td>
+<td>item_missao</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>consumivel</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>livro</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tipo-parte_corpo">Tipo: <strong>parte_corpo</strong></h3>
+<p>Representa as partes do corpo.</p>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>c</code></td>
+<td>cabeça</td>
+</tr>
+<tr>
+<td><code>t</code></td>
+<td>tronco</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>braços</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>pernas</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tipo-enum_tipo_item">Tipo: <strong>enum_tipo_item</strong></h3>
+<p>Representa os tipos de itens no sistema.</p>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a</code></td>
+<td>armadura</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>material</td>
+</tr>
+<tr>
+<td><code>i</code></td>
+<td>item_missao</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>consumivel</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>livro</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="tipo-enum_parte_corpo">Tipo: <strong>enum_parte_corpo</strong></h3>
+<p>Representa as partes do corpo.</p>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>c</code></td>
+<td>cabeça</td>
+</tr>
+<tr>
+<td><code>t</code></td>
+<td>tronco</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>braços</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>pernas</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+    
+  </body>
+</html>
