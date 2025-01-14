@@ -46,13 +46,18 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
 
    ```
 
-3. Inicie o ambiente com o Docker:
+3. Inicie o servidor do banco de dados e execute as migrations com:
 
   ```
    docker-compose up --build
   ```
-
-
+4. Inicie o jogo com:
+   ```
+   pip install --no-cache-dir -r requirements.txt
+   ```
+  ```
+  python3 src/main.py
+  ```
 ## Membros do grupo
 
 <center>
