@@ -30,7 +30,7 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
 | Módulo | Link da gravação                                                        | Data       |
 | ------ | ------------------------------------------------------------------------| ---------- |
 | 1      | [Apresentação Módulo 1](https://www.youtube.com/watch?v=xasOyzUFag4)    | 26/11/2025 |
-| 2      | [Apresentação Módulo 2]()                                               | 13/01/2025|
+| 2      | [Apresentação Módulo 2](https://youtu.be/uQpDJccvRBM?si=op720gt-4Q9Ot8lb)                                               | 13/01/2025|
 | 3      | [Apresentação Módulo 3]()                                               | ---------- |
   
 </center>
