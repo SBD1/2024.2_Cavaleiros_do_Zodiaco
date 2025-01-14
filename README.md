@@ -27,11 +27,11 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
 ## 🎥 Apresentações
 <center>
 
-| Módulo | Link da gravação             | Data       |
-| ------ | -----------------------------| ---------- |
-| 1      | [Apresentação Módulo 1]()    | ---------- |
-| 2      | [Apresentação Módulo 2]()    | -----------|
-| 3      | [Apresentação Módulo 3]()    | ---------- |
+| Módulo | Link da gravação                                                        | Data       |
+| ------ | ------------------------------------------------------------------------| ---------- |
+| 1      | [Apresentação Módulo 1](https://www.youtube.com/watch?v=xasOyzUFag4)    | 26/11/2025 |
+| 2      | [Apresentação Módulo 2]()                                               | 13/01/2025|
+| 3      | [Apresentação Módulo 3]()                                               | ---------- |
   
 </center>
 
@@ -45,16 +45,18 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
    cd game
 
    ```
-
-3. Inicie o servidor do banco de dados e execute as migrations com:
+3. Instale as dependencias:
+   
+   ```
+   pip install --no-cache-dir -r requirements.txt
+   ```
+5. Inicie o servidor do banco de dados e execute as migrations com:
 
   ```
    docker-compose up --build
   ```
-4. Inicie o jogo com:
-   ```
-   pip install --no-cache-dir -r requirements.txt
-   ```
+5. Inicie o jogo com:
+
   ```
   python3 src/main.py
   ```
