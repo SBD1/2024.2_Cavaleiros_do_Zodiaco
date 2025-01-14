@@ -28,10 +28,10 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
 <center>
 
 | Módulo | Link da gravação             | Data       |
-| ------ | --------------------- ------- | ---------- |
-| 1      | [Apresentação Módulo 1]()    | - |
-| 2      | [Apresentação Módulo 2]()    | - |
-| 3      | [Apresentação Módulo 3]()    | - |
+| ------ | -----------------------------| ---------- |
+| 1      | [Apresentação Módulo 1]()    | ---------- |
+| 2      | [Apresentação Módulo 2]()    | -----------|
+| 3      | [Apresentação Módulo 3]()    | ---------- |
   
 </center>
 
