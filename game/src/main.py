@@ -239,7 +239,7 @@ def mudar_de_sala(console):
                 port="5432"
             )
             with connection.cursor() as cursor:
-                cursor.execute("SELECT mover_party(%s, %s);", (selected_player_id, id_sala))
+                cursor.execute("SELECT mudar_sala(%s, %s);", (selected_player_id, int(id_sala)))
                 connection.commit()  # Confirma a transação
 
                 # Buscar o nome da sala para o feedback
