@@ -6,7 +6,8 @@
 | --- | --- | --- | --- |
 | 0.1 | 11/12/2023 | Criação do Documento | Vinícius Rufino |
 
-```ALTER TABLE santuario RENAME TO saga;
+```sql
+ALTER TABLE santuario RENAME TO saga;
 ALTER TABLE saga RENAME COLUMN id_santuario TO id_saga;
 ALTER TABLE saga RENAME COLUMN id_missao_proximo_santuario TO id_missao_proxima_saga;
 ALTER TABLE casa RENAME COLUMN id_santuario TO id_saga;
@@ -267,3 +268,5 @@ BEGIN
     );
 END;
 $$ LANGUAGE plpgsql;
+
+```

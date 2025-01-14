@@ -6,7 +6,8 @@
 | --- | --- | --- | --- |
 | 0.1 | 11/12/2023 | Criação do Documento | Vinícius Rufino |
 
-```-- 1. Listar informações do play
+```sql
+-- 1. Listar informações do play
 SELECT * FROM Player;
 -- 2. Listar todos os items no inventár
 SELECT * FROM Inventario;
@@ -90,3 +91,4 @@ END;
 $$ LANGUAGE plpgsql;
 -- Exemplo de uso
 CALL insert_item(1, 'a');
+```

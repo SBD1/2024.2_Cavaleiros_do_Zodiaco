@@ -22,6 +22,10 @@ nav:
       - Diagrama Entidade Relacionamento: "modulo01/der.md"
       - Modelo Lógico: "modulo01/ml.md"
       - Dicionário de Dados: "modulo01/dicionario.md"
+    - Módulo 2:
+      - Data Definition Language: "modulo02/DDL.md"
+      - Data Manipulation Language: "modulo02/DML.md"
+      - Data Query Language: "modulo02/DQL.md"
     - Apresentação: "apresentacao/modulo1.md"
 
 theme:
