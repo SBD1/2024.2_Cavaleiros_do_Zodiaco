@@ -12,6 +12,7 @@ from src.usecases.ver_salas_disponiveis import ver_salas_disponiveis
 from src.usecases.mudar_de_sala import mudar_de_sala
 from src.usecases.ver_sala_atual import ver_sala_atual
 from src.usecases.iniciar_jogo import iniciar_jogo
+from src.usecases.criar_jogador import criar_jogador
 from .util import limpar_terminal
 
 # Variável global para armazenar o ID do jogador selecionado
@@ -71,7 +72,7 @@ def run():
         escolha = input("\n🎮 Escolha uma opção: ").strip()
         
         if escolha == "1":
-            executar_com_interface(console, lambda c: c.print("[bold red]❌ Função não disponível no momento![/bold red]"))
+            executar_com_interface(console, lambda c: criar_jogador(console))
         elif escolha == "2":
             executar_com_interface(console, lambda c: listar_jogadores())
         elif escolha == "3":

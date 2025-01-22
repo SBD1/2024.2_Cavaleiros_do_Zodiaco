@@ -20,7 +20,7 @@ def obter_conexao():
             host=os.getenv("DATABASE_HOST"),
             port=os.getenv("POSTGRES_PORT"),
         )
-       
+        conn.autocommit = True
         return conn
     except Exception as e:
         print(f"❌ Erro ao conectar ao banco de dados: {e}")

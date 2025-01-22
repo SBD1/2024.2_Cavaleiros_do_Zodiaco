@@ -30,5 +30,6 @@ BEGIN
     ELSE
         RAISE EXCEPTION 'Movimento inválido: A sala destino (%s) não está conectada.', id_sala_destino;
     END IF;
+    
 END;
 $function$;
