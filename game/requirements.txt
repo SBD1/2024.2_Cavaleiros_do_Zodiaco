@@ -3,3 +3,6 @@ watchdog
 rich
 pyfiglet
 python-dotenv
+pygame
+python-vlc
+termcolor
