@@ -4,7 +4,15 @@ $$
 DECLARE
     id_elemento_min INT;
     id_elemento_max INT;
+    jogador_existente INT;
 BEGIN
+    -- Verificar se já existe um jogador com esse nome
+    SELECT COUNT(*) INTO jogador_existente FROM player WHERE nome = p_nome_cdz;
+    
+    IF jogador_existente > 0 THEN
+        RAISE EXCEPTION 'Jogador com nome existente' USING ERRCODE = 'P0001';
+    END IF;
+
     -- Obter o mínimo e o máximo ID do elemento
     SELECT MIN(id_elemento), MAX(id_elemento) 
     INTO id_elemento_min, id_elemento_max 
