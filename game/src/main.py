@@ -15,7 +15,7 @@ from src.usecases.iniciar_jogo import iniciar_jogo
 from src.usecases.criar_jogador import criar_jogador
 from src.usecases.ver_mapa import ver_mapa
 from .util import limpar_terminal
-
+from src.usecases.tocar_tema_encerramento import tocar_tema_encerramento
 # Variável global para armazenar o ID do jogador selecionado
 jogador_selecionado_id = None
 
@@ -90,6 +90,7 @@ def run():
             mostrar_menu_acoes(console)
         elif escolha == "6":
             console.print(Panel("[bold red]❌ Saindo do jogo...[/bold red]", expand=False))
+            executar_com_interface(console,lambda c: tocar_tema_encerramento())
             break
         else:
             console.print("[bold red]⚠ Opção inválida! Tente novamente.[/bold red]")
