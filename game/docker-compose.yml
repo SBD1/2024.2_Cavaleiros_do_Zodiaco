@@ -3,7 +3,7 @@ version: "3.8"
 services:
   banco_de_dados:
     image: postgres:13.2-alpine
-    container_name: banco_de_dados
+    container_name: game_banco_de_dados
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -20,7 +20,7 @@ services:
 
   controlador_de_migrations:
     image: flyway/flyway:latest
-    container_name: controlador_de_migrations
+    container_name: game_controlador_de_migrations
     depends_on:
       - banco_de_dados
     environment:
