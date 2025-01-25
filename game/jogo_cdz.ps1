@@ -6,9 +6,9 @@ param (
 function Verificar-Containers {
     $containers = docker ps --format "{{.Names}}"
     if ($containers -match "game") {
-        Write-Host "✅ Containers ja estao rodando!"
+        Write-Host "Containers ja estao rodando!"
     } else {
-        Write-Host "🚀 Iniciando os containers..."
+        Write-Host "Iniciando os containers..."
         docker-compose up -d
         Start-Sleep -Seconds 5  # Aguarda os containers subirem
     }
