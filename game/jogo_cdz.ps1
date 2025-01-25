@@ -39,15 +39,15 @@ switch ($acao) {
     }
     "comecar_jogo" {
         Verificar-Containers
-        Write-Host "🎮 Iniciando o jogo..."
+        Write-Host "Iniciando o jogo..."
         python -m src.main
     }
     "subir_containers" {
-        Write-Host "🚀 Subindo os containers..."
+        Write-Host "Subindo os containers..."
         docker-compose up -d
     }
     "parar_containers" {
-        Write-Host "🛑 Parando os containers..."
+        Write-Host "Parando os containers..."
         docker-compose down
     }
     "--help" {
