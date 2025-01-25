@@ -1,28 +1,42 @@
 from rich.console import Console
 from rich.panel import Panel
-from rich.text import Text
+from rich.table import Table
 from ..database import obter_cursor
 
 console = Console()
 
 def obter_status_jogador(player_id):
     """📜 Obtém e exibe o status do jogador com formatação aprimorada."""
+
     try:
         with obter_cursor() as cursor:
-            cursor.execute("SELECT get_player_info(%s);", (player_id,))
+            cursor.execute("SELECT * FROM get_player_info_v2(%s);", (player_id,))
             result = cursor.fetchone()
             
-            if result and result[0]:
-                status_linhas = result[0].split("\n")  # Divide os atributos por linha
+            if result:
+                # Desempacotamento dos dados
+                (nome, nivel, xp_acumulado, hp_max, magia_max, hp_atual, magia_atual,
+                 velocidade, ataque_fisico_base, ataque_magico_base, elemento) = result
 
-                # Monta o painel estilizado com cada atributo formatado
-                detalhes = "\n".join([f"🔹 {linha}" for linha in status_linhas])
+                # Criando a tabela estilizada para os atributos do jogador
+                table = Table(title=f"⚔️ Status de {nome}", border_style="blue")
 
-                console.print(Panel.fit(
-                    Text(detalhes, style="bold cyan"),
-                    title=f"⚔️ Status do Jogador {player_id} ⚔️",
-                    border_style="blue",
-                ))
+                table.add_column("Atributo", style="bold cyan")
+                table.add_column("Valor", style="bold yellow")
+
+                table.add_row("📛 Nome", f"{nome}")
+                table.add_row("📊 Nível", f"{nivel}")
+                table.add_row("✨ XP Acumulado", f"{xp_acumulado}")
+                table.add_row("❤️ HP Máximo", f"{hp_max}")
+                table.add_row("🔮 Magia Máxima", f"{magia_max}")
+                table.add_row("💖 HP Atual", f"{hp_atual}")
+                table.add_row("🌀 Magia Atual", f"{magia_atual}")
+                table.add_row("⚡ Velocidade", f"{velocidade}")
+                table.add_row("💥 Ataque Físico Base", f"{ataque_fisico_base}")
+                table.add_row("🔥 Ataque Mágico Base", f"{ataque_magico_base}")
+                table.add_row("🌟 Elemento", f"{elemento}")
+
+                console.print(table)
 
             else:
                 console.print(Panel.fit(

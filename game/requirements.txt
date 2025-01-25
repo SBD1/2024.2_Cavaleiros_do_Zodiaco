@@ -6,3 +6,5 @@ python-dotenv
 pygame
 python-vlc
 termcolor
+networkx
+matplotlib 

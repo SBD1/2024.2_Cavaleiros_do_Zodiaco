@@ -4,7 +4,7 @@ from rich.table import Table
 from ..database import obter_cursor
 
 def ver_salas_disponiveis(console, selected_player_id):
-    """🔍 Exibe as salas conectadas disponíveis para o jogador."""
+    """🔍 Exibe as salas conectadas disponíveis para o jogador com direções (Norte, Sul, Leste, Oeste)."""
 
     if selected_player_id is None:
         console.print(Panel.fit(
@@ -21,11 +21,12 @@ def ver_salas_disponiveis(console, selected_player_id):
 
             if salas:
                 table = Table(title="🏰 Salas Disponíveis", show_lines=True, header_style="bold cyan")
-                table.add_column("🔢 ID Sala", justify="center", style="bold yellow")
+                table.add_column("🧭 Direção", justify="center", style="bold magenta")
                 table.add_column("📍 Nome da Sala", justify="left", style="bold green")
 
                 for sala in salas:
-                    table.add_row(str(sala[0]), sala[1])
+                    direcao, nome = sala[2], sala[1]
+                    table.add_row(direcao, nome)
 
                 console.print(table)
             else:

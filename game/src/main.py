@@ -13,6 +13,7 @@ from src.usecases.mudar_de_sala import mudar_de_sala
 from src.usecases.ver_sala_atual import ver_sala_atual
 from src.usecases.iniciar_jogo import iniciar_jogo
 from src.usecases.criar_jogador import criar_jogador
+from src.usecases.ver_mapa import ver_mapa
 from .util import limpar_terminal
 
 # Variável global para armazenar o ID do jogador selecionado
@@ -31,22 +32,24 @@ def mostrar_menu_acoes(console):
     opcoes = {
         "1": ver_salas_disponiveis,
         "2": ver_sala_atual,
-        "3": mudar_de_sala
+        "3": mudar_de_sala,
+        "4": ver_mapa
     }
     while True:
         limpar_terminal(console)
         console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", title="🎮 Aventura Iniciada!", expand=False))
 
-        console.print("1️⃣ [bold yellow]Ver Mapa[/bold yellow] (Salas Disponíveis)")
+        console.print("1️⃣ [bold yellow]Ver Salas Disponíveis [/bold yellow]")
         console.print("2️⃣ [bold blue]Ver Sala Atual[/bold blue]")
         console.print("3️⃣ [bold green]Mudar de Sala[/bold green]")
-        console.print("4️⃣ [bold red]Sair do Menu de Ações[/bold red]")
+        console.print("4️⃣ [bold purple]Ver Mapa[/bold purple] 🗺")
+        console.print("5️⃣ [bold red]Sair do Menu de Ações[/bold red]")
 
         escolha = input("\n🎯 Escolha uma ação: ").strip()
         
         if escolha in opcoes:
             executar_com_interface(console, opcoes[escolha], jogador_selecionado_id)
-        elif escolha == "4":
+        elif escolha == "5":
             console.print(Panel("[bold red]👋 Saindo do Menu de Ações...[/bold red]", expand=False))
             input("\n[💾 Pressione ENTER para continuar...]")
             break
@@ -62,12 +65,12 @@ def run():
         limpar_terminal(console)
         console.print(Panel("[bold cyan]🛡 Cavaleiros do Zodíaco 🛡[/bold cyan]", title="✨ ✨ ✨ ✨", expand=False))
 
-        console.print("1️⃣ [bold yellow]Adicionar Novo Jogador[/bold yellow] ❌ [dim]Indisponível[/dim]")
+        console.print("1️⃣ [bold yellow]Adicionar Novo Jogador[/bold yellow] ")
         console.print("2️⃣ [bold blue]Listar Jogadores[/bold blue]")
         console.print("3️⃣ [bold green]Selecionar Jogador[/bold green]")
         console.print("4️⃣ [bold magenta]Mostrar Status do Jogador[/bold magenta]")
         console.print("5️⃣ [bold cyan]Iniciar Jogo[/bold cyan] 🚀")
-        console.print("6️⃣ [bold red]Sair[/bold red] ❌")
+        console.print("6️⃣ [bold red]Sair[/bold red] 🚪➡️🚶‍♂️ ")
 
         escolha = input("\n🎮 Escolha uma opção: ").strip()
         
@@ -76,8 +79,10 @@ def run():
         elif escolha == "2":
             executar_com_interface(console, lambda c: listar_jogadores())
         elif escolha == "3":
-            jogador_selecionado_id = selecionar_jogador()
-            executar_com_interface(console, lambda c: c.print(f"[bold cyan]👤 Jogador selecionado: {jogador_selecionado_id}[/bold cyan]"))
+            limpar_terminal(console)
+            jogador_selecionado = selecionar_jogador()
+            jogador_selecionado_id = jogador_selecionado[1]
+            executar_com_interface(console, lambda c: c.print(f"[bold cyan]👤 Jogador selecionado: {jogador_selecionado[0]}[/bold cyan]"))
         elif escolha == "4":
             executar_com_interface(console, lambda c: obter_status_jogador(jogador_selecionado_id))
         elif escolha == "5":

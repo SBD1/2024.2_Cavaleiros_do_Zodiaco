@@ -11,20 +11,20 @@ def selecionar_jogador():
     
     listar_jogadores()
     
-    nome_jogador = Prompt.ask("\n🛡️ Digite o nome do jogador que deseja selecionar").strip()
+    id_jogador = Prompt.ask("\n🛡️ Digite o número do jogador que deseja selecionar").strip()
 
     try:
         with obter_cursor() as cursor:
-            cursor.execute("SELECT id_player FROM player WHERE nome = %s;", (nome_jogador,))
-            resultado = cursor.fetchone()
+            cursor.execute("SELECT nome,id_player FROM player WHERE id_player = %s;", (id_jogador,))
+            nome_jogador = cursor.fetchone()
             
-            if resultado:
+            if nome_jogador:
                 console.print(Panel.fit(
                     f"✅ [bold green]Jogador [cyan]{nome_jogador}[/cyan] selecionado com sucesso![/bold green] 🏆",
                     title="🎯 Sucesso",
                     border_style="green"
                 ))
-                return resultado[0]  # Retorna o ID do jogador selecionado
+                return nome_jogador # Retorna o ID do jogador selecionado
             else:
                 console.print(Panel.fit(
                     f"⚠️ [bold yellow]Jogador '{nome_jogador}' não encontrado.[/bold yellow] 🛑",

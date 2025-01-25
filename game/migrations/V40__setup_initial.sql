@@ -5,6 +5,7 @@ CREATE OR REPLACE FUNCTION setar_sala_inicial(id_player_input INT)
 RETURNS VOID AS $$
 DECLARE
     sala_inicial_id INT;
+    existe_na_party BOOLEAN;
 BEGIN
     -- Recupera o menor id_sala da tabela sala
     SELECT MIN(id_sala) INTO sala_inicial_id FROM public.sala;
@@ -16,14 +17,27 @@ BEGIN
         SET id_sala_safe = sala_inicial_id
         WHERE id_player = id_player_input;
 
-        -- Insere na party
-        INSERT INTO public.party (id_player, id_sala)
-        VALUES (id_player_input, sala_inicial_id);
+        -- Verifica se o player já está na party
+        SELECT EXISTS(
+            SELECT 1 FROM public.party WHERE id_player = id_player_input
+        ) INTO existe_na_party;
+
+        -- Se já existir, apenas atualiza a sala
+        IF existe_na_party THEN
+            UPDATE public.party
+            SET id_sala = sala_inicial_id
+            WHERE id_player = id_player_input;
+        ELSE
+            -- Caso contrário, insere um novo registro na party
+            INSERT INTO public.party (id_player, id_sala)
+            VALUES (id_player_input, sala_inicial_id);
+        END IF;
     ELSE
         RAISE EXCEPTION 'Nenhuma sala encontrada na tabela sala.';
     END IF;
 END;
 $$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION setar_nova_sala(id_player_input INT, id_sala_input INT)
 RETURNS VOID AS $$
@@ -49,25 +63,29 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION get_salas_conectadas(id_player_input INT)
-RETURNS TABLE(id_sala INT, nome VARCHAR) AS $$
+RETURNS TABLE(id_sala INT, nome VARCHAR, direcao VARCHAR) AS $$
 BEGIN
     RETURN QUERY
     WITH salas_conectadas AS (
-        SELECT
-            unnest(ARRAY[s.id_sala_norte, s.id_sala_sul, s.id_sala_leste, s.id_sala_oeste]) AS id_sala_direcao
-        FROM public.sala s
-        WHERE s.id_sala = (
-            SELECT p.id_sala
-            FROM public.party p
-            WHERE p.id_player = id_player_input
-            LIMIT 1
-        )
+        SELECT s.id_sala_norte AS id_sala, CAST('Norte' AS VARCHAR) AS direcao FROM public.sala s WHERE s.id_sala = (
+            SELECT p.id_sala FROM public.party p WHERE p.id_player = id_player_input LIMIT 1
+        ) AND s.id_sala_norte IS NOT NULL
+        UNION ALL
+        SELECT s.id_sala_sul AS id_sala, CAST('Sul' AS VARCHAR) AS direcao FROM public.sala s WHERE s.id_sala = (
+            SELECT p.id_sala FROM public.party p WHERE p.id_player = id_player_input LIMIT 1
+        ) AND s.id_sala_sul IS NOT NULL
+        UNION ALL
+        SELECT s.id_sala_leste AS id_sala, CAST('Leste' AS VARCHAR) AS direcao FROM public.sala s WHERE s.id_sala = (
+            SELECT p.id_sala FROM public.party p WHERE p.id_player = id_player_input LIMIT 1
+        ) AND s.id_sala_leste IS NOT NULL
+        UNION ALL
+        SELECT s.id_sala_oeste AS id_sala, CAST('Oeste' AS VARCHAR) AS direcao FROM public.sala s WHERE s.id_sala = (
+            SELECT p.id_sala FROM public.party p WHERE p.id_player = id_player_input LIMIT 1
+        ) AND s.id_sala_oeste IS NOT NULL
     )
-    SELECT
-        s.id_sala, s.nome
+    SELECT sc.id_sala, s.nome, sc.direcao
     FROM salas_conectadas sc
-    JOIN public.sala s ON sc.id_sala_direcao = s.id_sala
-    WHERE sc.id_sala_direcao IS NOT NULL;
+    JOIN public.sala s ON sc.id_sala = s.id_sala;
 END;
 $$ LANGUAGE plpgsql;
 
