@@ -34,6 +34,6 @@ def iniciar_jogo(console: Console, selected_player_id):
         "[bold green]🎵 Tocando: 'Faça elevar o Cosmo em seu coração' 🎶[/bold green]",
         border_style="green"
     ))
-    tocar_musica("Tema de Abertura",5)
+    tocar_musica("Tema de Abertura",0)
 
     input("\n[🔙 Pressione ENTER para voltar ao menu]")
