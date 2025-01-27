@@ -31,25 +31,25 @@ def mostrar_menu_acoes(console):
     global jogador_selecionado_id
     opcoes = {
         "1": ver_salas_disponiveis,
-        "2": ver_sala_atual,
-        "3": mudar_de_sala,
-        "4": ver_mapa
+        "2": mudar_de_sala,
+        "3": ver_mapa
     }
     while True:
         limpar_terminal(console)
         console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", title="🎮 Aventura Iniciada!", expand=False))
 
         console.print("1️⃣ [bold yellow]Ver Salas Disponíveis [/bold yellow]")
-        console.print("2️⃣ [bold blue]Ver Sala Atual[/bold blue]")
-        console.print("3️⃣ [bold green]Mudar de Sala[/bold green]")
-        console.print("4️⃣ [bold purple]Ver Mapa[/bold purple] 🗺")
-        console.print("5️⃣ [bold red]Sair do Menu de Ações[/bold red]")
+        console.print("2️⃣ [bold green]Mudar de Sala[/bold green]")
+        console.print("3️⃣ [bold purple]Ver Mapa[/bold purple] 🗺")
+        console.print("4️⃣ [bold red]Sair do Menu de Ações[/bold red]")
+
+        ver_sala_atual(console, jogador_selecionado_id)
 
         escolha = input("\n🎯 Escolha uma ação: ").strip()
         
         if escolha in opcoes:
             executar_com_interface(console, opcoes[escolha], jogador_selecionado_id)
-        elif escolha == "5":
+        elif escolha == "4":
             console.print(Panel("[bold red]👋 Saindo do Menu de Ações...[/bold red]", expand=False))
             input("\n[💾 Pressione ENTER para continuar...]")
             break
@@ -81,13 +81,15 @@ def run():
         elif escolha == "3":
             limpar_terminal(console)
             jogador_selecionado = selecionar_jogador()
-            jogador_selecionado_id = jogador_selecionado[1]
-            executar_com_interface(console, lambda c: c.print(f"[bold cyan]👤 Jogador selecionado: {jogador_selecionado[0]}[/bold cyan]"))
+            if jogador_selecionado != None:
+                jogador_selecionado_id = jogador_selecionado[1]
+                executar_com_interface(console, lambda c: c.print(f"[bold cyan]👤 Jogador selecionado: {jogador_selecionado[0]}[/bold cyan]"))
         elif escolha == "4":
             executar_com_interface(console, lambda c: obter_status_jogador(jogador_selecionado_id))
         elif escolha == "5":
             executar_com_interface(console, iniciar_jogo, jogador_selecionado_id)
-            mostrar_menu_acoes(console)
+            if jogador_selecionado_id != None:
+                mostrar_menu_acoes(console)
         elif escolha == "6":
             console.print(Panel("[bold red]❌ Saindo do jogo...[/bold red]", expand=False))
             executar_com_interface(console,lambda c: tocar_tema_encerramento())

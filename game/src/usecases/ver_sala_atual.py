@@ -20,7 +20,7 @@ def ver_sala_atual(console, selected_player_id):
 
             if resultado and resultado[0]:
                 console.print(Panel.fit(
-                    f"📍 [bold cyan]Sala Atual:[/bold cyan]\n🏛️ [bold]{resultado[0]}[/bold]",
+                    f"📍 [bold]{resultado[0]}[/bold]",
                     title="🏰 Localização",
                     border_style="cyan"
                 ))

@@ -36,7 +36,7 @@ def tocar_tema_encerramento():
 
         # Reproduz a música
         pygame.mixer.music.play()
-        time.sleep(3)  # Aguarda 3 segundos antes de aceitar entrada do usuário
+        time.sleep(0)  # Aguarda 3 segundos antes de aceitar entrada do usuário
 
         print(f"🎵 Tema de encerramento tocando... Pressione qualquer tecla para sair.")
 

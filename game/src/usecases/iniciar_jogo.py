@@ -14,7 +14,6 @@ def iniciar_jogo(console: Console, selected_player_id):
             title="🚨 ERRO 🚨",
             border_style="red"
         ))
-        input("\n[Pressione ENTER para voltar ao menu]")
         return
 
 
