@@ -38,13 +38,13 @@ BEGIN
         p_nome_cdz, -- Nome fornecido por parâmetro
         1, -- Nível fixo
         0, -- XP acumulado fixo
-        20, -- HP Máximo fixo
-        20, -- Magia Máxima fixa
-        20, -- HP Atual fixo
-        20, -- Magia Atual fixa
-        floor(random() * 61), -- Velocidade aleatória (0 a 60)
-        floor(random() * 61), -- Ataque físico base aleatório (0 a 60)
-        floor(random() * 61), -- Ataque mágico base aleatório (0 a 60)
+        100, -- HP Máximo fixo
+        50, -- Magia Máxima fixa
+        100, -- HP Atual fixo
+        100, -- Magia Atual fixa
+        50, -- Velocidade aleatória (0 a 60)
+        20, -- Ataque físico base aleatório (0 a 60)
+        10, -- Ataque mágico base aleatório (0 a 60)
         1 -- Sala Safe ID fixa
     );
 
