@@ -1,6 +1,6 @@
 CREATE TABLE Tipo_Item (
     id_item SERIAL PRIMARY KEY,
-    tipo_item INTEGER NOT NULL
+    tipo_item enum_tipo_item NOT NULL
 );
 
 CREATE TABLE Armadura (
