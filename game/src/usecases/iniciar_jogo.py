@@ -25,7 +25,7 @@ def iniciar_jogo(console: Console, selected_player_id):
         border_style="bright_magenta"
     ))
     
-    setar_sala_inicial(selected_player_id)
+
 
     exibir_introducao(console)
 

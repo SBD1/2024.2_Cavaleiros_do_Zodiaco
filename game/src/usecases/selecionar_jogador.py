@@ -19,7 +19,6 @@ def selecionar_jogador():
             try:
                 cursor.execute("SELECT nome,id_player FROM player WHERE id_player = %s;", (id_jogador,))
                 nome_jogador = cursor.fetchone()
-                time.sleep(2)
             except:
                 console.print(Panel.fit(
                 f"❌ [bold red]Digite um número de jogador válido[/bold red]\n",
