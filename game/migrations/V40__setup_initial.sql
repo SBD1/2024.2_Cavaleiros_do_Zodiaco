@@ -7,14 +7,11 @@ DECLARE
     existe_na_party BOOLEAN;
 BEGIN
     -- Recupera o menor id_sala da tabela sala
-    SELECT MIN(id_sala) INTO sala_inicial_id FROM public.sala;
+    SELECT id_sala FROM public.sala_inicial;
 
     -- Verifica se existe uma sala
     IF sala_inicial_id IS NOT NULL THEN
-        -- Atualiza o id_sala_safe do player
-        UPDATE public.player
-        SET id_sala_safe = sala_inicial_id
-        WHERE id_player = id_player_input;
+
 
         -- Verifica se o player já está na party
         SELECT EXISTS(

@@ -30,8 +30,7 @@ BEGIN
         magia_atual,
         velocidade,
         ataque_fisico_base,
-        ataque_magico_base,
-        id_sala_safe
+        ataque_magico_base     
     )
     VALUES (
         floor(random() * (id_elemento_max - id_elemento_min + 1) + id_elemento_min), -- ID do elemento aleatório dentro do intervalo válido
@@ -44,8 +43,7 @@ BEGIN
         100, -- Magia Atual fixa
         50, -- Velocidade aleatória (0 a 60)
         20, -- Ataque físico base aleatório (0 a 60)
-        10, -- Ataque mágico base aleatório (0 a 60)
-        1 -- Sala Safe ID fixa
+        10 -- Ataque mágico base aleatório (0 a 60)
     );
 
 END;

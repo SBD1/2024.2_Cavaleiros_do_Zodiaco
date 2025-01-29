@@ -28,6 +28,12 @@ CREATE TABLE Sala (
 );
  
 
+CREATE TABLE Sala_Segura (
+    id_sala INTEGER PRIMARY KEY
+);
+ 
+
+
 
 ALTER TABLE Santuario ADD CONSTRAINT FK_Santuario_2
     FOREIGN KEY (id_missao_requisito)
@@ -52,3 +58,7 @@ ALTER TABLE Casa ADD CONSTRAINT FK_Casa_4
 ALTER TABLE Sala ADD CONSTRAINT FK_Sala_2
     FOREIGN KEY (id_casa)
     REFERENCES Casa (id_casa);
+
+ALTER TABLE Sala_Segura ADD CONSTRAINT FK_Sala_Segura_2
+    FOREIGN KEY (id_sala)
+    REFERENCES Sala (id_sala);

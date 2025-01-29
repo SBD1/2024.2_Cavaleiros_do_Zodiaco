@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
+from src.usecases.mudar_para_orfanato import mudar_para_orfanato
 from src.usecases.obter_status_jogador import obter_status_jogador
 from src.usecases.listar_jogadores import listar_jogadores
 from src.usecases.selecionar_jogador import selecionar_jogador
@@ -32,7 +33,8 @@ def mostrar_menu_acoes(console):
     opcoes = {
         "1": ver_salas_disponiveis,
         "2": mudar_de_sala,
-        "3": ver_mapa
+        "3": ver_mapa,
+        "4": mudar_para_orfanato
     }
     while True:
         limpar_terminal(console)
@@ -41,7 +43,8 @@ def mostrar_menu_acoes(console):
         console.print("1️⃣ [bold yellow]Ver Salas Disponíveis [/bold yellow]")
         console.print("2️⃣ [bold green]Mudar de Sala[/bold green]")
         console.print("3️⃣ [bold purple]Ver Mapa[/bold purple] 🗺")
-        console.print("4️⃣ [bold red]Sair do Menu de Ações[/bold red]")
+        console.print("4️⃣ [bold cyan]Voltar para Orfanato[/bold cyan] ")
+        console.print("5 [bold red]Sair do Menu de Ações[/bold red]")
 
         ver_sala_atual(console, jogador_selecionado_id)
 
@@ -49,7 +52,7 @@ def mostrar_menu_acoes(console):
         
         if escolha in opcoes:
             executar_com_interface(console, opcoes[escolha], jogador_selecionado_id)
-        elif escolha == "4":
+        elif escolha == "5":
             console.print(Panel("[bold red]👋 Saindo do Menu de Ações...[/bold red]", expand=False))
             input("\n[💾 Pressione ENTER para continuar...]")
             break

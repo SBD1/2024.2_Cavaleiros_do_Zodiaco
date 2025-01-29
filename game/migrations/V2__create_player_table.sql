@@ -10,8 +10,7 @@ CREATE TABLE Player (
     magia_atual INTEGER NOT NULL,
     velocidade INTEGER NOT NULL,
     ataque_fisico_base INTEGER NOT NULL,
-    ataque_magico_base INTEGER NOT NULL,
-    id_sala_safe INTEGER NOT NULL
+    ataque_magico_base INTEGER NOT NULL
 );
  
 ALTER TABLE Player ADD CONSTRAINT FK_Player_2

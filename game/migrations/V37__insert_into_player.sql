@@ -37,8 +37,7 @@ BEGIN
         magia_atual,
         velocidade,
         ataque_fisico_base,
-        ataque_magico_base,
-        id_sala_safe
+        ataque_magico_base
     )
     VALUES (
         floor(random() * (id_elemento_max - id_elemento_min + 1) + id_elemento_min), -- ID do elemento aleatório dentro do intervalo válido
@@ -51,8 +50,7 @@ BEGIN
         20, -- Magia Atual fixa
         floor(random() * 61), -- Velocidade aleatória (0 a 60)
         floor(random() * 61), -- Ataque físico base aleatório (0 a 60)
-        floor(random() * 61), -- Ataque mágico base aleatório (0 a 60)
-        1 -- Sala Safe ID fixa
+        floor(random() * 61) -- Ataque mágico base aleatório (0 a 60)
     );
     
     RAISE NOTICE 'Novo jogador % foi criado com sucesso!', nome_cdz;
