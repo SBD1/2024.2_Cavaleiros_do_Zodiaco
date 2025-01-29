@@ -3,14 +3,12 @@ RETURNS TRIGGER AS $$
 DECLARE
     new_id_item INTEGER;
 BEGIN
-    -- Obter o maior valor atual de id_item em tipo_item e incrementá-lo
-    SELECT COALESCE(MAX(id_item), 0) + 1 INTO new_id_item FROM tipo_item;
+    -- Insere um registro em tipo_item e captura o ID gerado automaticamente
+    INSERT INTO tipo_item (tipo_item)
+    VALUES ('c')
+    RETURNING id_item INTO new_id_item;
 
-    -- Inserir na tabela tipo_item com o novo id_item
-    INSERT INTO tipo_item (id_item, tipo_item)
-    VALUES (new_id_item, 'c');
-
-    -- Atribuir o novo id_item ao registro a ser inserido na tabela consumivel
+    -- Atribui o ID gerado ao campo id_item do registro a ser inserido na tabela consumivel
     NEW.id_item := new_id_item;
 
     -- Retorna o registro atualizado
@@ -22,6 +20,7 @@ CREATE TRIGGER before_insert_consumivel_trigger
 BEFORE INSERT ON consumivel
 FOR EACH ROW
 EXECUTE FUNCTION before_insert_consumivel();
+
 
 INSERT INTO Consumivel (
     nome, 

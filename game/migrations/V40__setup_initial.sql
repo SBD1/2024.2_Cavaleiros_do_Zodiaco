@@ -1,5 +1,4 @@
-INSERT INTO party (id_player, id_sala)
-VALUES(1, 1);
+
 
 CREATE OR REPLACE FUNCTION setar_sala_inicial(id_player_input INT)
 RETURNS VOID AS $$
