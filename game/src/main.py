@@ -1,3 +1,4 @@
+import time
 import psycopg2
 import os
 from dotenv import load_dotenv
@@ -17,39 +18,55 @@ from src.usecases.criar_jogador import criar_jogador
 from src.usecases.ver_mapa import ver_mapa
 from .util import limpar_terminal
 from src.usecases.tocar_tema_encerramento import tocar_tema_encerramento
-# Variável global para armazenar o ID do jogador selecionado
+from src.usecases.mudar_saga import mudar_saga
+from src.usecases.verificar_se_esta_no_orfanato import verificar_se_esta_no_orfanato
+
+
 jogador_selecionado_id = None
 
 def executar_com_interface(console, func, *args, **kwargs):
-    """Limpa o terminal, executa a função passada como argumento e aguarda input para continuar."""
+
     limpar_terminal(console)
     func(console, *args, **kwargs)
     console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
     input()
 
+
 def mostrar_menu_acoes(console):
-    """Exibe o menu de ações disponíveis para o jogador."""
+
     global jogador_selecionado_id
+
     opcoes = {
         "1": ver_salas_disponiveis,
         "2": mudar_de_sala,
         "3": ver_mapa,
-        "4": mudar_para_orfanato
+
     }
+
     while True:
         limpar_terminal(console)
-        console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", title="🎮 Aventura Iniciada!", expand=False))
+
+        ver_sala_atual(console, jogador_selecionado_id)
+
+        console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", expand=False))
 
         console.print("1️⃣ [bold yellow]Ver Salas Disponíveis [/bold yellow]")
         console.print("2️⃣ [bold green]Mudar de Sala[/bold green]")
         console.print("3️⃣ [bold purple]Ver Mapa[/bold purple] 🗺")
-        console.print("4️⃣ [bold cyan]Voltar para Orfanato[/bold cyan] ")
-        console.print("5 [bold red]Sair do Menu de Ações[/bold red]")
 
-        ver_sala_atual(console, jogador_selecionado_id)
+
+        if not verificar_se_esta_no_orfanato(jogador_selecionado_id):
+            console.print("4️⃣ [bold cyan]Voltar para o Orfanato[/bold cyan]")
+            opcoes["4"] = mudar_para_orfanato
+        else:
+            console.print("4️⃣ [bold blue]Mudar de Saga[/bold blue]")
+            opcoes["4"] = mudar_saga
+
+        console.print("5️⃣ [bold red]Sair do Menu de Ações[/bold red]\n")
+
 
         escolha = input("\n🎯 Escolha uma ação: ").strip()
-        
+
         if escolha in opcoes:
             executar_com_interface(console, opcoes[escolha], jogador_selecionado_id)
         elif escolha == "5":
@@ -58,6 +75,8 @@ def mostrar_menu_acoes(console):
             break
         else:
             console.print("[bold red]⚠ Opção inválida! Tente novamente.[/bold red]")
+            time.sleep(1)
+
 
 def run():
     """Menu principal do jogo."""

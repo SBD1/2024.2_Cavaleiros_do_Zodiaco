@@ -31,3 +31,5 @@ VALUES('i');
 INSERT INTO public.Sala_Segura (id_sala)
 VALUES(1);
 
+INSERT INTO Party (id_player, id_sala) VALUES (1,1); -- REMOVER DEPOIS 
+INSERT INTO Party (id_player, id_sala) VALUES (2,1); -- REMOVER DEPOIS

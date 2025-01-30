@@ -61,3 +61,5 @@ LANGUAGE plpgsql;
 
 SELECT insert_random_cdz_player();
 SELECT insert_random_cdz_player();
+
+

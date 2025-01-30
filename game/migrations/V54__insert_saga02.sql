@@ -70,5 +70,3 @@ VALUES ( nextval('sala_id_sala_seq'::regclass), 2, 'Templo Sagrado', NULL, 6, NU
 
 -- implementar casa dos cavaleiros negros se der tempo
 
-INSERT INTO party (id_player, id_sala)
-VALUES(1, 4);
