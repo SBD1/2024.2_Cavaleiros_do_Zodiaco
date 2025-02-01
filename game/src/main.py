@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
-from src.usecases.listar_casas_disponiveis import listar_casas_disponiveis
+from src.usecases.obter_acoes_disponiveis import obter_acoes_disponiveis
+from src.usecases.mudar_casa import mudar_casa
 from src.usecases.mudar_para_orfanato import mudar_para_orfanato
 from src.usecases.obter_status_jogador import obter_status_jogador
 from src.usecases.listar_jogadores import listar_jogadores
@@ -37,41 +38,25 @@ def mostrar_menu_acoes(console):
 
     global jogador_selecionado_id
 
-    opcoes = {
-        "1": ver_salas_disponiveis,
-        "2": mudar_de_sala,
-        "3": ver_mapa,
-        "5": listar_casas_disponiveis,
-
-    }
+    
 
     while True:
         limpar_terminal(console)
 
         ver_localizacao_atual(console, jogador_selecionado_id)
-
+        opcoes = obter_acoes_disponiveis(jogador_selecionado_id)
+        
         console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", expand=False))
 
-        console.print("1️⃣ [bold yellow]Ver Salas Disponíveis [/bold yellow]")
-        console.print("2️⃣ [bold green]Mudar de Sala[/bold green]")
-        console.print("3️⃣ [bold purple]Ver Mapa[/bold purple] 🗺")
+        for opcao in opcoes:
+            console.print(f"{opcoes.index(opcao) + 1}️⃣ {opcao[0]}")
 
 
-        if not verificar_se_esta_no_orfanato(jogador_selecionado_id):
-            console.print("4️⃣ [bold cyan]Voltar para o Orfanato[/bold cyan]")
-            opcoes["4"] = mudar_para_orfanato
-        else:
-            console.print("4️⃣ [bold blue]Mudar de Saga[/bold blue]")
-            opcoes["4"] = mudar_saga
+        escolha = int(input("\n🎯 Escolha uma ação: ").strip())
 
-        console.print("6 [bold red]Sair do Menu de Ações[/bold red]\n")
-
-
-        escolha = input("\n🎯 Escolha uma ação: ").strip()
-
-        if escolha in opcoes:
-            executar_com_interface(console, opcoes[escolha], jogador_selecionado_id)
-        elif escolha == "5":
+        if 1 <= int(escolha) < len(opcoes):
+            executar_com_interface(console, opcoes[escolha - 1][1], jogador_selecionado_id)
+        elif escolha == len(opcoes):
             console.print(Panel("[bold red]👋 Saindo do Menu de Ações...[/bold red]", expand=False))
             input("\n[💾 Pressione ENTER para continuar...]")
             break
