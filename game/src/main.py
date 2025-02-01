@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
+from src.usecases.listar_casas_disponiveis import listar_casas_disponiveis
 from src.usecases.mudar_para_orfanato import mudar_para_orfanato
 from src.usecases.obter_status_jogador import obter_status_jogador
 from src.usecases.listar_jogadores import listar_jogadores
@@ -12,7 +13,7 @@ from src.usecases.selecionar_jogador import selecionar_jogador
 from src.usecases.exibir_introducao import exibir_introducao
 from src.usecases.ver_salas_disponiveis import ver_salas_disponiveis
 from src.usecases.mudar_de_sala import mudar_de_sala
-from src.usecases.ver_sala_atual import ver_sala_atual
+from game.src.usecases.ver_locazalicao_atual import ver_localizacao_atual
 from src.usecases.iniciar_jogo import iniciar_jogo
 from src.usecases.criar_jogador import criar_jogador
 from src.usecases.ver_mapa import ver_mapa
@@ -40,13 +41,14 @@ def mostrar_menu_acoes(console):
         "1": ver_salas_disponiveis,
         "2": mudar_de_sala,
         "3": ver_mapa,
+        "5": listar_casas_disponiveis,
 
     }
 
     while True:
         limpar_terminal(console)
 
-        ver_sala_atual(console, jogador_selecionado_id)
+        ver_localizacao_atual(console, jogador_selecionado_id)
 
         console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", expand=False))
 
@@ -62,7 +64,7 @@ def mostrar_menu_acoes(console):
             console.print("4️⃣ [bold blue]Mudar de Saga[/bold blue]")
             opcoes["4"] = mudar_saga
 
-        console.print("5️⃣ [bold red]Sair do Menu de Ações[/bold red]\n")
+        console.print("6 [bold red]Sair do Menu de Ações[/bold red]\n")
 
 
         escolha = input("\n🎯 Escolha uma ação: ").strip()
