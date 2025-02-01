@@ -9,6 +9,7 @@ SELECT
         WHEN tipo_item = 'l' THEN 'Livro'
         ELSE 'Outro'
     END AS tipo_item,
+    quantidade,
     id_player
 FROM (
     SELECT
@@ -16,6 +17,7 @@ FROM (
         c.preco_venda,
         c.descricao,
         ti.tipo_item,
+        ia.quantidade,
         p.id_player 
     FROM inventario i
     JOIN player p ON p.id_player = i.id_player
@@ -30,6 +32,7 @@ FROM (
         l.preco_venda,
         l.descricao,
         ti.tipo_item,
+        ia.quantidade,
         p.id_player 
     FROM inventario i
     JOIN player p ON p.id_player = i.id_player
@@ -44,6 +47,7 @@ FROM (
         m.preco_venda,
         m.descricao,
         ti.tipo_item,
+        ia.quantidade,
         p.id_player 
     FROM inventario i
     JOIN player p ON p.id_player = i.id_player
