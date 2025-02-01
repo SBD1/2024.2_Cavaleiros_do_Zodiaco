@@ -11,6 +11,3 @@ CREATE TRIGGER trigger_insert_party
 AFTER INSERT ON Player
 FOR EACH ROW
 EXECUTE FUNCTION insert_party_trigger_function();
-
-
-

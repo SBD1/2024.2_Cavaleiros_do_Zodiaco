@@ -101,3 +101,49 @@ BEGIN
     RETURN 'Player mudou de saga com Sucesso';
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION listar_casas(player_id INT)                    
+RETURNS TABLE (
+    id_casa INT,
+    nome_casa TEXT
+) 
+AS $$
+DECLARE                                                                                                          
+    player_exists INT;                                                                                         
+BEGIN
+    -- Verifica se o jogador existe                                                                               
+    SELECT COUNT(*) INTO player_exists 
+    FROM player 
+    WHERE id_player = player_id;                                  
+
+    IF player_exists = 0 THEN                                                                                    
+        RAISE EXCEPTION 'O jogador com ID % não existe.', player_id;
+    END IF;                                                                                                       
+
+    -- Retorna as casas disponíveis                                                                             
+    RETURN QUERY                                                                                                 
+    SELECT 
+        c.id_casa, 
+        c.nome :: TEXT
+    FROM 
+        casa c
+    LEFT JOIN 
+        missao m ON c.id_missao_requisito = m.id_missao
+    LEFT JOIN 
+        player_missao pm ON pm.id_missao = m.id_missao AND pm.id_player = player_id
+    WHERE 
+        c.id_saga <> 1 
+        AND (c.id_missao_requisito IS NULL OR pm.status_missao = 'c')
+        AND c.id_saga = (
+            SELECT sa.id_saga
+            FROM party p
+            JOIN sala s ON p.id_sala = s.id_sala
+            JOIN casa ca ON  ca.id_casa= s.id_casa
+            JOIN saga sa ON sa.id_saga = ca.id_saga
+            WHERE p.id_player = player_id  
+        );
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Nenhuma casa disponível foi encontrada para o jogador.';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
