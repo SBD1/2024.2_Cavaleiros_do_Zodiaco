@@ -13,7 +13,7 @@ from src.usecases.selecionar_jogador import selecionar_jogador
 from src.usecases.exibir_introducao import exibir_introducao
 from src.usecases.ver_salas_disponiveis import ver_salas_disponiveis
 from src.usecases.mudar_de_sala import mudar_de_sala
-from game.src.usecases.ver_locazalicao_atual import ver_localizacao_atual
+from src.usecases.ver_locazalicao_atual import ver_localizacao_atual
 from src.usecases.iniciar_jogo import iniciar_jogo
 from src.usecases.criar_jogador import criar_jogador
 from src.usecases.ver_mapa import ver_mapa
