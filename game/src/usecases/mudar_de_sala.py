@@ -1,4 +1,6 @@
 from rich.panel import Panel
+
+from .ver_mapa import ver_mapa
 from ..database import obter_cursor
 from .ver_salas_disponiveis import ver_salas_disponiveis
 from ..database import obter_conexao
@@ -16,6 +18,7 @@ def mudar_de_sala(console, selected_player_id):
         return
 
     # Exibir as salas disponíveis
+    ver_mapa(console, selected_player_id)
     ver_salas_disponiveis(console, selected_player_id)
 
     console.print("\n📌 [bold cyan]Digite a direção para a qual deseja se mover (Norte, Sul, Leste, Oeste):[/bold cyan] ", end="")
