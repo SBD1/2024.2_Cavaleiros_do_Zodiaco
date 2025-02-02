@@ -1,3 +1,4 @@
+from .interagir_npc_mercador import interagir_npc_mercador
 from .mudar_casa import mudar_casa
 from .mudar_de_sala import mudar_de_sala
 from .mudar_para_orfanato import mudar_para_orfanato
@@ -12,6 +13,10 @@ from .ver_missoes import ver_missoes
 from .verificar_npc_na_sala import verificar_npc_na_sala
 from .interagir_npc_quest import interagir_npc_quest
 from .listar_todas_receitas import listar_todas_receitas
+
+
+
+
 def obter_acoes_disponiveis(jogador_id):
 
     # Opções comuns a todos os jogadores
@@ -42,7 +47,7 @@ def obter_acoes_disponiveis(jogador_id):
         opcoes.insert(0, ("[sea_green1]💬 Falar com Saori Kido (Missões)[/sea_green1]", interagir_npc_quest))
 
     elif check_npc == "Mercador":
-        opcoes.insert(0, ("[chartreuse2]💰 Falar com Jabu (Mercador)[/chartreuse2]", None))
+        opcoes.insert(0, ("[chartreuse2]💰 Falar com Jabu (Mercador)[/chartreuse2]", interagir_npc_mercador))
 
     opcoes.append(("[bold red]❌ Sair do Menu de Ações[/bold red]", None))
 

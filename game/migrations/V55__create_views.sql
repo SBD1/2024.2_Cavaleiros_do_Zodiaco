@@ -85,51 +85,52 @@ inner join cavaleiro c
 inner join elemento e 
 	on e.id_elemento = c.id_elemento ;
 
+        
 
-CREATE OR REPLACE VIEW items_a_venda_view
-AS SELECT subquery.nome,
-    subquery.preco_compra,
-    subquery.descricao,
-        CASE
-            WHEN subquery.tipo_item = 'a'::enum_tipo_item THEN 'Armadura'::text
-            WHEN subquery.tipo_item = 'm'::enum_tipo_item THEN 'Material'::text
-            WHEN subquery.tipo_item = 'c'::enum_tipo_item THEN 'Consumível'::text
-            WHEN subquery.tipo_item = 'l'::enum_tipo_item THEN 'Livro'::text
-            ELSE 'Outro'::text
-        END AS tipo_item,
-    subquery.level_minimo
-    FROM (   SELECT c.nome,
+CREATE OR REPLACE VIEW armadura_venda_view AS
+    SELECT 
+        a.nome,
+        iv.preco_compra,
+        a.descricao,
+        iv.nivel_minimo
+    FROM 
+        item_a_venda iv
+    JOIN 
+        tipo_item ti ON ti.id_item = iv.id_item
+    JOIN 
+        armadura a ON a.id_armadura = ti.id_item
+        ORDER BY iv.nivel_minimo, a.nome;
+
+CREATE OR REPLACE VIEW consumivel_venda_view AS
+    SELECT c.nome,
             iv.preco_compra,
             c.descricao,
-            iv.level_minimo,
-            ti.tipo_item
+            iv.nivel_minimo
             FROM item_a_venda iv
             JOIN tipo_item ti ON ti.id_item = iv.id_item
             JOIN consumivel c ON c.id_item = ti.id_item
-        UNION
-         SELECT l.nome,
+            ORDER BY iv.nivel_minimo, c.nome;
+
+CREATE OR REPLACE VIEW livro_venda_view AS
+    SELECT l.nome,
             iv.preco_compra,
             l.descricao,
-            iv.level_minimo,
-            ti.tipo_item
+            iv.nivel_minimo
             FROM item_a_venda iv
             JOIN tipo_item ti ON ti.id_item = iv.id_item
             JOIN livro l ON l.id_item = ti.id_item
-        UNION
-        SELECT m.nome,
+            ORDER BY iv.nivel_minimo, l.nome;
+
+CREATE OR REPLACE VIEW material_venda_view AS
+    SELECT m.nome,
             iv.preco_compra,
             m.descricao,
-            iv.level_minimo,
-            ti.tipo_item
+            iv.nivel_minimo
             FROM item_a_venda iv
             JOIN tipo_item ti ON ti.id_item = iv.id_item
             JOIN material m ON m.id_material = ti.id_item
-        UNION
-        SELECT a.nome,
-            iv.preco_compra,
-            a.descricao,
-            iv.level_minimo,
-            ti.tipo_item
-            FROM item_a_venda iv
-            JOIN tipo_item ti ON ti.id_item = iv.id_item
-            JOIN armadura a ON a.id_armadura = ti.id_item) subquery;
+            ORDER BY iv.nivel_minimo, m.nome;
+
+
+
+
