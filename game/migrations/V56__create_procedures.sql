@@ -113,3 +113,45 @@ BEGIN
     RAISE NOTICE 'Cavaleiro % foi adicionado à party.', p_id_cavaleiro_novo;
 END;
 $$;
+
+CREATE OR REPLACE PROCEDURE criar_item(
+    IN p_id_player INT,
+    IN p_id_item_gerado INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    material RECORD; 
+    insuficiente BOOLEAN := FALSE;
+BEGIN
+    FOR material IN 
+        SELECT mr.id_material, mr.quantidade
+        FROM material_receita mr
+        WHERE mr.id_receita = p_id_item_gerado
+    LOOP
+        IF (SELECT quantidade FROM item_armazenado 
+            WHERE id_inventario = p_id_player 
+              AND id_item = material.id_material) < material.quantidade THEN
+            insuficiente := TRUE;
+        END IF;
+    END LOOP;
+
+    IF insuficiente THEN
+        RAISE EXCEPTION 'Você não tem materiais suficientes para criar este item.';
+    END IF;
+
+    UPDATE item_armazenado ia
+    SET quantidade = ia.quantidade - mr.quantidade
+    FROM material_receita mr
+    WHERE ia.id_inventario = p_id_player
+    AND ia.id_item = mr.id_material
+    AND mr.id_receita = p_id_item_gerado;
+
+    INSERT INTO item_armazenado (id_inventario, id_item, quantidade)
+    VALUES (p_id_player, p_id_item_gerado, 1)
+    ON CONFLICT (id_inventario, id_item) 
+    DO UPDATE SET quantidade = item_armazenado.quantidade + 1;
+
+    RAISE NOTICE 'Item criado com sucesso!';
+END;
+$$;
