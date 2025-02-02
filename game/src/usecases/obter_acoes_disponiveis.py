@@ -21,7 +21,6 @@ def obter_acoes_disponiveis(jogador_id):
         ("[bold purple]🗺️ Ver Mapa[/bold purple]", ver_mapa),
         ("[bold cyan]🎒 Ver Inventário[/bold cyan]", ver_inventario),
         ("[bold blue]⚔️ Ver Grupo[/bold blue]", ver_grupo),
-        ("[bold red]🔄 Trocar Cavaleiro na Party[/bold red]", trocar_cavaleiro),
         ("[light_pink4]📜 Ver Missões[/light_pink4]", ver_missoes),
     ]
 

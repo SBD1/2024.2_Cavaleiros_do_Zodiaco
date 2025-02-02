@@ -30,7 +30,6 @@ def ver_grupo(console, player_id):
             ids_cavaleiros_party = {item[0] for item in grupo}
 
             tabela = Table(title="⚔️ Grupo do Jogador", show_lines=True)
-            tabela.add_column("ID", style="yellow", justify="center", no_wrap=True)
             tabela.add_column("Cavaleiro", style="cyan", justify="center", no_wrap=True)
             tabela.add_column("Elemento", style="blue", justify="center", no_wrap=True)
             tabela.add_column("Nível", style="green", justify="center", no_wrap=True)
@@ -50,7 +49,7 @@ def ver_grupo(console, player_id):
                 ) = item  
 
                 tabela.add_row(
-                    str(id_cavaleiro), nome, elemento, str(nivel), str(xp_atual), 
+                    nome, elemento, str(nivel), str(xp_atual), 
                     str(hp_max), str(magia_max), str(hp_atual), 
                     str(magia_atual), str(velocidade), str(ataque_fisico), str(ataque_magico)
                 )
@@ -69,7 +68,7 @@ def ver_grupo(console, player_id):
 
             console.print("\n[bold red]Escolha um cavaleiro para remover:[/bold red]")
             tabela_party = Table(title="🏰 Cavaleiros na Party", show_lines=True)
-            tabela_party.add_column("ID", style="yellow", justify="center")
+            tabela_party.add_column("Opção", style="yellow", justify="center")
             tabela_party.add_column("Nome", style="cyan", justify="left")
 
             for cavaleiro in grupo:
@@ -97,7 +96,7 @@ def ver_grupo(console, player_id):
 
             console.print("\n[bold green]Escolha um cavaleiro para adicionar à party:[/bold green]")
             tabela_disponiveis = Table(title="🛡️ Cavaleiros Disponíveis", show_lines=True)
-            tabela_disponiveis.add_column("ID", style="yellow", justify="center")
+            tabela_disponiveis.add_column("Opção", style="yellow", justify="center")
             tabela_disponiveis.add_column("Nome", style="cyan", justify="left")
 
             for cavaleiro in cavaleiros_disponiveis:
