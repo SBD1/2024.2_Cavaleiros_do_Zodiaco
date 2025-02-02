@@ -14,6 +14,7 @@ from .verificar_npc_na_sala import verificar_npc_na_sala
 from .interagir_npc_quest import interagir_npc_quest
 from .listar_todas_receitas import listar_todas_receitas
 from .gerar_item import gerar_item
+
 def obter_acoes_disponiveis(jogador_id):
 
     # Opções comuns a todos os jogadores
