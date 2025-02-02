@@ -43,3 +43,6 @@ VALUES
 
 -- Poção que aumenta a magia máxima
 ('Elixir da Magia', 'Aumenta a magia máxima em 15 pontos.', 350, 0, 0, 0, 15);
+
+INSERT INTO item_a_venda( id_item, preco_compra, nivel_minimo)
+VALUES (1,10,1), (2,50,5), (3,10,1), (4,50,5);

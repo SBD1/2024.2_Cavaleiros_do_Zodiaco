@@ -7,6 +7,7 @@ CREATE TABLE Armadura (
     id_armadura INTEGER,
     id_parte_corpo enum_parte_corpo,
     nome VARCHAR NOT NULL,
+    descricao VARCHAR,
     raridade_armadura VARCHAR NOT NULL,
     defesa_magica INTEGER,
     defesa_fisica INTEGER,
@@ -14,7 +15,6 @@ CREATE TABLE Armadura (
     ataque_fisico INTEGER,
     durabilidade_max INTEGER,
     preco_venda INTEGER,
-    descricao INTEGER,
     PRIMARY KEY (id_armadura, id_parte_corpo)
 );
  

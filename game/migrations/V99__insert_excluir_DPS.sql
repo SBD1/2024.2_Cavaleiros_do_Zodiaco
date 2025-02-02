@@ -6,15 +6,15 @@ VALUES (NULL, 5, 'Derrote Cassios', 'Cassios, o imponente guerreiro treinado por
 
 
 INSERT INTO public.item_missao (nome, descricao) 
-VALUES ('Veneno de Cobra', 'Um frasco contendo o veneno letal de Shinra, a Amazona de Prata. Um item raro e perigoso.');
+VALUES ('Veneno de Cobra', 'Um frasco contendo o veneno letal de Shaina, a Amazona de Prata. Um item raro e perigoso.');
 
 
 INSERT INTO public.missao (id_missao_anterior, item_necessario, nome, dialogo_inicial, dialogo_durante, dialogo_completa) 
-VALUES (1, 6, 'Derrote Shinra', 'Shinra, a Amazona de Prata, tem causado problemas em nosso território. Ela é perigosa e deve ser detido.', 'Sua missão é enfrentar e derrotar Shinra. Lembre-se, ela é rápido e usa seu veneno para enfraquecer seus inimigos.', 'Parabéns! Você derrotou Shinra e adquiriu seu mortal Veneno de Cobra. Sua bravura será lembrada.');
+VALUES (1, 6, 'Derrote Shaina', 'Shaina, a Amazona de Prata, tem causado problemas em nosso território. Ela é perigosa e deve ser detido.', 'Sua missão é enfrentar e derrotar Shaina. Lembre-se, ela é rápido e usa seu veneno para enfraquecer seus inimigos.', 'Parabéns! Você derrotou Shaina e adquiriu seu mortal Veneno de Cobra. Sua bravura será lembrada.');
 
 
-INSERT INTO public.boss
-( id_sala, id_item_missao, nome, nivel, xp_acumulado, hp_max, hp_atual, magia_max, magia_atual, velocidade, ataque_fisico_base, ataque_magico_base, dinheiro, fala_inicio, fala_derrotar_player, fala_derrotado, fala_condicao)
-VALUES ( 12, 5, 'Shinra de cobra', 1, 150, 100, 100, 100, 100, 100, 100, 100, 30, 'Toma veneno', 'fras2', 'frase3', 'frase4');
+INSERT INTO public.boss (id_sala, id_item_missao, nome, nivel, xp_acumulado, hp_max, hp_atual, magia_max, magia_atual, velocidade, ataque_fisico_base, ataque_magico_base, dinheiro, fala_inicio, fala_derrotar_player, fala_derrotado, fala_condicao) 
+VALUES (12, 5, 'Shaina de Cobra', 1, 150, 100, 100, 100, 100, 100, 100, 100, 30, 'Você ousa desafiar uma Amazona de Prata? Sentirá o poder do veneno da Cobra!', 'Eu avisei... sua força é insignificante contra o meu veneno mortal!', 'Impossível! Como um cavaleiro tão inferior conseguiu me derrotar?!', 'Se deseja sair vivo, mostre que é digno e enfrente-me com coragem!');
+
 
 

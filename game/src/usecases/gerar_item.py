@@ -84,3 +84,4 @@ def gerar_item(console, jogador_id):
             f"⛔ [bold red]Erro ao criar item: {e}[/bold red]",
             border_style="red"
         ))
+
