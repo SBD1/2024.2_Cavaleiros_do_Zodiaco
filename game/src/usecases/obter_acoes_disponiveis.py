@@ -13,9 +13,7 @@ from .ver_missoes import ver_missoes
 from .verificar_npc_na_sala import verificar_npc_na_sala
 from .interagir_npc_quest import interagir_npc_quest
 from .listar_todas_receitas import listar_todas_receitas
-
-
-
+from .gerar_item import gerar_item
 
 def obter_acoes_disponiveis(jogador_id):
 
@@ -26,6 +24,7 @@ def obter_acoes_disponiveis(jogador_id):
         ("[bold purple]🗺️ Ver Mapa[/bold purple]", ver_mapa),
         ("[bold cyan]🎒 Ver Inventário[/bold cyan]", ver_inventario),
         ("[light_pink4]📜 Ver Receitas [/light_pink4]", listar_todas_receitas),
+         ("[bold green]⚒️ Craftar Item[/bold green]", gerar_item),
         ("[bold blue]⚔️ Ver Grupo[/bold blue]", ver_grupo),
         ("[light_pink4]📜 Ver Missões[/light_pink4]", ver_missoes),
 

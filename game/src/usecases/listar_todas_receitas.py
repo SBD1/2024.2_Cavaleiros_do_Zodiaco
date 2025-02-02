@@ -3,7 +3,7 @@ from rich.panel import Panel
 from rich.table import Table
 from ..database import obter_cursor
 
-def listar_todas_receitas(console, jogador_id):
+def listar_todas_receitas(console,jogador_id):
     """
     Exibe todas as receitas disponíveis no jogo, listando o item gerado e os materiais necessários em uma única tabela.
     """
@@ -30,12 +30,11 @@ def listar_todas_receitas(console, jogador_id):
                 ))
                 return
 
-            # Criando uma única tabela para exibir todas as receitas
-            tabela = Table(title="📜 Receitas ", show_lines=True)
+            # Criando a tabela para exibir todas as receitas
+            tabela = Table(title="📜 Receitas", show_lines=True)
             tabela.add_column("Item Gerado", style="cyan", justify="left", no_wrap=True)
             tabela.add_column("Materiais Necessários", style="yellow", justify="left")
 
-            # Adicionando os dados na tabela
             for id_item_gerado, item_gerado, materiais in receitas:
                 tabela.add_row(item_gerado, materiais)
 
