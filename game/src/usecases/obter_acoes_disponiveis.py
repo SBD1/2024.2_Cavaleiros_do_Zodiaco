@@ -4,8 +4,9 @@ from .mudar_para_orfanato import mudar_para_orfanato
 from .mudar_saga import mudar_saga
 from .ver_mapa import ver_mapa
 from .ver_salas_disponiveis import ver_salas_disponiveis
-from .verificar_se_esta_no_orfanato import verificar_se_esta_no_orfanato
+from .verificar_se_esta_na_saga_orfanato import verificar_se_esta_na_saga_orfanato
 from .ver_inventario import ver_inventario
+from .ver_missoes import ver_missoes
 
 def obter_acoes_disponiveis(jogador_id):
 
@@ -15,11 +16,12 @@ def obter_acoes_disponiveis(jogador_id):
         ("[bold yellow]Ver Salas Disponíveis [/bold yellow]", ver_salas_disponiveis),
         ("[bold green]Mudar de Sala[/bold green]", mudar_de_sala),
         ("[bold purple]Ver Mapa[/bold purple] 🗺", ver_mapa),
-         ("[bold cyan]Ver Inventário[/bold cyan] 🎒", ver_inventario)
+        ("[bold cyan]Ver Inventário[/bold cyan] 🎒", ver_inventario),
+        ("[bold cyan]Ver Missões[/bold cyan] ", ver_missoes)
     ]
 
     # Opções que variam conforme o estado do jogador
-    if verificar_se_esta_no_orfanato(jogador_id):
+    if verificar_se_esta_na_saga_orfanato(jogador_id):
         opcoes.append(("[bold blue]Mudar de Saga[/bold blue]", mudar_saga))
     else:
         opcoes.append(("Mudar de Casa", mudar_casa))

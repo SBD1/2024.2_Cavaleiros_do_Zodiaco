@@ -4,24 +4,16 @@ import os
 from dotenv import load_dotenv
 from rich.console import Console
 from rich.panel import Panel
-from rich.text import Text
 from src.usecases.obter_acoes_disponiveis import obter_acoes_disponiveis
-from src.usecases.mudar_casa import mudar_casa
-from src.usecases.mudar_para_orfanato import mudar_para_orfanato
 from src.usecases.obter_status_jogador import obter_status_jogador
 from src.usecases.listar_jogadores import listar_jogadores
 from src.usecases.selecionar_jogador import selecionar_jogador
-from src.usecases.exibir_introducao import exibir_introducao
-from src.usecases.ver_salas_disponiveis import ver_salas_disponiveis
-from src.usecases.mudar_de_sala import mudar_de_sala
 from src.usecases.ver_locazalicao_atual import ver_localizacao_atual
 from src.usecases.iniciar_jogo import iniciar_jogo
 from src.usecases.criar_jogador import criar_jogador
-from src.usecases.ver_mapa import ver_mapa
 from .util import limpar_terminal
 from src.usecases.tocar_tema_encerramento import tocar_tema_encerramento
-from src.usecases.mudar_saga import mudar_saga
-from src.usecases.verificar_se_esta_no_orfanato import verificar_se_esta_no_orfanato
+
 
 
 jogador_selecionado_id = None
