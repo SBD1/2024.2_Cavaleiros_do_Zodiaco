@@ -120,7 +120,7 @@ BEGIN
         RAISE EXCEPTION 'O jogador com ID % não existe.', player_id;
     END IF;                                                                                                       
 
-    -- Retorna as casas disponíveis                                                                             
+    -- Retorna as casas disponíveis ordenadas por ID
     RETURN QUERY                                                                                                 
     SELECT 
         c.id_casa, 
@@ -138,12 +138,59 @@ BEGIN
             SELECT sa.id_saga
             FROM party p
             JOIN sala s ON p.id_sala = s.id_sala
-            JOIN casa ca ON  ca.id_casa= s.id_casa
+            JOIN casa ca ON ca.id_casa = s.id_casa
             JOIN saga sa ON sa.id_saga = ca.id_saga
-            WHERE p.id_player = player_id  
-        );
+            WHERE p.id_player = player_id
+            LIMIT 1
+        )
+    ORDER BY c.id_casa; -- Ordena as casas pelo ID
+
     IF NOT FOUND THEN
         RAISE EXCEPTION 'Nenhuma casa disponível foi encontrada para o jogador.';
     END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION mudar_casa(player_id INT, nova_casa_id INT)
+RETURNS TEXT AS $$
+DECLARE
+    casa_disponivel BOOLEAN;
+    saga_da_casa INT;
+    sala_inicial_da_casa INT;
+BEGIN
+    SELECT id_saga INTO saga_da_casa FROM casa WHERE id_casa = nova_casa_id;
+
+    IF saga_da_casa IS NULL THEN
+        RAISE EXCEPTION 'A casa selecionada não existe.';
+    END IF;
+
+    SELECT EXISTS(
+        SELECT 1 
+        FROM listar_sagas(player_id) 
+        WHERE id_saga = saga_da_casa
+    ) INTO casa_disponivel;
+
+    IF NOT casa_disponivel THEN
+        RAISE EXCEPTION 'O jogador ainda não desbloqueou a saga desta casa.';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM player WHERE id_player = player_id) THEN
+        RAISE EXCEPTION 'Jogador não encontrado.';
+    END IF;
+
+    SELECT MIN(sala.id_sala) INTO sala_inicial_da_casa
+    FROM sala
+    WHERE sala.id_casa = nova_casa_id;
+
+    IF sala_inicial_da_casa IS NULL THEN
+        RAISE EXCEPTION 'Nenhuma sala inicial encontrada para esta casa.';
+    END IF;
+
+    UPDATE public.party
+    SET id_sala = sala_inicial_da_casa
+    WHERE id_player = player_id;
+
+    RETURN 'Player mudou de casa com sucesso';
 END;
 $$ LANGUAGE plpgsql;

@@ -37,6 +37,20 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE PROCEDURE get_casa_atual(IN p_id_player INT, INOUT cur REFCURSOR)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    OPEN cur FOR
+        SELECT s.id_casa FROM 
+        Party as p
+        JOIN
+        Sala AS s 
+        ON p.id_sala = s.id_sala
+        WHERE p.id_player = p_id_player;
+END;
+$$;
+
 CREATE OR REPLACE PROCEDURE get_grupo_cursor(IN p_id_player INT, INOUT cur REFCURSOR)
 LANGUAGE plpgsql
 AS $$

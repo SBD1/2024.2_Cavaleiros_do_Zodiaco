@@ -12,7 +12,33 @@ def listar_casas_disponiveis(console, player_id):
     """
     try:
         with obter_cursor() as cursor:
-            # Consulta para buscar casas disponíveis
+            try:
+
+
+                cursor_name = "get_casa_atual"
+                cursor.connection.autocommit = False  
+                cursor.execute("CALL get_casa_atual(%s, %s);", (player_id, cursor_name))
+                cursor.execute(f"FETCH ALL FROM {cursor_name};")
+                casa_atual = cursor.fetchone()
+
+                cursor.execute(f"CLOSE {cursor_name};")
+
+                cursor.connection.commit()
+
+
+
+
+                if casa_atual:
+                    id_casa_atual = casa_atual[0]
+                else:
+                    id_casa_atual = None
+            except Exception as e:
+                console.print(Panel.fit(
+                    f"❌ [bold red]Erro ao obter a casa atual do jogador: {e}[/bold red]",
+                    border_style="red"
+                ))
+                return []
+            
             try:
                 cursor.execute("SELECT * FROM listar_casas(%s);", (player_id,))
                 casas = cursor.fetchall()
@@ -23,11 +49,13 @@ def listar_casas_disponiveis(console, player_id):
                 table.add_column("📍 Nome da casa", justify="left", style="bold green")
 
                 for casa in casas:
-                    # Convertendo valores para string antes de adicionar à tabela
-                    id_casa = str(casa[0])
+                    id_casa = casa[0]
                     nome_casa = casa[1]
-                    table.add_row(id_casa, nome_casa)
 
+                    if id_casa == id_casa_atual:
+                        table.add_row(f"[bold yellow]{str(id_casa)}[/bold yellow]", f"[bold yellow]{nome_casa} (Você está aqui.)[/bold yellow]")  # Destaque para a casa atual
+                    else:
+                        table.add_row(str(id_casa), nome_casa)
                 console.print(table)
 
                 return casas

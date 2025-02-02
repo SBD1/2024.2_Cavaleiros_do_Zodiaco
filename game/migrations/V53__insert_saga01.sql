@@ -25,8 +25,7 @@ INSERT INTO Sala ( id_casa, nome, id_sala_norte, id_sala_sul, id_sala_leste, id_
 VALUES ( 1, 'Oficina de Armaduras de Mu', 1, NULL, NULL, NULL);
 
 
-INSERT INTO public.tipo_item (tipo_item)
-VALUES('i');
+
 
 INSERT INTO public.Sala_Segura (id_sala)
 VALUES(1);

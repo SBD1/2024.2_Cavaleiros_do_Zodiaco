@@ -1,19 +1,19 @@
-/* brModelo: */
-
 CREATE TABLE Instancia_Cavaleiro (
-    id_instancia_cavaleiro SERIAL,
-    id_cavaleiro INTEGER NOT NULL,
+    id_instancia_cavaleiro INTEGER,
+    id_cavaleiro INTEGER,
+    id_player INTEGER,
     id_party INTEGER,
-    nivel INTEGER NOT NULL,
-    xp_atual INTEGER NOT NULL,
-    hp_max INTEGER NOT NULL,
-    magia_max INTEGER NOT NULL,
-    hp_atual INTEGER NOT NULL,
-    magia_atual INTEGER NOT NULL,
-    velocidade INTEGER NOT NULL,
-    ataque_fisico INTEGER NOT NULL,
-    ataque_magico INTEGER NOT NULL,
-    PRIMARY KEY (id_cavaleiro, id_instancia_cavaleiro)
+    nivel INTEGER,
+    tipo_armadura INTEGER,
+    xp_atual INTEGER,
+    hp_max INTEGER,
+    magia_max INTEGER,
+    hp_atual INTEGER,
+    magia_atual INTEGER,
+    velocidade INTEGER,
+    ataque_fisico INTEGER,
+    ataque_magico INTEGER,
+    PRIMARY KEY (id_cavaleiro, id_instancia_cavaleiro, id_player)
 );
  
 ALTER TABLE Instancia_Cavaleiro ADD CONSTRAINT FK_Instancia_Cavaleiro_2
@@ -23,3 +23,7 @@ ALTER TABLE Instancia_Cavaleiro ADD CONSTRAINT FK_Instancia_Cavaleiro_2
 ALTER TABLE Instancia_Cavaleiro ADD CONSTRAINT FK_Instancia_Cavaleiro_3
     FOREIGN KEY (id_party)
     REFERENCES Party (id_player);
+ 
+ALTER TABLE Instancia_Cavaleiro ADD CONSTRAINT FK_Instancia_Cavaleiro_4
+    FOREIGN KEY (id_player)
+    REFERENCES Player (id_player);
