@@ -14,19 +14,33 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
 
 ## Entregas
 
-- Modulo 1:
+- Módulo 1:
 
-  - [Modelo Entidade Relacionamento]()
+  - [Modelo Entidade Relacionamento](../docs/modulo01/mer.md)
 
-  - [Diagrama Entidade Relacionamento]()
+  - [Diagrama Entidade Relacionamento](../docs/modulo01/der.md)
 
-  - [Modelo Lógico]()
+  - [Modelo Lógico](../docs/modulo01/ml.md)
 
-  - [Diagrama de dados]()
+  - [Dicionário de Dados](../docs/modulo01/dicionario.md)
+
+  - Módulo 02:
+    
+    - [DDL](../docs/modulo02/DDL.md)
+
+    - [DML](../docs/modulo02/DML.md)
+
+    - [DQL](../docs/modulo02/DQL.md)
+
+  - Módulo 03:
+
+    - [Triggers](../docs/modulo03/Triggers.md)
 
 ## Apresentações
 
  - [Módulo 1](../docs/apresentacao/modulo1.md)
+ - [Módulo 2](../docs/apresentacao/modulo2.md)
+ - [Módulo 3](../docs/apresentacao/modulo3.md)
 
 ## Membros do grupo
 

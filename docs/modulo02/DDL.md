@@ -5,6 +5,11 @@
 | Versão | Data | Modificação | Autor |
 | --- | --- | --- | --- |
 |  0.1 | 13/01/2025 | Criação do Documento | Vinícius Rufino |
+|  1.0 | 22/01/2025 | Add o Set Up inicial | Lucas Ramon |
+|  1.1 | 22/01/2025 | Atualização do DDL | Lucas Ramon |
+|  2.0 | 02/02/2025 | Atualização do Documento | Vinícius Rufino |
+
+### SQL
 
 ```sql
 CREATE TABLE IF NOT EXISTS Elemento (
