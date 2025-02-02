@@ -23,7 +23,7 @@ BEGIN
         id_elemento,
         nome,
         nivel,
-        xp_acumulado,
+        xp_atual,
         hp_max,
         magia_max,
         hp_atual,

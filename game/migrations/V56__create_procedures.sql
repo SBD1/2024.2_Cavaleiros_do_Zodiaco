@@ -113,3 +113,80 @@ BEGIN
     RAISE NOTICE 'Cavaleiro % foi adicionado à party.', p_id_cavaleiro_novo;
 END;
 $$;
+
+CREATE OR REPLACE PROCEDURE comprar_item(
+    p_id_player INT,
+    p_id_item INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_dinheiro_atual NUMERIC;
+    v_preco_item NUMERIC;
+    v_level_minimo INT;
+    v_jogador_level INT;
+    v_id_inventario INT;
+    v_quantidade_atual INT;
+BEGIN
+    -- Verificar o dinheiro disponível do jogador
+    SELECT dinheiro, id_player INTO v_dinheiro_atual, v_id_inventario
+    FROM inventario
+    WHERE id_player = p_id_player;
+
+    IF v_dinheiro_atual IS NULL THEN
+        RAISE EXCEPTION 'Jogador não encontrado.';
+    END IF;
+
+    -- Verificar o preço e o nível mínimo do item
+    SELECT preco_compra, nivel_minimo INTO v_preco_item, v_level_minimo
+    FROM item_a_venda
+    WHERE id_item = p_id_item;
+
+    IF v_preco_item IS NULL THEN
+        RAISE EXCEPTION 'Item não encontrado.';
+    END IF;
+
+    -- Verificar o nível do jogador
+    SELECT nivel INTO v_jogador_level
+    FROM player
+    WHERE id_player = p_id_player;
+
+    IF v_jogador_level IS NULL THEN
+        RAISE EXCEPTION 'Jogador não encontrado.';
+    END IF;
+
+    IF v_jogador_level < v_level_minimo THEN
+        RAISE EXCEPTION 'Você precisa ser nível % para comprar este item.', v_level_minimo;
+    END IF;
+
+    -- Verificar se o jogador tem dinheiro suficiente
+    IF v_dinheiro_atual < v_preco_item THEN
+        RAISE EXCEPTION 'Dinheiro insuficiente para comprar o item.';
+    END IF;
+
+    -- Subtrair o preço do item do dinheiro do jogador
+    UPDATE inventario
+    SET dinheiro = dinheiro - v_preco_item
+    WHERE id_player = v_id_inventario;
+
+    -- Verificar se o item já existe no inventário do jogador
+    SELECT quantidade INTO v_quantidade_atual
+    FROM item_armazenado
+    WHERE id_inventario = v_id_inventario
+      AND id_item = p_id_item;
+
+    -- Se o item não existir, adicioná-lo ao inventário com quantidade 1
+    IF NOT FOUND THEN
+        INSERT INTO item_armazenado (id_inventario, id_item, quantidade)
+        VALUES (v_id_inventario, p_id_item, 1);
+    ELSE
+        -- Caso contrário, incrementar a quantidade do item existente
+        UPDATE item_armazenado
+        SET quantidade = quantidade + 1
+        WHERE id_inventario = v_id_inventario
+          AND id_item = p_id_item;
+    END IF;
+
+    RAISE NOTICE 'Item comprado com sucesso!';
+
+END $$;

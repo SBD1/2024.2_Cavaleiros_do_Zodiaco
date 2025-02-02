@@ -3,7 +3,7 @@ CREATE TABLE Player (
     id_elemento INTEGER,
     nome VARCHAR UNIQUE NOT NULL,
     nivel INTEGER NOT NULL,
-    xp_acumulado INTEGER NOT NULL,
+    xp_atual INTEGER NOT NULL,
     hp_max INTEGER NOT NULL,
     magia_max INTEGER NOT NULL,
     hp_atual INTEGER NOT NULL,

@@ -15,7 +15,7 @@ def obter_status_jogador(player_id):
             
             if result:
                 # Desempacotamento dos dados
-                (nome, nivel, xp_acumulado, hp_max, magia_max, hp_atual, magia_atual,
+                (nome, nivel, xp_atual, hp_max, magia_max, hp_atual, magia_atual,
                  velocidade, ataque_fisico_base, ataque_magico_base, elemento) = result
 
                 # Criando a tabela estilizada para os atributos do jogador
@@ -26,7 +26,7 @@ def obter_status_jogador(player_id):
 
                 table.add_row("📛 Nome", f"{nome}")
                 table.add_row("📊 Nível", f"{nivel}")
-                table.add_row("✨ XP Acumulado", f"{xp_acumulado}")
+                table.add_row("✨ XP Atual", f"{xp_atual}")
                 table.add_row("❤️ HP Máximo", f"{hp_max}")
                 table.add_row("🔮 Magia Máxima", f"{magia_max}")
                 table.add_row("💖 HP Atual", f"{hp_atual}")

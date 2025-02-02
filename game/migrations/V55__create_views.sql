@@ -7,6 +7,7 @@ SELECT
         WHEN tipo_item = 'm' THEN 'Material'
         WHEN tipo_item = 'c' THEN 'Consumível'
         WHEN tipo_item = 'l' THEN 'Livro'
+        WHEN tipo_item = 'i' THEN 'Item de Missão'
         ELSE 'Outro'
     END AS tipo_item,
     quantidade,
@@ -54,7 +55,23 @@ FROM (
     JOIN item_armazenado ia ON ia.id_inventario = i.id_player
     JOIN tipo_item ti ON ti.id_item = ia.id_item
     JOIN material m ON m.id_material = ti.id_item
+
+    UNION 
+
+    SELECT
+        im.nome,
+        0, -- Itens de missão não têm preço
+        im.descricao,
+        ti.tipo_item,
+        ia.quantidade,
+        p.id_player 
+    FROM inventario i
+    JOIN player p ON p.id_player = i.id_player
+    JOIN item_armazenado ia ON ia.id_inventario = i.id_player
+    JOIN tipo_item ti ON ti.id_item = ia.id_item
+    JOIN item_missao im ON im.id_item = ti.id_item
 ) AS subquery;
+
 
 
 create view grupo_view as
@@ -88,7 +105,7 @@ inner join elemento e
         
 
 CREATE OR REPLACE VIEW armadura_venda_view AS
-    SELECT 
+    SELECT iv.id_item,
         a.nome,
         iv.preco_compra,
         a.descricao,
@@ -102,27 +119,32 @@ CREATE OR REPLACE VIEW armadura_venda_view AS
         ORDER BY iv.nivel_minimo, a.nome;
 
 CREATE OR REPLACE VIEW consumivel_venda_view AS
-    SELECT c.nome,
+    SELECT iv.id_item,
+            c.nome,
             iv.preco_compra,
             c.descricao,
             iv.nivel_minimo
+            
             FROM item_a_venda iv
             JOIN tipo_item ti ON ti.id_item = iv.id_item
             JOIN consumivel c ON c.id_item = ti.id_item
             ORDER BY iv.nivel_minimo, c.nome;
 
 CREATE OR REPLACE VIEW livro_venda_view AS
-    SELECT l.nome,
+    SELECT iv.id_item,
+            l.nome,
             iv.preco_compra,
             l.descricao,
             iv.nivel_minimo
+            
             FROM item_a_venda iv
             JOIN tipo_item ti ON ti.id_item = iv.id_item
             JOIN livro l ON l.id_item = ti.id_item
             ORDER BY iv.nivel_minimo, l.nome;
 
 CREATE OR REPLACE VIEW material_venda_view AS
-    SELECT m.nome,
+    SELECT iv.id_item,
+            m.nome,
             iv.preco_compra,
             m.descricao,
             iv.nivel_minimo

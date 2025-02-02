@@ -97,7 +97,7 @@ BEGIN
                 'Nome: %s %sNível: %s%sXP Acumulado: %s%sHP Máximo: %s%sMagia Máxima: %s%sHP Atual: %s%sMagia Atual: %s%sVelocidade: %s%sAtaque Físico Base: %s%sAtaque Mágico Base: %s%sElemento: %s',
                 p.nome, E'\n',
                 p.nivel, E'\n',
-                p.xp_acumulado, E'\n',
+                p.atual, E'\n',
                 p.hp_max, E'\n',
                 p.magia_max, E'\n',
                 p.hp_atual, E'\n',

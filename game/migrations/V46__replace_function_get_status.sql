@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_player_info_v2(player_id INTEGER)
 RETURNS TABLE (
     nome TEXT,
     nivel INTEGER,
-    xp_acumulado INTEGER,
+    xp_atual INTEGER,
     hp_max INTEGER,
     magia_max INTEGER,
     hp_atual INTEGER,
@@ -17,7 +17,7 @@ BEGIN
     SELECT 
         p.nome::TEXT,  -- Conversão explícita para TEXT
         p.nivel,
-        p.xp_acumulado,
+        p.xp_atual,
         p.hp_max,
         p.magia_max,
         p.hp_atual,

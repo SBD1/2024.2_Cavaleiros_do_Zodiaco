@@ -30,15 +30,15 @@ def ver_missoes(console, player_id):
             # Criando a tabela para exibição
             missoes_iniciadas = Table(title=f"Missões Iniciadas", show_lines=True)
             missoes_iniciadas.add_column("Nome", style="cyan", justify="left")
-            missoes_iniciadas.add_column("Descrição", style="green", justify="right")
+            missoes_iniciadas.add_column("Descrição", style="green", justify="left")
             missoes_iniciadas.add_column("Item Necessário", style="white", justify="left")
-            missoes_iniciadas.add_column("Local", style="magenta", justify="center")
+            missoes_iniciadas.add_column("Local", style="magenta", justify="left")
 
             missoes_concluidas = Table(title=f"Missões Concluídas", show_lines=True)
             missoes_concluidas.add_column("Nome", style="cyan", justify="left")
-            missoes_concluidas.add_column("Descrição", style="green", justify="right")
+            missoes_concluidas.add_column("Descrição", style="green", justify="left")
             missoes_concluidas.add_column("Item Necessário", style="white", justify="left")
-            missoes_concluidas.add_column("Local", style="magenta", justify="center")
+            missoes_concluidas.add_column("Local", style="magenta", justify="left")
 
             # Preenchendo a tabela com os dados do inventário
             for missao in missoes:

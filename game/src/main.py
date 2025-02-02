@@ -41,7 +41,7 @@ def mostrar_menu_acoes(console):
         console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", expand=False))
 
         for opcao in opcoes:
-            console.print(f"{opcoes.index(opcao) + 1}️⃣ {opcao[0]}")
+            console.print(f"{opcoes.index(opcao) + 1}. {opcao[0]}")
 
 
         escolha = int(input("\n🎯 Escolha uma ação: ").strip())
