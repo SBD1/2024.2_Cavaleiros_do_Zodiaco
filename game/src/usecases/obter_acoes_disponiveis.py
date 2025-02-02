@@ -11,7 +11,7 @@ from .trocar_cavaleiro import trocar_cavaleiro
 from .ver_missoes import ver_missoes
 from .verificar_npc_na_sala import verificar_npc_na_sala
 from .interagir_npc_quest import interagir_npc_quest
-
+from .listar_todas_receitas import listar_todas_receitas
 def obter_acoes_disponiveis(jogador_id):
 
     # Opções comuns a todos os jogadores
@@ -20,8 +20,10 @@ def obter_acoes_disponiveis(jogador_id):
         ("[bold green]🚪 Mudar de Sala[/bold green]", mudar_de_sala),
         ("[bold purple]🗺️ Ver Mapa[/bold purple]", ver_mapa),
         ("[bold cyan]🎒 Ver Inventário[/bold cyan]", ver_inventario),
+        ("[light_pink4]📜 Ver Receitas [/light_pink4]", listar_todas_receitas),
         ("[bold blue]⚔️ Ver Grupo[/bold blue]", ver_grupo),
         ("[light_pink4]📜 Ver Missões[/light_pink4]", ver_missoes),
+
     ]
 
     # Opções que variam conforme o estado do jogador
