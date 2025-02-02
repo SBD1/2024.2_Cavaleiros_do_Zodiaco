@@ -101,9 +101,8 @@ BEGIN
     END IF;
 
     -- Adiciona o novo cavaleiro na party
-    INSERT INTO instancia_cavaleiro (id_instancia_cavaleiro, id_cavaleiro, id_party, nivel, xp_atual, hp_max, magia_max, hp_atual, magia_atual, velocidade, ataque_fisico, ataque_magico)
+    INSERT INTO instancia_cavaleiro (id_cavaleiro, id_party, nivel, xp_atual, hp_max, magia_max, hp_atual, magia_atual, velocidade, ataque_fisico, ataque_magico)
     SELECT 
-        nextval('instancia_cavaleiro_id_instancia_cavaleiro_seq'::regclass), 
         p_id_cavaleiro_novo, 
         id_sala_var,  -- Corrigido para `id_sala_var`
         nivel, 0, hp_max, magia_max, hp_max, magia_max, velocidade_base, ataque_fisico_base, ataque_magico_base

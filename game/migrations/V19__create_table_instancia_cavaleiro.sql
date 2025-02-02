@@ -1,5 +1,5 @@
 CREATE TABLE Instancia_Cavaleiro (
-    id_instancia_cavaleiro INTEGER,
+    id_instancia_cavaleiro SERIAL,
     id_cavaleiro INTEGER,
     id_player INTEGER,
     id_party INTEGER,
