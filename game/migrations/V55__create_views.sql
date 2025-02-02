@@ -59,6 +59,7 @@ FROM (
 
 create view grupo_view as
 select
+    ic.id_cavaleiro,
 	c.nome,
 	e.nome as elemento ,
 	ic.nivel ,

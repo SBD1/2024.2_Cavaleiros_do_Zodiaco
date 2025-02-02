@@ -10,19 +10,27 @@ def trocar_cavaleiro(console, player_id):
 
     try:
         with obter_cursor() as cursor:
-
-            cursor.execute("SELECT * FROM get_cavaleiros_disponiveis();")
+            # Obtém os cavaleiros disponíveis e os que já estão na party
+            cursor.execute("SELECT * FROM get_cavaleiros_disponiveis(%s);", (player_id,))
             cavaleiros_disponiveis = cursor.fetchall()
 
-            tabela = Table(title="🛡️ Cavaleiros Disponíveis para Adição", show_lines=True)
+            # Criar tabela para exibir os cavaleiros disponíveis
+            tabela = Table(title="🛡️ Cavaleiros Disponíveis para Troca", show_lines=True)
             tabela.add_column("ID", style="yellow", justify="center")
             tabela.add_column("Nome", style="cyan", justify="left")
+            tabela.add_column("Status", style="green", justify="center")
 
             for cavaleiro in cavaleiros_disponiveis:
-                tabela.add_row(str(cavaleiro[0]), cavaleiro[1])
+                id_cavaleiro, nome, esta_na_party = cavaleiro
+
+                # Se o cavaleiro já está na party, exibir com um ícone especial
+                status = "✔️ Na Party" if esta_na_party else "➕ Disponível"
+
+                tabela.add_row(str(id_cavaleiro), nome, status)
 
             console.print(tabela)
 
+            # Pedir ao jogador para escolher um novo cavaleiro
             console.print("[bold yellow]Digite o ID do cavaleiro que deseja adicionar à party:[/bold yellow]")
             escolha = input("> ")
 
@@ -35,7 +43,16 @@ def trocar_cavaleiro(console, player_id):
 
             id_cavaleiro_novo = int(escolha)
 
-            cursor.execute("SELECT * FROM get_party_cavaleiros(%s);", (player_id,))
+            # Se o cavaleiro já estiver na party, impedir a troca
+            if any(c[0] == id_cavaleiro_novo and c[2] for c in cavaleiros_disponiveis):
+                console.print(Panel.fit(
+                    "⛔ [bold red]Este cavaleiro já está na party! Escolha outro.[/bold red]",
+                    border_style="red"
+                ))
+                return
+
+            # Obtém os cavaleiros na party para pedir a troca
+            cursor.execute("SELECT id_cavaleiro, nome FROM get_party_cavaleiros(%s);", (player_id,))
             cavaleiros_na_party = cursor.fetchall()
 
             if len(cavaleiros_na_party) >= 3:
@@ -64,6 +81,7 @@ def trocar_cavaleiro(console, player_id):
             else:
                 id_cavaleiro_removido = None
 
+            # Chamar a procedure para trocar ou adicionar o cavaleiro
             cursor.execute("CALL trocar_cavaleiro_party(%s, %s, %s);", (player_id, id_cavaleiro_novo, id_cavaleiro_removido))
             cursor.connection.commit()
 
