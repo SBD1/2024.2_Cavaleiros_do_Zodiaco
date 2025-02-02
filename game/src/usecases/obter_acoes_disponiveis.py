@@ -10,6 +10,7 @@ from .ver_grupo import ver_grupo
 from .trocar_cavaleiro import trocar_cavaleiro
 from .ver_missoes import ver_missoes
 from .verificar_npc_na_sala import verificar_npc_na_sala
+from .interagir_npc_quest import interagir_npc_quest
 
 def obter_acoes_disponiveis(jogador_id):
 
@@ -22,7 +23,6 @@ def obter_acoes_disponiveis(jogador_id):
         ("[bold cyan]Ver Inventário[/bold cyan] 🎒", ver_inventario),
         ("[bold blue]Ver Grupo[/bold blue] ⚔️", ver_grupo),
         ("[bold red]Trocar Cavaleiro na Party[/bold red] 🔄", trocar_cavaleiro),
-        ("[bold cyan]Ver Inventário[/bold cyan] 🎒", ver_inventario),
         ("[light_pink4]Ver Missões[/light_pink4] ", ver_missoes)
     ]
 
@@ -36,13 +36,13 @@ def obter_acoes_disponiveis(jogador_id):
     check_npc = verificar_npc_na_sala(jogador_id)
 
     if check_npc == "Ferreiro":
-        opcoes.append(("[orange4]Falar com Mu[/orange4]", None))
+        opcoes.insert(0, ("[orange4]Falar com Mu[/orange4]", None))
 
     elif check_npc == "Missao":
-        opcoes.append(("[sea_green1]Falar com Saori Kido[/sea_green1]", None))
+        opcoes.insert(0, ("[sea_green1]Falar com Saori Kido[/sea_green1]", interagir_npc_quest))
 
     elif check_npc == "Mercador":
-        opcoes.append(("[chartreuse2]Falar com Jabu[/chartreuse2]", None))
+        opcoes.insert(0, ("[chartreuse2]Falar com Jabu[/chartreuse2]", None))
         
 
     opcoes.append(("[bold red]Sair do Menu de Ações[/bold red]", None))
