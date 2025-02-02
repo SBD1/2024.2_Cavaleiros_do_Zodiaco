@@ -62,4 +62,9 @@ LANGUAGE plpgsql;
 SELECT insert_random_cdz_player();
 SELECT insert_random_cdz_player();
 
+INSERT INTO inventario (id_player, dinheiro)
+VALUES 
+    (1, 50),
+    (2, 50);
+
 

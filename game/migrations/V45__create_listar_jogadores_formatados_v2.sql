@@ -4,9 +4,13 @@ RETURNS TABLE (
     nome TEXT,
     nivel INTEGER,
     elemento TEXT,
-    descricao TEXT,
-    fraco_contra TEXT,
-    forte_contra TEXT
+    hp_max INTEGER,
+    magia_max INTEGER,
+    hp_atual INTEGER,
+    magia_atual INTEGER,
+    ataque_fisico_base INTEGER,
+    ataque_magico_base INTEGER,
+    dinheiro INTEGER
 ) AS $$
 BEGIN
     RETURN QUERY 
@@ -15,11 +19,16 @@ BEGIN
         p.nome::TEXT AS nome,  -- Nome do jogador (de player)
         p.nivel,
         e.nome::TEXT AS elemento,  -- Nome do elemento (de elemento)
-        e.descricao::TEXT,
-        (SELECT e2.nome FROM elemento e2 WHERE e2.id_elemento = e.fraco_contra)::TEXT AS fraco_contra,
-        (SELECT e3.nome FROM elemento e3 WHERE e3.id_elemento = e.forte_contra)::TEXT AS forte_contra
+        p.hp_max,
+        p.magia_max, 
+        p.hp_atual, 
+        p.magia_atual, 
+        p.ataque_fisico_base, 
+        p.ataque_magico_base,
+        i.dinheiro
     FROM player p
     INNER JOIN elemento e ON e.id_elemento = p.id_elemento
+    INNER JOIN inventario i on i.id_player = p.id_player
     ORDER BY p.id_player;
 END;
 $$ LANGUAGE plpgsql;

@@ -7,6 +7,7 @@ from .ver_salas_disponiveis import ver_salas_disponiveis
 from .verificar_se_esta_na_saga_orfanato import verificar_se_esta_na_saga_orfanato
 from .ver_inventario import ver_inventario
 from .ver_missoes import ver_missoes
+from .verificar_npc_na_sala import verificar_npc_na_sala
 
 def obter_acoes_disponiveis(jogador_id):
 
@@ -17,7 +18,7 @@ def obter_acoes_disponiveis(jogador_id):
         ("[bold green]Mudar de Sala[/bold green]", mudar_de_sala),
         ("[bold purple]Ver Mapa[/bold purple] 🗺", ver_mapa),
         ("[bold cyan]Ver Inventário[/bold cyan] 🎒", ver_inventario),
-        ("[bold cyan]Ver Missões[/bold cyan] ", ver_missoes)
+        ("[light_pink4]Ver Missões[/light_pink4] ", ver_missoes)
     ]
 
     # Opções que variam conforme o estado do jogador
@@ -26,6 +27,17 @@ def obter_acoes_disponiveis(jogador_id):
     else:
         opcoes.append(("Mudar de Casa", mudar_casa))
         opcoes.append(("[bold cyan]Voltar para o Orfanato[/bold cyan]", mudar_para_orfanato))
+
+    check_npc = verificar_npc_na_sala(jogador_id)
+
+    if check_npc == "Ferreiro":
+        opcoes.append(("[orange4]Falar com Mu[/orange4]", None))
+
+    elif check_npc == "Missao":
+        opcoes.append(("[sea_green1]Falar com Saori Kido[/sea_green1]", None))
+
+    elif check_npc == "Mercador":
+        opcoes.append(("[chartreuse2]Falar com Jabu[/chartreuse2]", None))
         
 
     opcoes.append(("[bold red]Sair do Menu de Ações[/bold red]", None))
