@@ -1,6 +1,6 @@
 
 CREATE TABLE Npc_Ferreiro (
-    id_npc_ferreiro INTEGER PRIMARY KEY,
+    id_npc_ferreiro SERIAL PRIMARY KEY,
     id_sala INTEGER NOT NULL,
     id_missao_desbloqueia INTEGER NOT NULL,
     nome VARCHAR NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE Npc_Ferreiro (
  
 
 CREATE TABLE Npc_Quest (
-    id_npc_quest INTEGER PRIMARY KEY,
+    id_npc_quest SERIAL PRIMARY KEY,
     id_sala INTEGER NOT NULL,
     nome VARCHAR NOT NULL,
     descricao VARCHAR,
@@ -22,7 +22,7 @@ CREATE TABLE Npc_Quest (
  
 
 CREATE TABLE Npc_Mercador (
-    id_npc_mercador INTEGER PRIMARY KEY,
+    id_npc_mercador SERIAL PRIMARY KEY,
     id_sala INTEGER NOT NULL,
     nome VARCHAR NOT NULL,
     descricao VARCHAR,
