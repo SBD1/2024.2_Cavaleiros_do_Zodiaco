@@ -339,195 +339,126 @@ BEGIN
     RAISE NOTICE 'Item vendido com sucesso!';
 END $$;
 
-
-CREATE OR REPLACE PROCEDURE player_ataca_inimigo(
-    IN p_id_player INT,
-    IN p_id_instancia_inimigo INT,
-    IN p_parte_corpo enum_parte_corpo
+CREATE OR REPLACE PROCEDURE comprar_armadura(
+    p_id_player INTEGER,
+    p_id_item INTEGER
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    v_ataque_fisico INT;
-    v_defesa_fisica INT;
-    v_hp_atual INT;
-    v_dano INT;
+    v_preco_compra INTEGER;
+    v_nivel_minimo INTEGER;
+    v_jogador_nivel INTEGER;
+    v_dinheiro_disponivel INTEGER;
+    v_raridade TEXT; -- Declarado como TEXT
+    v_defesa_magica INTEGER;
+    v_defesa_fisica INTEGER;
+    v_ataque_magico INTEGER;
+    v_ataque_fisico INTEGER;
+    v_durabilidade_max INTEGER;
 BEGIN
-    -- Obtém o ataque físico do player
-    SELECT ataque_fisico_base INTO v_ataque_fisico
-    FROM player
-    WHERE id_player = p_id_player;
+    -- Buscar informações da armadura à venda
+    SELECT iv.preco_compra, iv.nivel_minimo, a.raridade_armadura::TEXT, -- Conversão explícita para TEXT
+           a.defesa_magica, a.defesa_fisica, a.ataque_magico, a.ataque_fisico, a.durabilidade_max
+    INTO v_preco_compra, v_nivel_minimo, v_raridade, 
+         v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max
+    FROM item_a_venda iv
+    JOIN tipo_item ti ON ti.id_item = iv.id_item
+    JOIN armadura a ON a.id_armadura = ti.id_item
+    WHERE iv.id_item = p_id_item;
 
-    -- Obtém a defesa da parte do corpo do inimigo
-    SELECT pci.defesa_fisica INTO v_defesa_fisica
-    FROM parte_corpo_inimigo pci
-    INNER JOIN instancia_inimigo ii
-        ON pci.id_instancia = ii.id_instancia AND pci.id_inimigo = ii.id_inimigo
-    WHERE pci.id_instancia = p_id_instancia_inimigo
-        AND pci.parte_corpo = p_parte_corpo;
-
-    -- Se não encontrar ataque ou defesa, sai da procedure
-    IF v_ataque_fisico IS NULL OR v_defesa_fisica IS NULL THEN
-        RAISE NOTICE 'Erro: Player ou inimigo não encontrado!';
-        RETURN;
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Armadura não encontrada para compra.';
     END IF;
 
-    -- Calcula o dano causado
-    v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0); -- Garante que o dano não seja negativo
+    -- Verificar o nível do jogador
+    SELECT nivel, i.dinheiro
+    INTO v_jogador_nivel, v_dinheiro_disponivel
+    FROM player p 
+    JOIN inventario i 
+    ON p.id_player = i.id_player
+    WHERE p.id_player = p_id_player;
 
-    -- Atualiza o HP do inimigo
-    UPDATE instancia_inimigo
-    SET hp_atual = GREATEST(hp_atual - v_dano, 0) -- Garante que o HP não seja negativo
-    WHERE id_instancia = p_id_instancia_inimigo;
+    IF v_jogador_nivel < v_nivel_minimo THEN
+        RAISE EXCEPTION 'Você precisa ser nível % para comprar esta armadura.', v_nivel_minimo;
+    END IF;
 
-    -- Obtém o novo HP para exibir
-    SELECT hp_atual INTO v_hp_atual
-    FROM instancia_inimigo
-    WHERE id_instancia = p_id_instancia_inimigo;
+    -- Verificar se o jogador tem dinheiro suficiente
+    IF v_dinheiro_disponivel < v_preco_compra THEN
+        RAISE EXCEPTION 'Dinheiro insuficiente para comprar esta armadura.';
+    END IF;
 
-    -- Mensagem de saída para debug
-    RAISE NOTICE 'Player % atacou o Inimigo % na parte %, causando % de dano. HP Atual do Inimigo: %',
-        p_id_player, p_id_instancia_inimigo, p_parte_corpo, v_dano, v_hp_atual;
+    -- Subtrair o valor da compra do dinheiro do jogador
+    UPDATE inventario
+    SET dinheiro = dinheiro - v_preco_compra
+    WHERE id_player = p_id_player;
+
+    -- Gerar a instância da armadura
+    INSERT INTO armadura_instancia (
+        id_armadura, id_parte_corpo_armadura, id_inventario, raridade_armadura,
+        defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_atual, preco_venda
+    )
+    SELECT 
+        a.id_armadura, a.id_parte_corpo, p_id_player, v_raridade,
+        v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max, v_preco_compra
+    FROM armadura a
+    WHERE a.id_armadura = p_id_item;
+
+    -- Mensagem de sucesso
+    RAISE NOTICE 'Armadura comprada e adicionada ao inventário com sucesso!';
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE cavaleiro_ataca_inimigo(
-    IN p_id_instancia_cavaleiro INT,
-    IN p_id_instancia_inimigo INT,
-    IN p_parte_corpo enum_parte_corpo
+CREATE OR REPLACE PROCEDURE equipar_armadura(
+    p_id_player INTEGER,
+    p_id_instancia INTEGER
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    v_ataque_fisico INT;
-    v_defesa_fisica INT;
-    v_hp_atual INT;
-    v_dano INT;
+    v_id_armadura INTEGER;
+    v_id_parte_corpo_armadura enum_parte_corpo; -- Altere para o tipo ENUM correspondente ao id_parte_corpo_armadura
+    v_armadura_atual INTEGER;
+    v_instancia_atual INTEGER;
 BEGIN
+    -- Verificar se a armadura existe no inventário do jogador
+    SELECT id_armadura, id_parte_corpo_armadura
+    INTO v_id_armadura, v_id_parte_corpo_armadura
+    FROM Armadura_Instancia
+    WHERE id_instancia = p_id_instancia
+      AND id_inventario = p_id_player;
 
-    SELECT ic.ataque_fisico INTO v_ataque_fisico
-    FROM instancia_cavaleiro ic
-    WHERE ic.id_instancia_cavaleiro = p_id_instancia_cavaleiro;
-
-    SELECT pci.defesa_fisica INTO v_defesa_fisica
-    FROM parte_corpo_inimigo pci
-    INNER JOIN instancia_inimigo ii
-        ON pci.id_instancia = ii.id_instancia AND pci.id_inimigo = ii.id_inimigo
-    WHERE pci.id_instancia = p_id_instancia_inimigo
-        AND pci.parte_corpo = p_parte_corpo;
-
-    IF v_ataque_fisico IS NULL OR v_defesa_fisica IS NULL THEN
-        RAISE NOTICE 'Erro: Cavaleiro ou inimigo não encontrado!';
-        RETURN;
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'A armadura não está no inventário do jogador ou não existe.';
     END IF;
 
-    v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0); -- Garante que o dano não seja negativo
+    -- Verificar se o jogador já possui uma armadura equipada na mesma parte do corpo
+    SELECT armadura_equipada, instancia_armadura_equipada
+    INTO v_armadura_atual, v_instancia_atual
+    FROM Parte_Corpo_Player
+    WHERE id_player = p_id_player
+      AND parte_corpo = v_id_parte_corpo_armadura;
 
-    UPDATE instancia_inimigo
-    SET hp_atual = GREATEST(hp_atual - v_dano, 0) -- Garante que o HP não seja negativo
-    WHERE id_instancia = p_id_instancia_inimigo;
-
-    SELECT hp_atual INTO v_hp_atual
-    FROM instancia_inimigo
-    WHERE id_instancia = p_id_instancia_inimigo;
-
-    RAISE NOTICE 'Cavaleiro % atacou o Inimigo % na parte %, causando % de dano. HP Atual do Inimigo: %',
-        p_id_instancia_cavaleiro, p_id_instancia_inimigo, p_parte_corpo, v_dano, v_hp_atual;
-END;
-$$;
-
-
-CREATE OR REPLACE PROCEDURE inimigo_ataca_player(
-    IN p_id_instancia_inimigo INT,
-    IN p_id_player INT,
-    IN p_parte_corpo enum_parte_corpo
-)
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    v_ataque_fisico INT;
-    v_defesa_fisica INT;
-    v_hp_atual INT;
-    v_dano INT;
-BEGIN
-    SELECT i.ataque_fisico_base INTO v_ataque_fisico
-    FROM instancia_inimigo ii
-    INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
-    WHERE ii.id_instancia = p_id_instancia_inimigo;
-
-    SELECT pc.defesa_fisica INTO v_defesa_fisica
-    FROM parte_corpo_player pcp
-    INNER JOIN player p ON pcp.id_player = p.id_player
-    INNER JOIN parte_corpo pc ON pc.id_parte_corpo = pcp.parte_corpo
-    WHERE pcp.id_player = p_id_player
-        AND pcp.parte_corpo = p_parte_corpo;
-
-    IF v_ataque_fisico IS NULL OR v_defesa_fisica IS NULL THEN
-        RAISE NOTICE 'Erro: Inimigo ou player não encontrado!';
-        RETURN;
+    IF FOUND THEN
+        -- Se uma armadura já estiver equipada, ela é devolvida ao inventário
+        UPDATE Armadura_Instancia
+        SET id_inventario = p_id_player
+        WHERE id_armadura = v_armadura_atual
+          AND id_instancia = v_instancia_atual;
     END IF;
 
-    v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0); -- Garante que o dano não seja negativo
+    -- Atualizar a nova armadura como equipada
+    UPDATE Parte_Corpo_Player
+    SET armadura_equipada = v_id_armadura,
+        instancia_armadura_equipada = p_id_instancia
+    WHERE id_player = p_id_player
+      AND parte_corpo = v_id_parte_corpo_armadura;
 
-    UPDATE player
-    SET hp_atual = GREATEST(hp_atual - v_dano, 0) -- Garante que o HP não seja negativo
-    WHERE id_player = p_id_player;
+    -- Remover a armadura equipada do inventário
+    UPDATE Armadura_Instancia
+    SET id_inventario = NULL
+    WHERE id_instancia = p_id_instancia;
 
-    SELECT hp_atual INTO v_hp_atual
-    FROM player
-    WHERE id_player = p_id_player;
-
-    RAISE NOTICE 'Inimigo % atacou o Player % na parte %, causando % de dano. HP Atual do Player: %',
-        p_id_instancia_inimigo, p_id_player, p_parte_corpo, v_dano, v_hp_atual;
-END;
-$$;
-
-
-CREATE OR REPLACE PROCEDURE inimigo_ataca_cavaleiro(
-    IN p_id_instancia_inimigo INT,
-    IN p_id_instancia_cavaleiro INT,
-    IN p_parte_corpo enum_parte_corpo
-)
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    v_ataque_fisico INT;
-    v_defesa_fisica INT;
-    v_hp_atual INT;
-    v_dano INT;
-BEGIN
-  
-    SELECT i.ataque_fisico_base INTO v_ataque_fisico
-    FROM instancia_inimigo ii
-    INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
-    WHERE ii.id_instancia = p_id_instancia_inimigo;
-
-    
-    SELECT pcc.defesa_fisica_bonus INTO v_defesa_fisica
-    FROM parte_corpo_cavaleiro pcc
-    INNER JOIN instancia_cavaleiro ic 
-        ON ic.id_instancia_cavaleiro = pcc.id_instancia_cavaleiro
-    WHERE pcc.id_instancia_cavaleiro = p_id_instancia_cavaleiro
-        AND pcc.parte_corpo = p_parte_corpo;
-
-    
-    IF v_ataque_fisico IS NULL OR v_defesa_fisica IS NULL THEN
-        RAISE NOTICE 'Erro: Inimigo ou cavaleiro não encontrado!';
-        RETURN;
-    END IF;
-
-    
-    v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0); 
-
-    UPDATE instancia_cavaleiro
-    SET hp_atual = GREATEST(hp_atual - v_dano, 0) 
-    WHERE id_instancia_cavaleiro = p_id_instancia_cavaleiro;
-
-    SELECT hp_atual INTO v_hp_atual
-    FROM instancia_cavaleiro
-    WHERE id_instancia_cavaleiro = p_id_instancia_cavaleiro;
-
-    RAISE NOTICE 'Inimigo % atacou o Cavaleiro % na parte %, causando % de dano. HP Atual do Cavaleiro: %',
-        p_id_instancia_inimigo, p_id_instancia_cavaleiro, p_parte_corpo, v_dano, v_hp_atual;
+    RAISE NOTICE 'A armadura foi equipada com sucesso!';
 END;
 $$;

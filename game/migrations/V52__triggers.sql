@@ -265,3 +265,28 @@ ON item_armazenado
 FOR EACH ROW
 WHEN (NEW.quantidade = 0) 
 EXECUTE FUNCTION remover_item_se_zero();
+
+
+CREATE OR REPLACE FUNCTION reviver_inimigos_sala()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Atualiza todos os inimigos mortos (hp_atual = 0) na sala para hp_max
+    UPDATE instancia_inimigo ii
+    SET hp_atual = i.hp_max
+    FROM inimigo i
+    WHERE ii.id_inimigo = i.id_inimigo
+    AND ii.id_grupo IN (
+        SELECT gi.id_grupo
+        FROM grupo_inimigo gi
+        WHERE gi.id_sala = NEW.id_sala
+    )
+    AND ii.hp_atual = 0; -- Só revive os que estão mortos
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_reviver_inimigos
+AFTER UPDATE OF id_sala ON party
+FOR EACH ROW
+EXECUTE FUNCTION reviver_inimigos_sala();

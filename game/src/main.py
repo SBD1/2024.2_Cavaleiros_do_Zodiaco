@@ -40,17 +40,7 @@ def mostrar_menu_acoes(console):
 
         if verificar_inimigos(console,jogador_selecionado_id):
             batalhar(console,jogador_selecionado_id)
-            #TO-DO: batalhar(console,jogador_selecionado_id)
-            # 1 - select trazendo todas as instancias de inimigos na sala
-            # 2 - select trazendo os camaradas 
-            # 3 - rodo um order by velocidade pras instancias (inimigos,cavaleiros,player)
-            # 4 - com isso saberemos quem ta na hora de atacar pela fila
-            # 5 - inimigo ataca aleatorio
-            # 6 - jogador escolhe ataque do cavaleiro ataca aleatorio
-            # 7 - player escolhe o ataque
-            # 8 - faz as rodadas ate o player morrer ou ate todos os inimigos morrerem
-
-            #limpar_terminal(console)
+            limpar_terminal(console)
         elif verificar_boss(console,jogador_selecionado_id):
             limpar_terminal(console)
         
