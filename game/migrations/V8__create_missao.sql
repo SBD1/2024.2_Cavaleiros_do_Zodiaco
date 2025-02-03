@@ -2,6 +2,7 @@ CREATE TABLE Missao (
     id_missao SERIAL PRIMARY KEY,
     id_missao_anterior INTEGER,
     item_necessario INTEGER NOT NULL,
+    id_cavaleiro_desbloqueado INTEGER,
     nome VARCHAR UNIQUE NOT NULL,
     dialogo_inicial VARCHAR,
     dialogo_durante VARCHAR,

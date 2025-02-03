@@ -1,9 +1,3 @@
-ALTER TABLE santuario RENAME TO saga;
-ALTER TABLE saga RENAME COLUMN id_santuario TO id_saga;
-ALTER TABLE saga RENAME COLUMN id_missao_proximo_santuario TO id_missao_proxima_saga;
-ALTER TABLE casa RENAME COLUMN id_santuario TO id_saga;
-ALTER TABLE Missao ALTER COLUMN nome TYPE VARCHAR USING NULL;
-
 INSERT INTO Saga ( id_missao_requisito, id_missao_proxima_saga, nome, descricao, nivel_recomendado)
 VALUES ( NULL, NULL, 'Saga SafeHouse', 'O início da jornada dos Cavaleiros de Bronze, onde cresceram e descobriram seus destinos.', 1);
 

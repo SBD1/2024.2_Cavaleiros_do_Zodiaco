@@ -30,11 +30,13 @@ def listar_jogadores():
 
                 # Ícones personalizados para os elementos
                 elementos_config = {
-                   "Fogo": {"emoji": "🔥", "cor": "bold red"},
+                    "Fogo": {"emoji": "🔥", "cor": "bold red"},
                     "Água": {"emoji": "💧", "cor": "bold blue"},
                     "Terra": {"emoji": "🌿", "cor": "bold green"},
                     "Vento": {"emoji": "🌪️", "cor": "bold cyan"},
                     "Trovão": {"emoji": "⚡", "cor": "bold yellow"},
+                    "Luz": {"emoji": "✨", "cor": "bold white"},
+                    "Trevas": {"emoji": "🌑", "cor": "bold magenta"},
                 }
 
 

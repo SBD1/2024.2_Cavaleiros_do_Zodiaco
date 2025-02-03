@@ -157,3 +157,4 @@ BEGIN
     RETURN COALESCE(desbloqueado, FALSE);
 END;
 $$ LANGUAGE plpgsql;
+
