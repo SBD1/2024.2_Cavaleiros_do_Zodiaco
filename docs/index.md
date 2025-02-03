@@ -34,7 +34,7 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
 
   - Módulo 03:
 
-    - [Triggers](./modulo03/triggers.md)
+    - [Triggers](./modulo03/Triggers.md)
 
 ## Apresentações
 
