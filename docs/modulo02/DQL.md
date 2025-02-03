@@ -10,6 +10,8 @@
 
 ### SQL
 
+    Focada na recuperação de informações armazenadas no banco de dados. Serve para consultar dados, aplicar filtros, ordenações e agrupamentos para obter resultados específicos. 
+
 ```sql
 -- 1. Listar informações do play
 SELECT * FROM Player;
