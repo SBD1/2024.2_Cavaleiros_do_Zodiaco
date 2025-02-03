@@ -166,74 +166,54 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION inimigo_ataca_player(
+CREATE OR REPLACE FUNCTION inimigo_ataca_cavaleiro(
     p_id_instancia_inimigo INT,
-    p_id_player INT,
+    p_id_instancia_cavaleiro INT,
     p_parte_corpo enum_parte_corpo
 ) RETURNS TABLE(mensagem TEXT) AS $$
 DECLARE
-    v_nome_inimigo TEXT;
-    v_nome_player TEXT;
     v_ataque_fisico INT;
     v_defesa_fisica INT;
-    v_hp_atual_antes INT;
-    v_hp_atual_depois INT;
+    v_hp_atual INT;
     v_dano INT;
-    v_parte_corpo_extenso TEXT;
 BEGIN
-    -- Obtém os nomes do inimigo e do player
-    SELECT p.nome INTO v_nome_player FROM player p WHERE p.id_player = p_id_player;
-    
-    SELECT i.nome INTO v_nome_inimigo 
+    -- Obtém o ataque físico do inimigo
+    SELECT i.ataque_fisico_base INTO v_ataque_fisico
     FROM instancia_inimigo ii
     INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
     WHERE ii.id_instancia = p_id_instancia_inimigo;
 
-    -- Obtém ataque físico do inimigo (dividido por 3 como solicitado)
-    SELECT i.ataque_fisico_base / 3 INTO v_ataque_fisico 
-    FROM instancia_inimigo ii
-    INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
-    WHERE ii.id_instancia = p_id_instancia_inimigo;
+    -- Obtém a defesa da parte do corpo do cavaleiro
+    SELECT pcc.defesa_fisica_bonus INTO v_defesa_fisica
+    FROM parte_corpo_cavaleiro pcc
+    INNER JOIN instancia_cavaleiro ic 
+        ON ic.id_instancia_cavaleiro = pcc.id_instancia_cavaleiro
+    WHERE pcc.id_instancia_cavaleiro = p_id_instancia_cavaleiro
+        AND pcc.parte_corpo = p_parte_corpo;
 
-    -- Obtém defesa física correta do player
-    SELECT pc.defesa_fisica INTO v_defesa_fisica
-    FROM parte_corpo_player pcp
-    INNER JOIN player p ON pcp.id_player = p.id_player
-    INNER JOIN parte_corpo pc ON pc.id_parte_corpo = pcp.parte_corpo
-    WHERE pcp.id_player = p_id_player AND pcp.parte_corpo = p_parte_corpo;
-
-    -- Obtém o HP antes do ataque
-    SELECT hp_atual INTO v_hp_atual_antes FROM player WHERE id_player = p_id_player;
-
-    -- Converte parte do corpo para nome completo
-    v_parte_corpo_extenso := CASE 
-        WHEN p_parte_corpo = 'c' THEN 'Cabeça 🧠'
-        WHEN p_parte_corpo = 't' THEN 'Tronco 🏋️'
-        WHEN p_parte_corpo = 'b' THEN 'Braços 💪'
-        WHEN p_parte_corpo = 'p' THEN 'Pernas 🦵'
-        ELSE 'Desconhecido' 
-    END;
-
-    -- Validação se encontrou os valores corretos
+    -- Se ataque ou defesa não forem encontrados, retorna erro
     IF v_ataque_fisico IS NULL OR v_defesa_fisica IS NULL THEN
-        RETURN QUERY SELECT '⚠️ Erro: Inimigo ou player não encontrado!'::TEXT;
+        RETURN QUERY SELECT 'Erro: Inimigo ou cavaleiro não encontrado!'::TEXT;
     END IF;
 
-    -- Calcula o dano real a ser aplicado
-    v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0);
+    -- Calcula o dano causado
+    v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0); -- Garante que o dano não seja negativo
 
-    -- Atualiza o HP do player garantindo que não fique negativo
-    UPDATE player 
-    SET hp_atual = GREATEST(hp_atual - v_dano, 0)
-    WHERE id_player = p_id_player;
+    -- Atualiza o HP do cavaleiro
+    UPDATE instancia_cavaleiro
+    SET hp_atual = GREATEST(hp_atual - v_dano, 0) -- Garante que o HP não seja negativo
+    WHERE id_instancia_cavaleiro = p_id_instancia_cavaleiro;
 
-    -- Obtém o novo HP do player após o ataque
-    SELECT hp_atual INTO v_hp_atual_depois FROM player WHERE id_player = p_id_player;
+    -- Obtém o novo HP do cavaleiro
+    SELECT hp_atual INTO v_hp_atual
+    FROM instancia_cavaleiro
+    WHERE id_instancia_cavaleiro = p_id_instancia_cavaleiro;
 
-    -- Retorna a mensagem de ataque formatada corretamente
+    -- Retorna a mensagem do ataque
     RETURN QUERY SELECT format(
-        '🔥 %s atacou %s na %s, causando %s de dano. HP: %s → %s',
-        v_nome_inimigo, v_nome_player, v_parte_corpo_extenso, v_dano, v_hp_atual_antes, v_hp_atual_depois
+        '💀 Inimigo %s atacou o Cavaleiro %s na parte %s, causando %s de dano. HP Atual do Cavaleiro: %s',
+        p_id_instancia_inimigo, p_id_instancia_cavaleiro, p_parte_corpo, v_dano, v_hp_atual
     );
 END;
 $$ LANGUAGE plpgsql;
+

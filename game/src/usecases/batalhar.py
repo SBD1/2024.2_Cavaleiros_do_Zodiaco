@@ -7,7 +7,6 @@ from ..database import obter_cursor
 from collections import deque
 from dataclasses import dataclass
 from ..util import limpar_terminal
-
 @dataclass
 class Combatente:
     id_instancia: int
@@ -34,20 +33,6 @@ def obter_nome_combatente(cursor, tipo, id_instancia):
     
     result = cursor.fetchone()
     return result[0] if result else f"{tipo.capitalize()} {id_instancia}"
-
-def exibir_fila(console, fila_turnos, cursor):
-    """ Exibe a fila de turnos atual """
-    table = Table(title="📜 Fila de Turnos", show_header=True, header_style="bold cyan")
-    table.add_column("Posição", justify="center")
-    table.add_column("Nome", justify="left")
-    table.add_column("Tipo", justify="center")
-    table.add_column("Velocidade", justify="center")
-
-    for i, combatente in enumerate(fila_turnos, start=1):
-        nome_combatente = obter_nome_combatente(cursor, combatente.tipo, combatente.id_instancia)
-        table.add_row(str(i), nome_combatente, combatente.tipo.capitalize(), str(combatente.velocidade))
-
-    console.print(table)
 
 def batalhar(console, id_player):
     """⚔️ Inicia uma batalha entre o jogador, seus cavaleiros e os inimigos da sala, organizando a fila de ataque."""
@@ -85,19 +70,14 @@ def batalhar(console, id_player):
             while fila_turnos:
                 limpar_terminal(console)
                 console.print(Panel.fit(f"⚔️ [bold magenta]Rodada {rodada}[/bold magenta]", border_style="magenta"))
-                console.print("🎯 [bold yellow]DEBUG: Fila inicial de turnos[/bold yellow]")
-                exibir_fila(console, fila_turnos, cursor)
-                # Exibir fila de turnos
-                
 
                 if not fila_turnos:
-                    console.print("[bold red]⚠ ERRO: Nenhum combatente foi encontrado na batalha![/bold red]")
                     break  
 
                 combatente_atual = fila_turnos.popleft()  
+
                 nome_combatente = obter_nome_combatente(cursor, combatente_atual.tipo, combatente_atual.id_instancia)
 
-                # Verificar se o combatente ainda tem HP
                 cursor.execute(f"""
                     SELECT hp_atual FROM { 
                         "player" if combatente_atual.tipo == "player" else 
@@ -112,15 +92,15 @@ def batalhar(console, id_player):
                 
                 hp_atual = cursor.fetchone()
                 if hp_atual and hp_atual[0] <= 0:
-                    console.print(f"💀 [bold red]{nome_combatente} foi derrotado e removido da batalha![/bold red] 💀")
+                    console.print(f"💀 [bold red]{nome_combatente} foi derrotado![/bold red] 💀")
                     continue  
 
                 if combatente_atual.tipo in ["player", "cavaleiro"]:
-                    cursor.execute("SELECT id_instancia, hp_atual, i.hp_max FROM instancia_inimigo ii INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo WHERE ii.hp_atual > 0")
-                    inimigos_disponiveis = cursor.fetchall()
+                    cursor.execute("SELECT id_instancia FROM instancia_inimigo WHERE hp_atual > 0")
+                    inimigos_disponiveis = [row[0] for row in cursor.fetchall()]
 
                     if not inimigos_disponiveis:
-                        limpar_terminal(console)
+                        console.print("[bold green]🎉 Vitória! Todos os inimigos foram derrotados! 🎉[/bold green]")
                         return  
 
                     console.print(f"🎯 {nome_combatente} está atacando!")
@@ -129,12 +109,11 @@ def batalhar(console, id_player):
                     table = Table(title="👹 Inimigos disponíveis", show_header=True, header_style="bold red")
                     table.add_column("ID", justify="center")
                     table.add_column("Nome", justify="left")
-                    table.add_column("HP Atual / HP Máx", justify="center")
 
                     inimigos_opcoes = {}
-                    for inimigo_id, hp_atual, hp_max in inimigos_disponiveis:
+                    for inimigo_id in inimigos_disponiveis:
                         nome_inimigo = obter_nome_combatente(cursor, "inimigo", inimigo_id)
-                        table.add_row(str(inimigo_id), nome_inimigo, f"{hp_atual} / {hp_max}")
+                        table.add_row(str(inimigo_id), nome_inimigo)
                         inimigos_opcoes[inimigo_id] = nome_inimigo
 
                     console.print(table)
@@ -169,8 +148,35 @@ def batalhar(console, id_player):
                     if mensagem:
                         console.print(f"📢 {mensagem[0]}")
 
+                elif combatente_atual.tipo == "inimigo":
+                    cursor.execute("SELECT id_instancia_cavaleiro FROM instancia_cavaleiro WHERE hp_atual > 0 AND id_player = %s", (id_player,))
+                    cavaleiros_disponiveis = [row[0] for row in cursor.fetchall()]
+
+                    cursor.execute("SELECT id_player FROM player WHERE hp_atual > 0 AND id_player = %s", (id_player,))
+                    players_disponiveis = [row[0] for row in cursor.fetchall()]
+
+                    alvos = cavaleiros_disponiveis + players_disponiveis
+                    if not alvos:
+                        console.print("[bold red]💀 Todos os aliados foram derrotados! Você perdeu a batalha. 💀[/bold red]")
+                        return  
+
+                    alvo_escolhido = random.choice(alvos)
+                    parte_alvo = random.choice(list(partes_corpo.keys()))
+
+                    nome_alvo = obter_nome_combatente(cursor, "cavaleiro" if alvo_escolhido in cavaleiros_disponiveis else "player", alvo_escolhido)
+                    nome_inimigo = obter_nome_combatente(cursor, "inimigo", combatente_atual.id_instancia)
+
+                    console.print(f"💀 {nome_inimigo} atacou {nome_alvo} na {partes_corpo[parte_alvo]}!")
+
+                    cursor.execute("SELECT * FROM inimigo_ataca_player(%s, %s, %s)", 
+                                   (combatente_atual.id_instancia, alvo_escolhido, parte_alvo))
+                    mensagem = cursor.fetchone()
+                    if mensagem:
+                        console.print(f"📢 {mensagem[0]}")
+
                 fila_turnos.append(combatente_atual)
                 rodada += 1
+                time.sleep(2)
 
     except Exception as e:
         console.print(Panel.fit(
