@@ -270,3 +270,71 @@ BEGIN
     RAISE NOTICE 'Item comprado com sucesso!';
 
 END $$;
+
+CREATE OR REPLACE PROCEDURE vender_item(
+    p_id_player INT,
+    p_nome_item TEXT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_preco_venda NUMERIC;
+    v_quantidade_atual INT;
+BEGIN
+    -- Verificar o preço de venda e a quantidade atual do item no inventário do jogador
+    SELECT preco_venda, quantidade
+    INTO v_preco_venda, v_quantidade_atual
+    FROM inventario_view
+    WHERE id_player = p_id_player
+      AND nome = p_nome_item;
+
+    -- Verificar se o item existe no inventário
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Você não possui este item no inventário.';
+    END IF;
+
+    -- Verificar se o item tem quantidade suficiente para ser vendido
+    IF v_quantidade_atual <= 0 THEN
+        RAISE EXCEPTION 'Quantidade insuficiente para vender.';
+    END IF;
+
+    -- Atualizar a quantidade do item no inventário
+    IF v_quantidade_atual > 1 THEN
+        UPDATE item_armazenado
+        SET quantidade = quantidade - 1
+        WHERE id_inventario = p_id_player
+          AND id_item = (
+              SELECT ti.id_item
+              FROM tipo_item ti
+              JOIN inventario_view iv ON ti.id_item = (
+                  SELECT ia.id_item
+                  FROM item_armazenado ia
+                  WHERE ia.id_inventario = p_id_player
+                  AND iv.nome = p_nome_item
+                  LIMIT 1
+              )
+          );
+    ELSE
+        -- Remover o item do inventário se a quantidade for zero após a venda
+        DELETE FROM item_armazenado
+        WHERE id_inventario = p_id_player
+          AND id_item = (
+              SELECT ti.id_item
+              FROM tipo_item ti
+              JOIN inventario_view iv ON ti.id_item = (
+                  SELECT ia.id_item
+                  FROM item_armazenado ia
+                  WHERE ia.id_inventario = p_id_player
+                  AND iv.nome = p_nome_item
+                  LIMIT 1
+              )
+          );
+    END IF;
+
+    -- Adicionar o valor do item ao dinheiro do jogador
+    UPDATE inventario
+    SET dinheiro = dinheiro + v_preco_venda
+    WHERE id_player = p_id_player;
+
+    RAISE NOTICE 'Item vendido com sucesso!';
+END $$;

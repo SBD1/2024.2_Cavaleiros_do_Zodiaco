@@ -8,7 +8,7 @@ CREATE TABLE Armadura_Instancia (
     defesa_fisica INTEGER NOT NULL,
     ataque_magico INTEGER NOT NULL,
     ataque_fisico INTEGER NOT NULL, 
-    durabilidade_max INTEGER NOT NULL,
+    durabilidade_atual INTEGER NOT NULL,
     preco_venda INTEGER NOT NULL,
     PRIMARY KEY (id_armadura, id_instancia, id_parte_corpo_armadura)
 );

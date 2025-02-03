@@ -14,6 +14,7 @@ from .verificar_npc_na_sala import verificar_npc_na_sala
 from .interagir_npc_quest import interagir_npc_quest
 from .listar_todas_receitas import listar_todas_receitas
 from .gerar_item import gerar_item
+from .verificar_desbloqueio_ferreiro import verificar_desbloqueio_ferreiro
 
 def obter_acoes_disponiveis(jogador_id):
 
@@ -39,7 +40,7 @@ def obter_acoes_disponiveis(jogador_id):
 
     check_npc = verificar_npc_na_sala(jogador_id)
 
-    if check_npc == "Ferreiro":
+    if check_npc == "Ferreiro" and verificar_desbloqueio_ferreiro(jogador_id):
         opcoes.insert(0, ("[orange4]🔨 Falar com Mu (Ferreiro)[/orange4]", None))
 
     elif check_npc == "Missao":
