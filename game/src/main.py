@@ -11,6 +11,8 @@ from src.usecases.selecionar_jogador import selecionar_jogador
 from src.usecases.ver_locazalicao_atual import ver_localizacao_atual
 from src.usecases.iniciar_jogo import iniciar_jogo
 from src.usecases.criar_jogador import criar_jogador
+from src.usecases.verificar_inimigos import verificar_inimigos
+from src.usecases.verificar_boss import verificar_boss
 from .util import limpar_terminal
 from src.usecases.tocar_tema_encerramento import tocar_tema_encerramento
 
@@ -35,7 +37,15 @@ def mostrar_menu_acoes(console):
     while True:
         limpar_terminal(console)
 
+        if verificar_inimigos(console,jogador_selecionado_id):
+            limpar_terminal(console)
+        elif verificar_boss(console,jogador_selecionado_id):
+            limpar_terminal(console)
+        
+
+
         ver_localizacao_atual(console, jogador_selecionado_id)
+
         opcoes = obter_acoes_disponiveis(jogador_selecionado_id)
         
         console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", expand=False))

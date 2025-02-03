@@ -154,5 +154,31 @@ CREATE OR REPLACE VIEW material_venda_view AS
             ORDER BY iv.nivel_minimo, m.nome;
 
 
+create or replace view inimigos_por_sala_view as
+		 select
+	s.id_sala ,
+	count(*)
+from
+	instancia_inimigo ii
+inner join grupo_inimigo gi 
+				 on
+	ii.id_grupo = ii.id_grupo
+inner join sala s
+				 on
+	s.id_sala = gi.id_sala
+group by
+	s.id_sala
 
+
+create view boss_por_sala_view as
+select
+	b.id_sala,
+	count(*)
+from
+	boss b
+inner join sala s2 on
+	s2.id_sala = b.id_sala
+group by
+	b.id_sala
+		
 
