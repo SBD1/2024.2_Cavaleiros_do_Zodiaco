@@ -1,17 +1,12 @@
 ## DDL
 
-### Versionamento
+## Introdução
 
-| Versão | Data | Modificação | Autor |
-| --- | --- | --- | --- |
-|  0.1 | 13/01/2025 | Criação do Documento | Vinícius Rufino |
-|  1.0 | 22/01/2025 | Add o Set Up inicial | Lucas Ramon |
-|  1.1 | 22/01/2025 | Atualização do DDL | Lucas Ramon |
-|  2.0 | 02/02/2025 | Atualização do Documento | Vinícius Rufino |
+No Módulo 2, exploramos as principais linguagens utilizadas para definir, manipular e consultar dados em um banco de dados relacional. Essas linguagens são essenciais para a criação, manutenção e extração de informações de forma eficiente. Abaixo, destacamos os três principais conceitos abordados:
 
-### Data Definition Language
+### Data Definition Language (DDL)
 
-    É a Responsável pela estrutura do banco de dados (Criar, Modificar e excluir objetos).
+A Linguagem de Definição de Dados (DDL) é responsável pela estrutura do banco de dados. Comandos DDL permitem criar, modificar e excluir objetos como tabelas, índices, views e esquemas.
 
 ```sql
 CREATE TABLE IF NOT EXISTS Elemento (
@@ -747,3 +742,13 @@ END;
 $function$;
 
 ```
+
+### Versionamento
+
+| Versão | Data | Modificação | Autor |
+| --- | --- | --- | --- |
+|  0.1 | 13/01/2025 | Criação do Documento | Vinícius Rufino |
+|  1.0 | 22/01/2025 | Add o Set Up inicial | Lucas Ramon |
+|  1.1 | 22/01/2025 | Atualização do DDL | Lucas Ramon |
+|  2.0 | 02/02/2025 | Atualização do Documento | Vinícius Rufino |
+|  2.1 | 03/02/2025 | Atualização do DDL | Vinícius Rufino |
