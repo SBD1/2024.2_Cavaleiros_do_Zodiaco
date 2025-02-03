@@ -182,3 +182,23 @@ group by
 	b.id_sala
 		
 
+			 
+-- select pros camaradas (cavaleiros na party do player)
+create view cavaleiros_party_view as
+select
+	ic.id_instancia_cavaleiro,p.id_player
+from
+	party p
+inner join instancia_cavaleiro ic
+			  		   on
+	ic.id_party = p.id_player
+
+-- select pros inimigos (inimigos na sala que o player tá)
+ create view inimigos_sala_player_view as 
+ SELECT ii.id_instancia,pl.id_player FROM instancia_inimigo ii
+        INNER JOIN grupo_inimigo gi ON ii.id_grupo = gi.id_grupo
+        inner join sala s on s.id_sala = gi.id_sala 
+        inner join party p on p.id_sala = s.id_sala 
+        inner join player pl on p.id_player = p.id_player 
+        
+        
