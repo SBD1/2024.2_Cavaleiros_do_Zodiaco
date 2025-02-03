@@ -13,6 +13,7 @@ from src.usecases.iniciar_jogo import iniciar_jogo
 from src.usecases.criar_jogador import criar_jogador
 from src.usecases.verificar_inimigos import verificar_inimigos
 from src.usecases.verificar_boss import verificar_boss
+from src.usecases.batalhar import batalhar
 from .util import limpar_terminal
 from src.usecases.tocar_tema_encerramento import tocar_tema_encerramento
 
@@ -38,6 +39,7 @@ def mostrar_menu_acoes(console):
         limpar_terminal(console)
 
         if verificar_inimigos(console,jogador_selecionado_id):
+            batalhar(console,jogador_selecionado_id)
             #TO-DO: batalhar(console,jogador_selecionado_id)
             # 1 - select trazendo todas as instancias de inimigos na sala
             # 2 - select trazendo os camaradas 
@@ -48,7 +50,7 @@ def mostrar_menu_acoes(console):
             # 7 - player escolhe o ataque
             # 8 - faz as rodadas ate o player morrer ou ate todos os inimigos morrerem
 
-            limpar_terminal(console)
+            #limpar_terminal(console)
         elif verificar_boss(console,jogador_selecionado_id):
             limpar_terminal(console)
         
