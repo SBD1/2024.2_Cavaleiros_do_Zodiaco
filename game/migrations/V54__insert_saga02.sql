@@ -52,8 +52,8 @@ VALUES ( nextval('sala_id_sala_seq'::regclass), 2, 'Templo Sagrado', NULL, 6, NU
 
 -- salas da casa 3 arena galactica
 
--- INSERT INTO Sala (id_sala, id_casa, nome, id_sala_norte, id_sala_sul, id_sala_leste, id_sala_oeste) -- id 13
--- VALUES ( nextval('sala_id_sala_seq'::regclass), 2, 'Arena de batalha Geki', NULL, NULL, NULL, NULL);
+INSERT INTO Sala (id_sala, id_casa, nome, id_sala_norte, id_sala_sul, id_sala_leste, id_sala_oeste) -- id 13
+VALUES ( nextval('sala_id_sala_seq'::regclass), 3, 'Arena de batalha Geki', NULL, NULL, NULL, NULL);
 
 -- INSERT INTO Sala (id_sala, id_casa, nome, id_sala_norte, id_sala_sul, id_sala_leste, id_sala_oeste) -- id 14
 -- VALUES ( nextval('sala_id_sala_seq'::regclass), 2, 'Arena de batalha Jabu', NULL, NULL, NULL, NULL);

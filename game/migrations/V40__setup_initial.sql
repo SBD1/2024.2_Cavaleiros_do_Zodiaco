@@ -139,19 +139,16 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION get_sala_atual(id_player_input INT)
-RETURNS TEXT AS $$
+RETURNS TABLE(id_sala INT, nome_sala TEXT) AS $$
 BEGIN
-    RETURN (
-        SELECT STRING_AGG(
-            FORMAT('Sala Atual: %s',s.nome),
-            '\n'
-        )
-        FROM sala s
-        INNER JOIN party p ON s.id_sala = p.id_sala
-        WHERE p.id_player = id_player_input
-    );
+    RETURN QUERY
+    SELECT s.id_sala, s.nome::TEXT
+    FROM sala s
+    INNER JOIN party p ON s.id_sala = p.id_sala
+    WHERE p.id_player = id_player_input;
 END;
 $$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION get_nome_sala(id_sala_input INT)
 RETURNS VARCHAR AS $$
