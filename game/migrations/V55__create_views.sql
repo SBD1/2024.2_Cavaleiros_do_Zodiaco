@@ -197,7 +197,7 @@ group by
 -- select pros camaradas (cavaleiros na party do player)
 create view cavaleiros_party_view as
 select
-	ic.id_instancia_cavaleiro,p.id_player
+	ic.id_instancia_cavaleiro,p.id_player,p.id_sala
 from
 	party p
 inner join instancia_cavaleiro ic
@@ -205,6 +205,7 @@ inner join instancia_cavaleiro ic
 	ic.id_party = p.id_player;
 
 -- select pros inimigos (inimigos na sala que o player tá)
+<<<<<<< HEAD
 create view inimigos_sala_player_view as 
  SELECT ii.id_instancia,pl.id_player FROM instancia_inimigo ii
         INNER JOIN grupo_inimigo gi ON ii.id_grupo = gi.id_grupo
@@ -232,10 +233,46 @@ JOIN Parte_Corpo_Player pcp
     ON ai.id_armadura = pcp.armadura_equipada
     AND ai.id_instancia = pcp.instancia_armadura_equipada
     AND ai.id_parte_corpo_armadura = pcp.parte_corpo
+=======
+ create view inimigos_sala_player_view as 
+ SELECT ii.id_instancia,pl.id_player,p.id_sala FROM instancia_inimigo ii
+        INNER JOIN grupo_inimigo gi ON ii.id_grupo = gi.id_grupo
+        inner join sala s on s.id_sala = gi.id_sala 
+        inner join party p on p.id_sala = s.id_sala 
+        inner join player pl on p.id_player = p.id_player ;
+        
+        
+create or replace VIEW view_fila_turnos_batalha AS
+SELECT 
+    id_instancia_cavaleiro AS id_instancia, 
+    'cavaleiro' AS tipo, 
+    velocidade, 
+    id_player
+FROM instancia_cavaleiro 
+WHERE id_instancia_cavaleiro IN (
+    SELECT id_instancia_cavaleiro FROM cavaleiros_party_view
+)
+    
+UNION ALL
+
+SELECT 
+    id_instancia AS id_instancia, 
+    'inimigo' AS tipo, 
+    i.velocidade , 
+    p.id_player
+FROM instancia_inimigo ii
+inner join inimigo i
+on i.id_inimigo  = ii.id_inimigo 
+INNER JOIN grupo_inimigo gi ON ii.id_grupo = gi.id_grupo
+        inner join sala s on s.id_sala = gi.id_sala 
+        inner join party p on p.id_sala = s.id_sala 
+        inner join player pl on p.id_player = p.id_player 
+>>>>>>> efc9167868a79ffacbec8cf360945092f5524730
 
 UNION ALL
 
 SELECT 
+<<<<<<< HEAD
     ai.id_armadura,
     ai.id_parte_corpo_armadura,
     ai.id_instancia,
@@ -258,3 +295,12 @@ WHERE NOT EXISTS (
       AND pcp.instancia_armadura_equipada = ai.id_instancia
       AND pcp.parte_corpo = ai.id_parte_corpo_armadura
 );
+=======
+    id_player AS id_instancia, 
+    'player' AS tipo, 
+    velocidade, 
+    id_player
+FROM player
+
+ORDER BY velocidade DESC;
+>>>>>>> efc9167868a79ffacbec8cf360945092f5524730
