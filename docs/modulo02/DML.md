@@ -11,6 +11,8 @@
 
 ### SQL
 
+    Utilizada para inserir, atualizar, excluir e gerenciar os dados armazenados nas tabelas.
+
 ```sql
 ALTER TABLE santuario RENAME TO saga;
 ALTER TABLE saga RENAME COLUMN id_santuario TO id_saga;
