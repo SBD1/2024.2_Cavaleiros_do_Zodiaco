@@ -135,3 +135,25 @@ BEGIN
     RETURN v_tem_boss;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION verificar_desbloqueio_ferreiro(p_id_player INTEGER)
+RETURNS BOOLEAN AS $$
+DECLARE
+    desbloqueado BOOLEAN;
+BEGIN
+    -- Verificar se o NPC Ferreiro foi desbloqueado
+    SELECT CASE
+        WHEN pm.status_missao = 'c' THEN TRUE
+        ELSE FALSE
+    END
+    INTO desbloqueado
+    FROM npc_ferreiro nf
+    LEFT JOIN player_missao pm
+        ON pm.id_missao = nf.id_missao_desbloqueia
+        AND pm.id_player = p_id_player
+    WHERE nf.id_npc_ferreiro = 1; -- Garantir que é o NPC Ferreiro com ID 1
+
+    -- Retornar o resultado
+    RETURN COALESCE(desbloqueado, FALSE);
+END;
+$$ LANGUAGE plpgsql;
