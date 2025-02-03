@@ -338,3 +338,73 @@ BEGIN
 
     RAISE NOTICE 'Item vendido com sucesso!';
 END $$;
+
+CREATE OR REPLACE PROCEDURE comprar_armadura(
+    p_id_player INTEGER,
+    p_id_item INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_preco_compra INTEGER;
+    v_nivel_minimo INTEGER;
+    v_jogador_nivel INTEGER;
+    v_dinheiro_disponivel INTEGER;
+    v_raridade TEXT; -- Declarado como TEXT
+    v_defesa_magica INTEGER;
+    v_defesa_fisica INTEGER;
+    v_ataque_magico INTEGER;
+    v_ataque_fisico INTEGER;
+    v_durabilidade_max INTEGER;
+BEGIN
+    -- Buscar informações da armadura à venda
+    SELECT iv.preco_compra, iv.nivel_minimo, a.raridade_armadura::TEXT, -- Conversão explícita para TEXT
+           a.defesa_magica, a.defesa_fisica, a.ataque_magico, a.ataque_fisico, a.durabilidade_max
+    INTO v_preco_compra, v_nivel_minimo, v_raridade, 
+         v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max
+    FROM item_a_venda iv
+    JOIN tipo_item ti ON ti.id_item = iv.id_item
+    JOIN armadura a ON a.id_armadura = ti.id_item
+    WHERE iv.id_item = p_id_item;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Armadura não encontrada para compra.';
+    END IF;
+
+    -- Verificar o nível do jogador
+    SELECT nivel, i.dinheiro
+    INTO v_jogador_nivel, v_dinheiro_disponivel
+    FROM player p 
+    JOIN inventario i 
+    ON p.id_player = i.id_player
+    WHERE p.id_player = p_id_player;
+
+    IF v_jogador_nivel < v_nivel_minimo THEN
+        RAISE EXCEPTION 'Você precisa ser nível % para comprar esta armadura.', v_nivel_minimo;
+    END IF;
+
+    -- Verificar se o jogador tem dinheiro suficiente
+    IF v_dinheiro_disponivel < v_preco_compra THEN
+        RAISE EXCEPTION 'Dinheiro insuficiente para comprar esta armadura.';
+    END IF;
+
+    -- Subtrair o valor da compra do dinheiro do jogador
+    UPDATE inventario
+    SET dinheiro = dinheiro - v_preco_compra
+    WHERE id_player = p_id_player;
+
+    -- Gerar a instância da armadura
+    INSERT INTO armadura_instancia (
+        id_armadura, id_parte_corpo_armadura, id_inventario, raridade_armadura,
+        defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_atual, preco_venda
+    )
+    SELECT 
+        a.id_armadura, a.id_parte_corpo, p_id_player, v_raridade,
+        v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max, v_preco_compra
+    FROM armadura a
+    WHERE a.id_armadura = p_id_item;
+
+    -- Mensagem de sucesso
+    RAISE NOTICE 'Armadura comprada e adicionada ao inventário com sucesso!';
+END;
+$$;

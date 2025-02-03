@@ -105,18 +105,29 @@ inner join elemento e
         
 
 CREATE OR REPLACE VIEW armadura_venda_view AS
-    SELECT iv.id_item,
-        a.nome,
-        iv.preco_compra,
-        a.descricao,
-        iv.nivel_minimo
-    FROM 
-        item_a_venda iv
-    JOIN 
-        tipo_item ti ON ti.id_item = iv.id_item
-    JOIN 
-        armadura a ON a.id_armadura = ti.id_item
-        ORDER BY iv.nivel_minimo, a.nome;
+SELECT 
+    a.id_armadura,
+    a.nome,
+    iv.preco_compra,
+    a.descricao,
+    iv.nivel_minimo,
+    a.raridade_armadura,
+    a.defesa_magica,
+    a.defesa_fisica,
+    a.ataque_magico,
+    a.ataque_fisico,
+    a.durabilidade_max,
+    a.preco_venda
+FROM 
+    item_a_venda iv
+JOIN 
+    tipo_item ti ON ti.id_item = iv.id_item
+JOIN 
+    armadura a ON a.id_armadura = ti.id_item
+ORDER BY 
+    iv.nivel_minimo, 
+    a.nome;
+
 
 CREATE OR REPLACE VIEW consumivel_venda_view AS
     SELECT iv.id_item,
@@ -179,7 +190,7 @@ from
 inner join sala s2 on
 	s2.id_sala = b.id_sala
 group by
-	b.id_sala
+	b.id_sala;
 		
 
 			 
@@ -191,14 +202,59 @@ from
 	party p
 inner join instancia_cavaleiro ic
 			  		   on
-	ic.id_party = p.id_player
+	ic.id_party = p.id_player;
 
 -- select pros inimigos (inimigos na sala que o player tá)
- create view inimigos_sala_player_view as 
+create view inimigos_sala_player_view as 
  SELECT ii.id_instancia,pl.id_player FROM instancia_inimigo ii
         INNER JOIN grupo_inimigo gi ON ii.id_grupo = gi.id_grupo
         inner join sala s on s.id_sala = gi.id_sala 
         inner join party p on p.id_sala = s.id_sala 
-        inner join player pl on p.id_player = p.id_player 
+        inner join player pl on p.id_player = p.id_player;
         
-        
+
+CREATE OR REPLACE VIEW armaduras_jogador_view AS
+SELECT 
+    ai.id_armadura,
+    ai.id_parte_corpo_armadura,
+    ai.id_instancia,
+    ai.raridade_armadura,
+    ai.durabilidade_atual,
+    ai.ataque_fisico,
+    ai.ataque_magico,
+    ai.defesa_fisica,
+    ai.defesa_magica,
+    'equipada' AS status_armadura,
+    pcp.parte_corpo AS parte_corpo_equipada,
+    pcp.id_player
+FROM Armadura_Instancia ai
+JOIN Parte_Corpo_Player pcp
+    ON ai.id_armadura = pcp.armadura_equipada
+    AND ai.id_instancia = pcp.instancia_armadura_equipada
+    AND ai.id_parte_corpo_armadura = pcp.parte_corpo
+
+UNION ALL
+
+SELECT 
+    ai.id_armadura,
+    ai.id_parte_corpo_armadura,
+    ai.id_instancia,
+    ai.raridade_armadura,
+    ai.durabilidade_atual,
+    ai.ataque_fisico,
+    ai.ataque_magico,
+    ai.defesa_fisica,
+    ai.defesa_magica,
+    'inventario' AS status_armadura,
+    NULL AS parte_corpo_equipada,
+    i.id_player
+FROM Armadura_Instancia ai
+JOIN Inventario i
+    ON ai.id_inventario = i.id_player
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Parte_Corpo_Player pcp
+    WHERE pcp.armadura_equipada = ai.id_armadura
+      AND pcp.instancia_armadura_equipada = ai.id_instancia
+      AND pcp.parte_corpo = ai.id_parte_corpo_armadura
+);

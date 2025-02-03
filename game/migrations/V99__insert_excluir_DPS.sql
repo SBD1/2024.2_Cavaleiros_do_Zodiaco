@@ -49,3 +49,54 @@ INSERT INTO public.material_receita
 (id_receita, id_material, quantidade)
 VALUES(9, 8, 4);
 
+-- Cabeça
+INSERT INTO public.armadura
+( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max, preco_venda)
+VALUES
+('c', 'Elmo de Pégaso', 
+'O elmo da Armadura de Pégaso protege a cabeça do cavaleiro com sua resistência mágica e física, refletindo a energia indomável do cosmos.', 
+'Rara', 50, 70, 10, 15, 100, 500);
+
+INSERT INTO public.item_a_venda
+(id_item, preco_compra, nivel_minimo)
+VALUES(currval('tipo_item_id_item_seq'), 2, 1);
+
+-- Tronco
+INSERT INTO public.armadura
+( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max, preco_venda)
+VALUES
+('t', 'Peitoral de Pégaso', 
+'O peitoral da Armadura de Pégaso oferece excelente proteção contra ataques físicos e mágicos, simbolizando a coragem do cavaleiro.', 
+'Rara', 80, 100, 20, 25, 150, 1000);
+
+INSERT INTO public.item_a_venda
+(id_item, preco_compra, nivel_minimo)
+VALUES(currval('tipo_item_id_item_seq'), 2, 1);
+
+-- Braços
+INSERT INTO public.armadura
+( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max, preco_venda)
+VALUES
+('b', 'Braçadeiras de Pégaso', 
+'As braçadeiras da Armadura de Pégaso aumentam a força física e protegem os braços em combates ferozes, permitindo golpes precisos e poderosos.', 
+'Rara', 30, 40, 15, 20, 80, 400);
+
+INSERT INTO public.item_a_venda
+(id_item, preco_compra, nivel_minimo)
+VALUES(currval('tipo_item_id_item_seq'), 2, 1);
+
+-- Pernas
+INSERT INTO public.armadura
+( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max, preco_venda)
+VALUES
+('p', 'Grevas de Pégaso', 
+'As grevas da Armadura de Pégaso garantem proteção total às pernas do cavaleiro e aumentam a mobilidade e equilíbrio nos combates.', 
+'Rara', 40, 50, 10, 15, 90, 450);
+
+INSERT INTO public.item_a_venda
+(id_item, preco_compra, nivel_minimo)
+VALUES(currval('tipo_item_id_item_seq'), 2, 1);
+
+INSERT INTO public.armadura_instancia
+(id_armadura, id_parte_corpo_armadura, id_inventario, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_atual, preco_venda)
+VALUES(13,'p', 1, 'Rara', 40, 50, 10, 15, 90, 450);

@@ -3,7 +3,7 @@ CREATE TABLE Armadura_Instancia (
     id_parte_corpo_armadura enum_parte_corpo,
     id_instancia SERIAL,
     id_inventario INTEGER,
-    raridade_armadura INTEGER NOT NULL,
+    raridade_armadura VARCHAR NOT NULL,
     defesa_magica INTEGER NOT NULL,
     defesa_fisica INTEGER NOT NULL,
     ataque_magico INTEGER NOT NULL,
