@@ -139,13 +139,13 @@ EXECUTE FUNCTION before_insert_livro();
 CREATE OR REPLACE FUNCTION before_insert_material()
 RETURNS TRIGGER AS $$
 DECLARE
-    new_id_item INTEGER;
+    new_id_material INTEGER;
 BEGIN
     INSERT INTO tipo_item (tipo_item)
     VALUES ('m') -- 'm' para material
-    RETURNING id_item INTO new_id_item;
+    RETURNING id_item INTO new_id_material;
 
-    NEW.id_item := new_id_item;
+    NEW.id_material := new_id_material;
 
     RETURN NEW;
 END;
@@ -244,3 +244,24 @@ CREATE TRIGGER trigger_atualizar_status_missao
 AFTER INSERT ON item_armazenado
 FOR EACH ROW
 EXECUTE FUNCTION atualizar_status_missao_ao_drop_item();
+
+
+CREATE OR REPLACE FUNCTION remover_item_se_zero()
+RETURNS TRIGGER AS $$
+BEGIN
+    
+    IF NEW.quantidade = 0 THEN
+        DELETE FROM item_armazenado
+        WHERE id_inventario = NEW.id_inventario
+          AND id_item = NEW.id_item;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_remover_item_se_zero
+AFTER UPDATE OF quantidade
+ON item_armazenado
+FOR EACH ROW
+WHEN (NEW.quantidade = 0) 
+EXECUTE FUNCTION remover_item_se_zero();
