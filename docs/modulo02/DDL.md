@@ -9,7 +9,9 @@
 |  1.1 | 22/01/2025 | Atualização do DDL | Lucas Ramon |
 |  2.0 | 02/02/2025 | Atualização do Documento | Vinícius Rufino |
 
-### SQL
+### Data Definition Language
+
+    É a Responsável pela estrutura do banco de dados (Criar, Modificar e excluir objetos).
 
 ```sql
 CREATE TABLE IF NOT EXISTS Elemento (
