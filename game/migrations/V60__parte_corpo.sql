@@ -92,3 +92,62 @@ CROSS JOIN public.parte_corpo pc
 WHERE NOT EXISTS (
     SELECT 1 FROM public.parte_corpo_player pp WHERE pp.id_player = p.id_player AND pp.parte_corpo = pc.id_parte_corpo
 );
+
+
+CREATE OR REPLACE FUNCTION gerar_partes_corpo_inimigo()
+RETURNS TRIGGER AS $$
+BEGIN
+  
+    INSERT INTO public.parte_corpo_inimigo (
+        id_instancia, 
+        id_inimigo,
+        parte_corpo, 
+        defesa_fisica, 
+        defesa_magica, 
+        chance_acerto_base, 
+        chance_acerto_critico
+    )
+    SELECT 
+        NEW.id_instancia,      
+        NEW.id_inimigo,        
+        pc.id_parte_corpo,     
+        pc.defesa_fisica,      
+        pc.defesa_magica,     
+        pc.chance_acerto,      
+        pc.chance_acerto_critico  
+    FROM public.parte_corpo pc;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_gerar_partes_corpo_inimigo
+AFTER INSERT ON public.instancia_inimigo
+FOR EACH ROW
+EXECUTE FUNCTION gerar_partes_corpo_inimigo();
+
+
+INSERT INTO public.parte_corpo_inimigo (
+    id_instancia, 
+    id_inimigo,
+    parte_corpo, 
+    defesa_fisica, 
+    defesa_magica, 
+    chance_acerto_base, 
+    chance_acerto_critico
+)
+SELECT 
+    ii.id_instancia,       -- ID da instância do inimigo
+    ii.id_inimigo,         -- ID do tipo de inimigo
+    pc.id_parte_corpo,     -- Partes do corpo baseadas na tabela parte_corpo
+    pc.defesa_fisica,      -- Atributos originais da parte do corpo
+    pc.defesa_magica,     
+    pc.chance_acerto,      
+    pc.chance_acerto_critico  
+FROM public.instancia_inimigo ii
+CROSS JOIN public.parte_corpo pc
+WHERE NOT EXISTS (
+    SELECT 1 FROM public.parte_corpo_inimigo pi 
+    WHERE pi.id_instancia = ii.id_instancia AND pi.parte_corpo = pc.id_parte_corpo
+);

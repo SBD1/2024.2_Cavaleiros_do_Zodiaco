@@ -338,3 +338,196 @@ BEGIN
 
     RAISE NOTICE 'Item vendido com sucesso!';
 END $$;
+
+
+CREATE OR REPLACE PROCEDURE player_ataca_inimigo(
+    IN p_id_player INT,
+    IN p_id_instancia_inimigo INT,
+    IN p_parte_corpo enum_parte_corpo
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_ataque_fisico INT;
+    v_defesa_fisica INT;
+    v_hp_atual INT;
+    v_dano INT;
+BEGIN
+    -- Obtém o ataque físico do player
+    SELECT ataque_fisico_base INTO v_ataque_fisico
+    FROM player
+    WHERE id_player = p_id_player;
+
+    -- Obtém a defesa da parte do corpo do inimigo
+    SELECT pci.defesa_fisica INTO v_defesa_fisica
+    FROM parte_corpo_inimigo pci
+    INNER JOIN instancia_inimigo ii
+        ON pci.id_instancia = ii.id_instancia AND pci.id_inimigo = ii.id_inimigo
+    WHERE pci.id_instancia = p_id_instancia_inimigo
+        AND pci.parte_corpo = p_parte_corpo;
+
+    -- Se não encontrar ataque ou defesa, sai da procedure
+    IF v_ataque_fisico IS NULL OR v_defesa_fisica IS NULL THEN
+        RAISE NOTICE 'Erro: Player ou inimigo não encontrado!';
+        RETURN;
+    END IF;
+
+    -- Calcula o dano causado
+    v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0); -- Garante que o dano não seja negativo
+
+    -- Atualiza o HP do inimigo
+    UPDATE instancia_inimigo
+    SET hp_atual = GREATEST(hp_atual - v_dano, 0) -- Garante que o HP não seja negativo
+    WHERE id_instancia = p_id_instancia_inimigo;
+
+    -- Obtém o novo HP para exibir
+    SELECT hp_atual INTO v_hp_atual
+    FROM instancia_inimigo
+    WHERE id_instancia = p_id_instancia_inimigo;
+
+    -- Mensagem de saída para debug
+    RAISE NOTICE 'Player % atacou o Inimigo % na parte %, causando % de dano. HP Atual do Inimigo: %',
+        p_id_player, p_id_instancia_inimigo, p_parte_corpo, v_dano, v_hp_atual;
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE cavaleiro_ataca_inimigo(
+    IN p_id_instancia_cavaleiro INT,
+    IN p_id_instancia_inimigo INT,
+    IN p_parte_corpo enum_parte_corpo
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_ataque_fisico INT;
+    v_defesa_fisica INT;
+    v_hp_atual INT;
+    v_dano INT;
+BEGIN
+
+    SELECT ic.ataque_fisico INTO v_ataque_fisico
+    FROM instancia_cavaleiro ic
+    WHERE ic.id_instancia_cavaleiro = p_id_instancia_cavaleiro;
+
+    SELECT pci.defesa_fisica INTO v_defesa_fisica
+    FROM parte_corpo_inimigo pci
+    INNER JOIN instancia_inimigo ii
+        ON pci.id_instancia = ii.id_instancia AND pci.id_inimigo = ii.id_inimigo
+    WHERE pci.id_instancia = p_id_instancia_inimigo
+        AND pci.parte_corpo = p_parte_corpo;
+
+    IF v_ataque_fisico IS NULL OR v_defesa_fisica IS NULL THEN
+        RAISE NOTICE 'Erro: Cavaleiro ou inimigo não encontrado!';
+        RETURN;
+    END IF;
+
+    v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0); -- Garante que o dano não seja negativo
+
+    UPDATE instancia_inimigo
+    SET hp_atual = GREATEST(hp_atual - v_dano, 0) -- Garante que o HP não seja negativo
+    WHERE id_instancia = p_id_instancia_inimigo;
+
+    SELECT hp_atual INTO v_hp_atual
+    FROM instancia_inimigo
+    WHERE id_instancia = p_id_instancia_inimigo;
+
+    RAISE NOTICE 'Cavaleiro % atacou o Inimigo % na parte %, causando % de dano. HP Atual do Inimigo: %',
+        p_id_instancia_cavaleiro, p_id_instancia_inimigo, p_parte_corpo, v_dano, v_hp_atual;
+END;
+$$;
+
+
+CREATE OR REPLACE PROCEDURE inimigo_ataca_player(
+    IN p_id_instancia_inimigo INT,
+    IN p_id_player INT,
+    IN p_parte_corpo enum_parte_corpo
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_ataque_fisico INT;
+    v_defesa_fisica INT;
+    v_hp_atual INT;
+    v_dano INT;
+BEGIN
+    SELECT i.ataque_fisico_base INTO v_ataque_fisico
+    FROM instancia_inimigo ii
+    INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
+    WHERE ii.id_instancia = p_id_instancia_inimigo;
+
+    SELECT pc.defesa_fisica INTO v_defesa_fisica
+    FROM parte_corpo_player pcp
+    INNER JOIN player p ON pcp.id_player = p.id_player
+    INNER JOIN parte_corpo pc ON pc.id_parte_corpo = pcp.parte_corpo
+    WHERE pcp.id_player = p_id_player
+        AND pcp.parte_corpo = p_parte_corpo;
+
+    IF v_ataque_fisico IS NULL OR v_defesa_fisica IS NULL THEN
+        RAISE NOTICE 'Erro: Inimigo ou player não encontrado!';
+        RETURN;
+    END IF;
+
+    v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0); -- Garante que o dano não seja negativo
+
+    UPDATE player
+    SET hp_atual = GREATEST(hp_atual - v_dano, 0) -- Garante que o HP não seja negativo
+    WHERE id_player = p_id_player;
+
+    SELECT hp_atual INTO v_hp_atual
+    FROM player
+    WHERE id_player = p_id_player;
+
+    RAISE NOTICE 'Inimigo % atacou o Player % na parte %, causando % de dano. HP Atual do Player: %',
+        p_id_instancia_inimigo, p_id_player, p_parte_corpo, v_dano, v_hp_atual;
+END;
+$$;
+
+
+CREATE OR REPLACE PROCEDURE inimigo_ataca_cavaleiro(
+    IN p_id_instancia_inimigo INT,
+    IN p_id_instancia_cavaleiro INT,
+    IN p_parte_corpo enum_parte_corpo
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_ataque_fisico INT;
+    v_defesa_fisica INT;
+    v_hp_atual INT;
+    v_dano INT;
+BEGIN
+  
+    SELECT i.ataque_fisico_base INTO v_ataque_fisico
+    FROM instancia_inimigo ii
+    INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
+    WHERE ii.id_instancia = p_id_instancia_inimigo;
+
+    
+    SELECT pcc.defesa_fisica_bonus INTO v_defesa_fisica
+    FROM parte_corpo_cavaleiro pcc
+    INNER JOIN instancia_cavaleiro ic 
+        ON ic.id_instancia_cavaleiro = pcc.id_instancia_cavaleiro
+    WHERE pcc.id_instancia_cavaleiro = p_id_instancia_cavaleiro
+        AND pcc.parte_corpo = p_parte_corpo;
+
+    
+    IF v_ataque_fisico IS NULL OR v_defesa_fisica IS NULL THEN
+        RAISE NOTICE 'Erro: Inimigo ou cavaleiro não encontrado!';
+        RETURN;
+    END IF;
+
+    
+    v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0); 
+
+    UPDATE instancia_cavaleiro
+    SET hp_atual = GREATEST(hp_atual - v_dano, 0) 
+    WHERE id_instancia_cavaleiro = p_id_instancia_cavaleiro;
+
+    SELECT hp_atual INTO v_hp_atual
+    FROM instancia_cavaleiro
+    WHERE id_instancia_cavaleiro = p_id_instancia_cavaleiro;
+
+    RAISE NOTICE 'Inimigo % atacou o Cavaleiro % na parte %, causando % de dano. HP Atual do Cavaleiro: %',
+        p_id_instancia_inimigo, p_id_instancia_cavaleiro, p_parte_corpo, v_dano, v_hp_atual;
+END;
+$$;
