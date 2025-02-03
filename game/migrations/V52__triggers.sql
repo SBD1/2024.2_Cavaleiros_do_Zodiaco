@@ -161,13 +161,13 @@ EXECUTE FUNCTION before_insert_material();
 CREATE OR REPLACE FUNCTION before_insert_armadura()
 RETURNS TRIGGER AS $$
 DECLARE
-    new_id_item INTEGER;
+    new_id_armadura INTEGER;
 BEGIN
     INSERT INTO tipo_item (tipo_item)
     VALUES ('a') -- 'a' para armadura
-    RETURNING id_item INTO new_id_item;
+    RETURNING id_item INTO new_id_armadura;
 
-    NEW.id_item := new_id_item;
+    NEW.id_armadura := new_id_armadura;
 
     RETURN NEW;
 END;

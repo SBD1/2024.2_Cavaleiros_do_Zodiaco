@@ -35,7 +35,7 @@ def interagir_npc_mercador(console, selected_player_id):
                 escolha = input("\n🎯 Escolha uma opção: ").strip()
 
                 if escolha == "1":
-                    listar_itens_por_categoria(console, cursor, "armadura", selected_player_id, dialogo_comprar, nome_npc)
+                    comprar_armadura(console, cursor, selected_player_id, dialogo_comprar, nome_npc)
                 elif escolha == "2":
                     listar_itens_por_categoria(console, cursor, "consumivel", selected_player_id, dialogo_comprar, nome_npc)
                 elif escolha == "3":
@@ -56,14 +56,93 @@ def interagir_npc_mercador(console, selected_player_id):
         except Exception as e:
             console.print(f"[bold red]Erro:[/bold red] {e}")
 
+def comprar_armadura(console, cursor, selected_player_id, dialogo_comprar, nome_npc):
+    """
+    Exibe as armaduras disponíveis para compra e chama a procedure de compra.
+    """
+    try:
+        limpar_terminal(console)
+        console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]{dialogo_comprar}[/italic]", expand=False))
 
+        # Buscar armaduras disponíveis para venda
+        cursor.execute("""
+            SELECT id_armadura, nome, descricao, preco_compra, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max
+            FROM armadura_venda_view
+        """)
+        armaduras = cursor.fetchall()
+
+        if not armaduras:
+            console.print("\n[bold yellow]⚠ Nenhuma armadura disponível para venda.[/bold yellow]")
+            input("\n[Pressione Enter para voltar ao menu...]")
+            limpar_terminal(console)
+            return
+
+        # Criar tabela com as armaduras disponíveis
+        tabela_armaduras = Table(title="⚔️ Armaduras Disponíveis para Compra", show_lines=True)
+        tabela_armaduras.add_column("Opção", justify="center", style="bold cyan")
+        tabela_armaduras.add_column("Nome", style="bold yellow", justify="left")
+        tabela_armaduras.add_column("Descrição", style="dim", justify="left")
+        tabela_armaduras.add_column("Raridade", style="magenta", justify="center")
+        tabela_armaduras.add_column("Preço", style="green", justify="right")
+        tabela_armaduras.add_column("Defesa Física", style="red", justify="center")
+        tabela_armaduras.add_column("Defesa Mágica", style="blue", justify="center")
+        tabela_armaduras.add_column("Ataque Físico", style="green", justify="center")
+        tabela_armaduras.add_column("Ataque Mágico", style="blue", justify="center")
+        tabela_armaduras.add_column("Durabilidade", style="yellow", justify="center")
+
+        for idx, armadura in enumerate(armaduras, start=1):
+            id_armadura, nome, descricao, preco, raridade, def_magica, def_fisica, atk_magico, atk_fisico, durabilidade = armadura
+            tabela_armaduras.add_row(
+                str(idx), nome, descricao, raridade,
+                f"{preco} moedas", str(def_fisica), str(def_magica),
+                str(atk_fisico), str(atk_magico), str(durabilidade)
+            )
+
+        console.print("\n", tabela_armaduras)
+
+        # Escolher uma armadura para comprar
+        console.print("[bold green]\nDigite o número da armadura para comprá-la ou 'S' para sair.[/bold green]")
+        escolha = input("🎯 Escolha uma opção: ").strip()
+
+        if escolha.lower() == 's':
+            console.print("[bold cyan]Você voltou ao menu do mercador.[/bold cyan]")
+            console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+            limpar_terminal(console)
+            return
+
+        if not escolha.isdigit() or int(escolha) < 1 or int(escolha) > len(armaduras):
+            console.print("[bold red]❌ Opção inválida![/bold red]")
+            console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+            limpar_terminal(console)
+            return
+
+        escolha_idx = int(escolha) - 1
+        id_armadura, nome_armadura, _, preco, _, _, _, _, _, _ = armaduras[escolha_idx]
+
+        # Chamar a procedure de compra de armadura
+        try:
+            cursor.execute("CALL comprar_armadura(%s, %s)", (selected_player_id, id_armadura))
+            console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]Parabéns, você adquiriu a armadura [bold green]{nome_armadura}[/bold green] por [yellow]{preco} moedas![/yellow][/italic]", expand=False))
+            input("\n[Pressione ENTER para continuar...]")
+
+        except Exception as e:
+            console.print(f"[bold red]Erro ao comprar a armadura:[/bold red] {str(e)}")
+            input("\n[Pressione ENTER para continuar...]")
+            limpar_terminal(console)
+
+    except Exception as e:
+        console.print(f"[bold red]Erro:[/bold red] {str(e)}")
+        console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+        input()
+        limpar_terminal(console)
+
+        
 # Função para listar itens por categoria e processar a compra
 def listar_itens_por_categoria(console, cursor, categoria, selected_player_id, dialogo_comprar, nome_npc):
     try:
         limpar_terminal(console)
         console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]{dialogo_comprar}[/italic]", expand=False))
         categorias_para_visoes = {
-            "armadura": "armadura_venda_view",
             "consumivel": "consumivel_venda_view",
             "livro": "livro_venda_view",
             "material": "material_venda_view"
@@ -113,11 +192,12 @@ def listar_itens_por_categoria(console, cursor, categoria, selected_player_id, d
             console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
             limpar_terminal(console)
             return
-
+        
+            
         escolha_idx = int(escolha) - 1
         id_item, nome_item, preco, descricao, nivel_minimo = itens[escolha_idx]
 
-        # Processar a compra chamando a procedure
+        
         try:
             cursor.execute("CALL comprar_item(%s, %s)", (selected_player_id, id_item))
             console.print(Panel(f"[italic]Você comprou [cyan]{nome_item}[/cyan] por [yellow]{preco} moedas![/yellow][/italic]", expand=False))
