@@ -462,3 +462,163 @@ BEGIN
     RAISE NOTICE 'A armadura foi equipada com sucesso!';
 END;
 $$;
+
+CREATE OR REPLACE PROCEDURE restaurar_durabilidade(
+    p_id_player INT,
+    p_id_instancia INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_raridade VARCHAR(20);
+    v_durabilidade_atual INT;
+    v_custo_alma INT;
+    v_almas_disponiveis INT;
+BEGIN
+    -- Buscar informações da armadura
+    SELECT raridade_armadura, durabilidade_atual 
+    INTO v_raridade, v_durabilidade_atual
+    FROM armadura_instancia 
+    WHERE id_instancia = p_id_instancia;
+
+    -- Se a armadura não existir, retorna erro
+    IF v_raridade IS NULL OR v_durabilidade_atual IS NULL THEN
+        RAISE EXCEPTION 'A armadura selecionada não existe!';
+    END IF;
+
+    -- Se a durabilidade já estiver em 100%, não faz nada
+    IF v_durabilidade_atual = 100 THEN
+        RAISE NOTICE 'A durabilidade já está em 100%%. Nenhuma restauração foi feita.';
+        RETURN;
+    END IF;
+
+    -- Buscar custo da restauração com base na durabilidade atual
+    SELECT custo_alma INTO v_custo_alma
+    FROM custos_ferreiro
+    WHERE tipo_acao = 'restaurar'
+      AND raridade = v_raridade
+      AND v_durabilidade_atual BETWEEN durabilidade_min AND durabilidade_max;
+
+    -- Se não encontrou um custo, retorna erro
+    IF v_custo_alma IS NULL THEN
+        RAISE EXCEPTION 'Erro ao calcular o custo de restauração!';
+    END IF;
+
+    -- Buscar quantas Almas de Armadura o jogador tem
+    SELECT alma_armadura INTO v_almas_disponiveis
+    FROM inventario
+    WHERE id_player = p_id_player;
+
+    -- Se o jogador não tem almas ou não tem o suficiente, retorna erro
+    IF v_almas_disponiveis IS NULL OR v_almas_disponiveis < v_custo_alma THEN
+        RAISE EXCEPTION 'Você não tem Almas de Armadura suficientes para restaurar a durabilidade! Custo: %, Disponível: %', v_custo_alma, COALESCE(v_almas_disponiveis, 0);
+    END IF;
+
+    -- Deduzir Almas do jogador e restaurar a durabilidade
+    UPDATE inventario
+    SET alma_armadura = alma_armadura - v_custo_alma
+    WHERE id_player = p_id_player;
+
+    UPDATE armadura_instancia
+    SET durabilidade_atual = 100
+    WHERE id_instancia = p_id_instancia;
+
+    RAISE NOTICE 'Durabilidade restaurada para 100%%! Foram usadas % Almas.', v_custo_alma;
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE melhorar_armadura(
+    p_id_player INT,
+    p_id_instancia INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_raridade_atual VARCHAR(20);
+    v_nova_raridade VARCHAR(20);
+    v_custo_alma INT;
+    v_almas_disponiveis INT;
+BEGIN
+    -- Buscar a raridade atual da armadura
+    SELECT raridade_armadura INTO v_raridade_atual
+    FROM armadura_instancia 
+    WHERE id_instancia = p_id_instancia;
+
+    -- Definir a nova raridade
+    IF v_raridade_atual = 'Bronze' THEN
+        v_nova_raridade := 'Prata';
+    ELSIF v_raridade_atual = 'Prata' THEN
+        v_nova_raridade := 'Ouro';
+    ELSE
+        RAISE EXCEPTION 'Esta armadura já está no nível máximo (Ouro)!';
+    END IF;
+
+    -- Buscar o custo da melhoria
+    SELECT custo_alma INTO v_custo_alma
+    FROM custos_ferreiro
+    WHERE tipo_acao = 'melhorar' AND raridade = v_raridade_atual;
+
+    -- Buscar quantas Almas de Armadura o jogador tem
+    SELECT alma_armadura INTO v_almas_disponiveis
+    FROM inventario
+    WHERE id_player = p_id_player;
+
+    -- Se o jogador não tiver Almas suficientes, lançar exceção
+    IF v_almas_disponiveis IS NULL OR v_almas_disponiveis < v_custo_alma THEN
+        RAISE EXCEPTION 'Você não tem Almas de Armadura suficientes para melhorar esta armadura! Custo: %, Disponível: %', v_custo_alma, COALESCE(v_almas_disponiveis, 0);
+    END IF;
+
+    -- Deduzir Almas do jogador e melhorar a raridade da armadura
+    UPDATE inventario
+    SET alma_armadura = alma_armadura - v_custo_alma
+    WHERE id_player = p_id_player;
+
+    UPDATE armadura_instancia
+    SET raridade_armadura = v_nova_raridade, durabilidade_atual = 100
+    WHERE id_instancia = p_id_instancia;
+
+    RAISE NOTICE 'Armadura melhorada para % e durabilidade restaurada para 100%%! % Almas foram usadas.', v_nova_raridade, v_custo_alma;
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE desmanchar_armadura(
+    p_id_player INT,
+    p_id_instancia INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_raridade VARCHAR(20);
+    v_almas_recebidas INT;
+BEGIN
+    -- Buscar a raridade da armadura
+    SELECT raridade_armadura INTO v_raridade
+    FROM armadura_instancia
+    WHERE id_instancia = p_id_instancia;
+
+    -- Se a armadura não existir, retorna erro
+    IF v_raridade IS NULL THEN
+        RAISE EXCEPTION 'A armadura selecionada não existe!';
+    END IF;
+
+    -- Buscar quantas Almas serão recebidas
+    SELECT custo_alma INTO v_almas_recebidas
+    FROM custos_ferreiro
+    WHERE tipo_acao = 'desmanchar' AND raridade = v_raridade;
+
+    -- Se o custo não for encontrado, retorna erro
+    IF v_almas_recebidas IS NULL THEN
+        RAISE EXCEPTION 'Erro ao calcular a quantidade de Almas recebidas ao desmanchar!';
+    END IF;
+
+    -- Remover a armadura da tabela armadura_instancia
+    DELETE FROM armadura_instancia WHERE id_instancia = p_id_instancia;
+
+    -- Adicionar as Almas ao inventário do jogador
+    UPDATE inventario
+    SET alma_armadura = alma_armadura + v_almas_recebidas
+    WHERE id_player = p_id_player;
+
+    RAISE NOTICE 'Armadura desmanchada! Você recebeu % Almas de Armadura.', v_almas_recebidas;
+END;
+$$;

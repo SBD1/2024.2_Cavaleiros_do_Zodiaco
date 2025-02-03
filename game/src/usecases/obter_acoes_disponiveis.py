@@ -16,6 +16,7 @@ from .listar_todas_receitas import listar_todas_receitas
 from .gerar_item import gerar_item
 from .verificar_desbloqueio_ferreiro import verificar_desbloqueio_ferreiro
 from .listar_equipamentos import listar_equipamentos
+from .interagir_npc_ferreiro import interagir_npc_ferreiro
 
 def obter_acoes_disponiveis(jogador_id):
 
@@ -43,7 +44,7 @@ def obter_acoes_disponiveis(jogador_id):
     check_npc = verificar_npc_na_sala(jogador_id)
 
     if check_npc == "Ferreiro" and verificar_desbloqueio_ferreiro(jogador_id):
-        opcoes.insert(0, ("[orange4]🔨 Falar com Mu (Ferreiro)[/orange4]", None))
+        opcoes.insert(0, ("[orange4]🔨 Falar com Mu (Ferreiro)[/orange4]", interagir_npc_ferreiro))
 
     elif check_npc == "Missao":
         opcoes.insert(0, ("[sea_green1]💬 Falar com Saori Kido (Missões)[/sea_green1]", interagir_npc_quest))
