@@ -42,14 +42,52 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     OPEN cur FOR
-        SELECT s.id_casa FROM 
+        SELECT s.id_casa, c.nome FROM 
         Party as p
         JOIN
         Sala AS s 
         ON p.id_sala = s.id_sala
+        JOIN
+        Casa as c 
+        ON c.id_casa = s.id_casa
         WHERE p.id_player = p_id_player;
 END;
 $$;
+
+CREATE OR REPLACE PROCEDURE get_saga_segura(IN p_id_player INT, INOUT cur REFCURSOR)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    OPEN cur FOR
+         SELECT sa.id_saga, sa.nome
+            FROM public.sala_segura AS ss
+            JOIN public.sala AS s ON ss.id_sala = s.id_sala
+            JOIN public.casa AS c ON s.id_casa = c.id_casa
+            JOIN public.saga AS sa ON c.id_saga = sa.id_saga
+            LIMIT 1;
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE get_saga_atual(IN p_id_player INT, INOUT cur REFCURSOR)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    OPEN cur FOR
+        SELECT c.id_saga, sa.nome FROM 
+        Party as p
+        JOIN
+        Sala AS s 
+        ON p.id_sala = s.id_sala
+        JOIN
+        Casa as c 
+        ON c.id_casa = s.id_casa
+        JOIN
+        Saga as sa
+        ON sa.id_saga = c.id_saga
+        WHERE p.id_player = p_id_player;
+END;
+$$;
+
 
 CREATE OR REPLACE PROCEDURE get_grupo_cursor(IN p_id_player INT, INOUT cur REFCURSOR)
 LANGUAGE plpgsql

@@ -8,26 +8,24 @@ def verificar_se_esta_na_saga_orfanato(jogador_selecionado_id):
     try:
         with obter_cursor() as cursor:
             # Obter a saga atual do jogador
-            cursor.execute("""
-                SELECT sa.id_saga
-                FROM public.party AS p
-                JOIN public.sala AS s ON p.id_sala = s.id_sala
-                JOIN public.casa AS c ON s.id_casa = c.id_casa
-                JOIN public.saga AS sa ON c.id_saga = sa.id_saga
-                WHERE p.id_player = %s;
-            """, (jogador_selecionado_id,))
+            cursor_name = "get_saga_atual"
+            cursor.connection.autocommit = False  
+            cursor.execute("CALL get_saga_atual(%s, %s);", (jogador_selecionado_id, cursor_name))
+            cursor.execute(f"FETCH ALL FROM {cursor_name};")
             saga_atual = cursor.fetchone()
+            cursor.execute(f"CLOSE {cursor_name};")
+            cursor.connection.commit()
+            
 
 
-            cursor.execute("""
-                SELECT sa.id_saga, c.id_casa
-                FROM public.sala_segura AS ss
-                JOIN public.sala AS s ON ss.id_sala = s.id_sala
-                JOIN public.casa AS c ON s.id_casa = c.id_casa
-                JOIN public.saga AS sa ON c.id_saga = sa.id_saga
-                LIMIT 1;
-            """)
+            cursor_name = "get_saga_safe"
+            cursor.connection.autocommit = False  
+            cursor.execute("CALL get_saga_segura(%s, %s);", (jogador_selecionado_id, cursor_name))
+            cursor.execute(f"FETCH ALL FROM {cursor_name};")
             saga_segura = cursor.fetchone()
+            cursor.execute(f"CLOSE {cursor_name};")
+            cursor.connection.commit()
+            
 
             if saga_atual and saga_segura and saga_atual[0] == saga_segura[0]:
                 return True  # Jogador está no Orfanato
