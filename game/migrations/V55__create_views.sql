@@ -91,10 +91,10 @@ SELECT
     pl.id_player
 FROM
     party pt
-INNER JOIN player pl ON pt.id_player = pl.id_player
-INNER JOIN instancia_cavaleiro ic ON ic.id_party = pt.id_sala
-INNER JOIN cavaleiro c ON c.id_cavaleiro = ic.id_cavaleiro
-INNER JOIN elemento e ON e.id_elemento = c.id_elemento;
+JOIN player pl ON pt.id_player = pl.id_player
+JOIN instancia_cavaleiro ic ON ic.id_party = pt.id_player
+JOIN cavaleiro c ON c.id_cavaleiro = ic.id_cavaleiro
+JOIN elemento e ON e.id_elemento = c.id_elemento;
 
 -- VIEW armadura_venda_view
 CREATE OR REPLACE VIEW armadura_venda_view AS
