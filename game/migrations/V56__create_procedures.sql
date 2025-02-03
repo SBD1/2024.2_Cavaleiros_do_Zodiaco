@@ -474,7 +474,23 @@ DECLARE
     v_durabilidade_atual INT;
     v_custo_alma INT;
     v_almas_disponiveis INT;
+    v_id_custo_ferreiro INT;
+    v_material_id INT;
+    v_quantidade_necessaria INT;
+    v_quantidade_disponivel INT;
+    v_id_inventario INT;
+    v_nome_material TEXT;
 BEGIN
+    -- Buscar o ID do inventário do jogador
+    SELECT id_player INTO v_id_inventario
+    FROM inventario
+    WHERE id_player = p_id_player;
+
+    -- Se o inventário não existir, retorna erro
+    IF v_id_inventario IS NULL THEN
+        RAISE EXCEPTION 'Inventário não encontrado para o jogador!';
+    END IF;
+
     -- Buscar informações da armadura
     SELECT raridade_armadura, durabilidade_atual 
     INTO v_raridade, v_durabilidade_atual
@@ -488,19 +504,19 @@ BEGIN
 
     -- Se a durabilidade já estiver em 100%, não faz nada
     IF v_durabilidade_atual = 100 THEN
-        RAISE NOTICE 'A durabilidade já está em 100%%. Nenhuma restauração foi feita.';
+        RAISE EXCEPTION 'A durabilidade já está em 100%%. Nenhuma restauração foi feita.';
         RETURN;
     END IF;
 
-    -- Buscar custo da restauração com base na durabilidade atual
-    SELECT custo_alma INTO v_custo_alma
+    -- Buscar o custo de alma da restauração com base na durabilidade atual
+    SELECT id, custo_alma INTO v_id_custo_ferreiro, v_custo_alma
     FROM custos_ferreiro
     WHERE tipo_acao = 'restaurar'
       AND raridade = v_raridade
       AND v_durabilidade_atual BETWEEN durabilidade_min AND durabilidade_max;
 
     -- Se não encontrou um custo, retorna erro
-    IF v_custo_alma IS NULL THEN
+    IF v_id_custo_ferreiro IS NULL THEN
         RAISE EXCEPTION 'Erro ao calcular o custo de restauração!';
     END IF;
 
@@ -514,18 +530,52 @@ BEGIN
         RAISE EXCEPTION 'Você não tem Almas de Armadura suficientes para restaurar a durabilidade! Custo: %, Disponível: %', v_custo_alma, COALESCE(v_almas_disponiveis, 0);
     END IF;
 
-    -- Deduzir Almas do jogador e restaurar a durabilidade
+    -- Verificar materiais necessários na tabela material_necessario_ferreiro
+    FOR v_material_id, v_quantidade_necessaria, v_nome_material IN
+        SELECT mn.id_material, quantidade, m.nome
+        FROM material_necessario_ferreiro mn
+        JOIN material m
+        ON mn.id_material = m.id_material
+        WHERE id_custo_ferreiro = v_id_custo_ferreiro
+    LOOP
+        -- Verificar quantidade disponível do material no inventário
+        SELECT quantidade INTO v_quantidade_disponivel
+        FROM item_armazenado
+        WHERE id_inventario = v_id_inventario AND id_item = v_material_id;
+
+        -- Se não houver quantidade suficiente do material, retorna erro
+        IF v_quantidade_disponivel IS NULL OR v_quantidade_disponivel < v_quantidade_necessaria THEN
+            RAISE EXCEPTION 'Você não possui materiais suficientes para restaurar a durabilidade! Material: %, Necessário: %, Disponível: %', v_nome_material, v_quantidade_necessaria, COALESCE(v_quantidade_disponivel, 0);
+        END IF;
+    END LOOP;
+
+    -- Deduzir as Almas de Armadura do jogador
     UPDATE inventario
     SET alma_armadura = alma_armadura - v_custo_alma
     WHERE id_player = p_id_player;
 
+    -- Deduzir os materiais necessários do inventário do jogador
+    FOR v_material_id, v_quantidade_necessaria IN
+        SELECT id_material, quantidade
+        FROM material_necessario_ferreiro
+        WHERE id_custo_ferreiro = v_id_custo_ferreiro
+    LOOP
+        UPDATE item_armazenado
+        SET quantidade = quantidade - v_quantidade_necessaria
+        WHERE id_inventario = v_id_inventario AND id_item = v_material_id;
+    END LOOP;
+
+    -- Restaurar a durabilidade da armadura
     UPDATE armadura_instancia
     SET durabilidade_atual = 100
     WHERE id_instancia = p_id_instancia;
 
-    RAISE NOTICE 'Durabilidade restaurada para 100%%! Foram usadas % Almas.', v_custo_alma;
+    RAISE NOTICE 'Durabilidade restaurada para 100%%! Foram usadas % Almas e os materiais necessários foram consumidos.', v_custo_alma;
 END;
 $$;
+
+
+
 
 CREATE OR REPLACE PROCEDURE melhorar_armadura(
     p_id_player INT,
@@ -538,10 +588,26 @@ DECLARE
     v_nova_raridade VARCHAR(20);
     v_custo_alma INT;
     v_almas_disponiveis INT;
+    v_id_custo_ferreiro INT;
+    v_id_inventario INT;
+    v_material_id INT;
+    v_quantidade_necessaria INT;
+    v_quantidade_disponivel INT;
+    v_material_nome TEXT;
 BEGIN
+    -- Buscar o ID do inventário do jogador
+    SELECT id_player INTO v_id_inventario
+    FROM inventario
+    WHERE id_player = p_id_player;
+
+    -- Se o inventário não existir, retorna erro
+    IF v_id_inventario IS NULL THEN
+        RAISE EXCEPTION 'Inventário não encontrado para o jogador!';
+    END IF;
+
     -- Buscar a raridade atual da armadura
     SELECT raridade_armadura INTO v_raridade_atual
-    FROM armadura_instancia 
+    FROM armadura_instancia
     WHERE id_instancia = p_id_instancia;
 
     -- Definir a nova raridade
@@ -554,32 +620,69 @@ BEGIN
     END IF;
 
     -- Buscar o custo da melhoria
-    SELECT custo_alma INTO v_custo_alma
+    SELECT id, custo_alma INTO v_id_custo_ferreiro, v_custo_alma
     FROM custos_ferreiro
     WHERE tipo_acao = 'melhorar' AND raridade = v_raridade_atual;
+
+    -- Se não encontrou o custo, retorna erro
+    IF v_id_custo_ferreiro IS NULL THEN
+        RAISE EXCEPTION 'Erro ao calcular o custo de melhoria!';
+    END IF;
 
     -- Buscar quantas Almas de Armadura o jogador tem
     SELECT alma_armadura INTO v_almas_disponiveis
     FROM inventario
     WHERE id_player = p_id_player;
 
-    -- Se o jogador não tiver Almas suficientes, lançar exceção
+    -- Se o jogador não tem almas ou não tem o suficiente, retorna erro
     IF v_almas_disponiveis IS NULL OR v_almas_disponiveis < v_custo_alma THEN
         RAISE EXCEPTION 'Você não tem Almas de Armadura suficientes para melhorar esta armadura! Custo: %, Disponível: %', v_custo_alma, COALESCE(v_almas_disponiveis, 0);
     END IF;
 
-    -- Deduzir Almas do jogador e melhorar a raridade da armadura
+    -- Verificar materiais necessários na tabela material_necessario_ferreiro
+    FOR v_material_id, v_quantidade_necessaria, v_material_nome IN
+        SELECT mn.id_material, quantidade, m.nome
+        FROM material_necessario_ferreiro mn
+        JOIN material m
+        ON m.id_material = mn.id_material
+        WHERE id_custo_ferreiro = v_id_custo_ferreiro
+    LOOP
+        -- Verificar quantidade disponível do material no inventário
+        SELECT quantidade INTO v_quantidade_disponivel
+        FROM item_armazenado
+        WHERE id_inventario = v_id_inventario AND id_item = v_material_id;
+
+        -- Se não houver quantidade suficiente do material, retorna erro
+        IF v_quantidade_disponivel IS NULL OR v_quantidade_disponivel < v_quantidade_necessaria THEN
+            RAISE EXCEPTION 'Você não possui materiais suficientes para melhorar a armadura! Material: %, Necessário: %, Disponível: %', v_material_nome, v_quantidade_necessaria, COALESCE(v_quantidade_disponivel, 0);
+        END IF;
+    END LOOP;
+
+    -- Deduzir as Almas de Armadura do jogador
     UPDATE inventario
     SET alma_armadura = alma_armadura - v_custo_alma
     WHERE id_player = p_id_player;
 
+    -- Deduzir os materiais necessários do inventário do jogador
+    FOR v_material_id, v_quantidade_necessaria IN
+        SELECT id_material, quantidade
+        FROM material_necessario_ferreiro
+        WHERE id_custo_ferreiro = v_id_custo_ferreiro
+    LOOP
+        UPDATE item_armazenado
+        SET quantidade = quantidade - v_quantidade_necessaria
+        WHERE id_inventario = v_id_inventario AND id_item = v_material_id;
+    END LOOP;
+
+    -- Melhorar a raridade da armadura e restaurar a durabilidade
     UPDATE armadura_instancia
     SET raridade_armadura = v_nova_raridade, durabilidade_atual = 100
     WHERE id_instancia = p_id_instancia;
 
-    RAISE NOTICE 'Armadura melhorada para % e durabilidade restaurada para 100%%! % Almas foram usadas.', v_nova_raridade, v_custo_alma;
+    RAISE NOTICE 'Armadura melhorada para % e durabilidade restaurada para 100%%! Foram usadas % Almas e os materiais necessários foram consumidos.', v_nova_raridade, v_custo_alma;
 END;
 $$;
+
 
 CREATE OR REPLACE PROCEDURE desmanchar_armadura(
     p_id_player INT,

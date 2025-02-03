@@ -220,9 +220,11 @@ INNER JOIN player pl ON p.id_player = pl.id_player;
 -- VIEW armaduras_jogador_view
 CREATE OR REPLACE VIEW armaduras_jogador_view AS
 SELECT 
+    ai.id_instancia,
     ai.id_armadura,
     ai.id_parte_corpo_armadura,
-    ai.id_instancia,
+    a.nome,
+    a.descricao,
     ai.raridade_armadura,
     ai.durabilidade_atual,
     ai.ataque_fisico,
@@ -234,6 +236,7 @@ SELECT
     pcp.id_player
 FROM 
     armadura_instancia ai
+JOIN armadura a ON a.id_armadura = ai.id_armadura
 JOIN 
     parte_corpo_player pcp ON ai.id_armadura = pcp.armadura_equipada
     AND ai.id_instancia = pcp.instancia_armadura_equipada
@@ -242,9 +245,11 @@ JOIN
 UNION ALL
 
 SELECT 
+    ai.id_instancia,
     ai.id_armadura,
     ai.id_parte_corpo_armadura,
-    ai.id_instancia,
+    a.nome,
+    a.descricao,
     ai.raridade_armadura,
     ai.durabilidade_atual,
     ai.ataque_fisico,
@@ -256,6 +261,7 @@ SELECT
     i.id_player
 FROM 
     armadura_instancia ai
+JOIN armadura a ON a.id_armadura = ai.id_armadura
 JOIN 
     inventario i ON ai.id_inventario = i.id_player
 WHERE 

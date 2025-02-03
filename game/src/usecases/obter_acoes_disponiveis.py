@@ -17,6 +17,7 @@ from .gerar_item import gerar_item
 from .verificar_desbloqueio_ferreiro import verificar_desbloqueio_ferreiro
 from .listar_equipamentos import listar_equipamentos
 from .interagir_npc_ferreiro import interagir_npc_ferreiro
+from .equipar_armadura import equipar_armadura
 
 def obter_acoes_disponiveis(jogador_id):
 
@@ -25,7 +26,7 @@ def obter_acoes_disponiveis(jogador_id):
         ("[bold yellow]🛡️ Ver Salas Disponíveis [/bold yellow]", ver_salas_disponiveis),
         ("[bold green]🚪 Mudar de Sala[/bold green]", mudar_de_sala),
         ("[bold purple]🗺️ Ver Mapa[/bold purple]", ver_mapa),
-        ("[bold orange]🪖 Ver Equipamento[/bold orange]", listar_equipamentos),
+        ("[bold orange]🪖 Ver Equipamento[/bold orange]", equipar_armadura),
         ("[bold cyan]🎒 Ver Inventário[/bold cyan]", ver_inventario),
         ("[light_pink4]📜 Ver Receitas [/light_pink4]", listar_todas_receitas),
         ("[bold green]⚒️ Craftar Item[/bold green]", gerar_item),

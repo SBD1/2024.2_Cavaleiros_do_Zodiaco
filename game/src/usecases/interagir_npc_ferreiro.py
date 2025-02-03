@@ -2,6 +2,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
+from .listar_equipamentos import listar_equipamentos
+
 from ..util import limpar_terminal
 from ..database import obter_cursor
 
@@ -29,41 +31,7 @@ def interagir_npc_ferreiro(console, jogador_id):
                 limpar_terminal(console)
                 console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]{dialogo_inicial}[/italic]", expand=False))
 
-                # Buscar todas as armaduras do jogador através da VIEW
-                cursor.execute("""
-                    SELECT 
-                        id_instancia,
-                        id_parte_corpo_armadura,
-                        raridade_armadura,
-                        durabilidade_atual,
-                        status_armadura
-                    FROM armaduras_jogador_view
-                    WHERE id_player = %s
-                    ORDER BY status_armadura DESC, raridade_armadura DESC;
-                """, (jogador_id,))
-                
-                armaduras = cursor.fetchall()
-
-                if not armaduras:
-                    console.print(Panel.fit("🔍 [bold yellow]Você não possui armaduras disponíveis![/bold yellow]", border_style="yellow"))
-                    return
-
-                # Criar tabela de armaduras disponíveis
-                tabela_armaduras = Table(title="🛠️ Armaduras no Ferreiro", show_lines=True)
-                tabela_armaduras.add_column("ID Instância", style="cyan", justify="center")
-                tabela_armaduras.add_column("Parte do Corpo (ID)", style="magenta", justify="left")
-                tabela_armaduras.add_column("Raridade", style="cyan", justify="center")
-                tabela_armaduras.add_column("Durabilidade", style="yellow", justify="center")
-                tabela_armaduras.add_column("Status", style="white", justify="center")
-
-                for armadura in armaduras:
-                    id_instancia, id_parte_corpo_armadura, raridade, durabilidade, status = armadura
-                    tabela_armaduras.add_row(
-                        str(id_instancia), str(id_parte_corpo_armadura), str(raridade),
-                        str(durabilidade), status
-                    )
-
-                console.print(tabela_armaduras)
+                listar_equipamentos(console, jogador_id)
 
                 # Opções do jogador
                 console.print("\n[bold cyan]Escolha uma ação:[/bold cyan]")
@@ -122,11 +90,10 @@ def interagir_npc_ferreiro(console, jogador_id):
                 except Exception as e:
                     # Captura a mensagem do RAISE EXCEPTION corretamente
                     
-                    console.print(Panel.fit(f"⛔ [bold red]Erro: {e.diag.message_primary}[/bold red]", border_style="red"))
+                    console.print(Panel.fit(f"⛔ [bold red]{e.diag.message_primary}[/bold red]", border_style="red"))
 
                 # Pausar para que o jogador veja o resultado
                 console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
                 input()
-
     except Exception as e:
         console.print(Panel.fit(f"⛔ [bold red]Erro ao interagir com o ferreiro: {e}[/bold red]", border_style="red"))

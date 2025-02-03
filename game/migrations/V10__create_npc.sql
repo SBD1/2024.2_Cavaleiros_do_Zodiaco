@@ -47,6 +47,21 @@ INSERT INTO public.custos_ferreiro (tipo_acao, raridade, custo_alma) VALUES
 ('desmanchar', 'Prata', 5),
 ('desmanchar', 'Ouro', 15);
 
+CREATE TABLE material_necessario_ferreiro (
+    id_material INTEGER,
+    id_custo_ferreiro INTEGER,
+    quantidade INTEGER,
+    PRIMARY KEY (id_material, id_custo_ferreiro)
+);
+ 
+ALTER TABLE material_necessario_ferreiro ADD CONSTRAINT FK_material_necessario_ferreiro_2
+    FOREIGN KEY (id_material)
+    REFERENCES Material (id_material);
+ 
+ALTER TABLE material_necessario_ferreiro ADD CONSTRAINT FK_material_necessario_ferreiro_3
+    FOREIGN KEY (id_custo_ferreiro)
+    REFERENCES Custos_ferreiro (id);
+
 CREATE TABLE Npc_Quest (
     id_npc_quest SERIAL PRIMARY KEY,
     id_sala INTEGER NOT NULL,
