@@ -16,31 +16,31 @@ Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo 
 
 - Módulo 1:
 
-  - [Modelo Entidade Relacionamento](../docs/modulo01/mer.md)
+  - [Modelo Entidade Relacionamento](./modulo01/mer.md)
 
-  - [Diagrama Entidade Relacionamento](../docs/modulo01/der.md)
+  - [Diagrama Entidade Relacionamento](./modulo01/der.md)
 
-  - [Modelo Lógico](../docs/modulo01/ml.md)
+  - [Modelo Lógico](./modulo01/ml.md)
 
-  - [Dicionário de Dados](../docs/modulo01/dicionario.md)
+  - [Dicionário de Dados](./modulo01/dicionario.md)
 
   - Módulo 02:
     
-    - [DDL](../docs/modulo02/DDL.md)
+    - [DDL](./modulo02/DDL.md)
 
-    - [DML](../docs/modulo02/DML.md)
+    - [DML](./modulo02/DML.md)
 
-    - [DQL](../docs/modulo02/DQL.md)
+    - [DQL](./modulo02/DQL.md)
 
   - Módulo 03:
 
-    - [Triggers](../docs/modulo03/Triggers.md)
+    - [Triggers](./modulo03/triggers.md)
 
 ## Apresentações
 
- - [Módulo 1](../docs/apresentacao/modulo1.md)
- - [Módulo 2](../docs/apresentacao/modulo2.md)
- - [Módulo 3](../docs/apresentacao/modulo3.md)
+ - [Módulo 1](./apresentacao/modulo1.md)
+ - [Módulo 2](./apresentacao/modulo2.md)
+ - [Módulo 3](./apresentacao/modulo3.md)
 
 ## Membros do grupo
 
