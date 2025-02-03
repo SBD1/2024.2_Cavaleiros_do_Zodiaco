@@ -167,7 +167,7 @@ inner join sala s
 				 on
 	s.id_sala = gi.id_sala
 group by
-	s.id_sala
+	s.id_sala;
 
 
 create view boss_por_sala_view as
