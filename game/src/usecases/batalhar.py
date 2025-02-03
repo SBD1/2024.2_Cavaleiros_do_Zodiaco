@@ -107,7 +107,7 @@ def batalhar(console, id_player):
 
                     # Mostrar inimigos disponíveis em tabela
                     table = Table(title="👹 Inimigos disponíveis", show_header=True, header_style="bold red")
-                    table.add_column("ID", justify="center")
+                    table.add_column("Opção", justify="center")
                     table.add_column("Nome", justify="left")
 
                     inimigos_opcoes = {}
@@ -120,10 +120,10 @@ def batalhar(console, id_player):
 
                     while True:
                         try:
-                            id_inimigo_alvo = int(input("> Escolha o ID do inimigo para atacar: "))
+                            id_inimigo_alvo = int(input("> Escolha a Opção do inimigo para atacar: "))
                             if id_inimigo_alvo in inimigos_opcoes:
                                 break
-                            console.print("[bold red]❌ ID inválido! Escolha um inimigo listado acima.[/bold red]")
+                            console.print("[bold red]❌ Opção inválido! Escolha um inimigo listado acima.[/bold red]")
                         except ValueError:
                             console.print("[bold red]❌ Entrada inválida! Digite um número válido.[/bold red]")
 
