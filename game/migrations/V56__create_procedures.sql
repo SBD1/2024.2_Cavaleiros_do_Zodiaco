@@ -408,3 +408,57 @@ BEGIN
     RAISE NOTICE 'Armadura comprada e adicionada ao inventário com sucesso!';
 END;
 $$;
+
+CREATE OR REPLACE PROCEDURE equipar_armadura(
+    p_id_player INTEGER,
+    p_id_instancia INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_id_armadura INTEGER;
+    v_id_parte_corpo_armadura enum_parte_corpo; -- Altere para o tipo ENUM correspondente ao id_parte_corpo_armadura
+    v_armadura_atual INTEGER;
+    v_instancia_atual INTEGER;
+BEGIN
+    -- Verificar se a armadura existe no inventário do jogador
+    SELECT id_armadura, id_parte_corpo_armadura
+    INTO v_id_armadura, v_id_parte_corpo_armadura
+    FROM Armadura_Instancia
+    WHERE id_instancia = p_id_instancia
+      AND id_inventario = p_id_player;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'A armadura não está no inventário do jogador ou não existe.';
+    END IF;
+
+    -- Verificar se o jogador já possui uma armadura equipada na mesma parte do corpo
+    SELECT armadura_equipada, instancia_armadura_equipada
+    INTO v_armadura_atual, v_instancia_atual
+    FROM Parte_Corpo_Player
+    WHERE id_player = p_id_player
+      AND parte_corpo = v_id_parte_corpo_armadura;
+
+    IF FOUND THEN
+        -- Se uma armadura já estiver equipada, ela é devolvida ao inventário
+        UPDATE Armadura_Instancia
+        SET id_inventario = p_id_player
+        WHERE id_armadura = v_armadura_atual
+          AND id_instancia = v_instancia_atual;
+    END IF;
+
+    -- Atualizar a nova armadura como equipada
+    UPDATE Parte_Corpo_Player
+    SET armadura_equipada = v_id_armadura,
+        instancia_armadura_equipada = p_id_instancia
+    WHERE id_player = p_id_player
+      AND parte_corpo = v_id_parte_corpo_armadura;
+
+    -- Remover a armadura equipada do inventário
+    UPDATE Armadura_Instancia
+    SET id_inventario = NULL
+    WHERE id_instancia = p_id_instancia;
+
+    RAISE NOTICE 'A armadura foi equipada com sucesso!';
+END;
+$$;

@@ -24,7 +24,7 @@ def obter_acoes_disponiveis(jogador_id):
         ("[bold yellow]🛡️ Ver Salas Disponíveis [/bold yellow]", ver_salas_disponiveis),
         ("[bold green]🚪 Mudar de Sala[/bold green]", mudar_de_sala),
         ("[bold purple]🗺️ Ver Mapa[/bold purple]", ver_mapa),
-        ("[bold orange]🎒 Ver Equipamento[/bold orange]", listar_equipamentos),
+        ("[bold orange]🪖 Ver Equipamento[/bold orange]", listar_equipamentos),
         ("[bold cyan]🎒 Ver Inventário[/bold cyan]", ver_inventario),
         ("[light_pink4]📜 Ver Receitas [/light_pink4]", listar_todas_receitas),
         ("[bold green]⚒️ Craftar Item[/bold green]", gerar_item),

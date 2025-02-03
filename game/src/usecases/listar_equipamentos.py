@@ -6,6 +6,7 @@ from ..database import obter_cursor
 def listar_equipamentos(console, jogador_id):
     """
     Lista as armaduras equipadas e armazenadas no inventário de um jogador.
+    Permite equipar um equipamento do inventário.
     """
 
     try:
@@ -49,7 +50,7 @@ def listar_equipamentos(console, jogador_id):
                 INNER JOIN Inventario i
                     ON ai.id_inventario = i.id_player
                 WHERE i.id_player = %s
-                ORDER BY ai.id_parte_corpo_armadura;
+                ORDER BY ai.id_instancia, ai.id_parte_corpo_armadura;
             """, (jogador_id,))
             armaduras_inventario = cursor.fetchall()
 
@@ -92,11 +93,39 @@ def listar_equipamentos(console, jogador_id):
                     tabela_inventario.add_row(
                         str(id_instancia), parte_corpo, str(raridade),
                         str(durabilidade), str(ataque_fisico), str(ataque_magico),
-                        str(defesa_fisica), str(defesa_magica)
+                        str(defesa_fisica), str(defesa_magica
+                        )
                     )
                 console.print(tabela_inventario)
+
+                # Perguntar se deseja equipar uma armadura
+                console.print("[bold yellow]\nDeseja equipar uma armadura do inventário? (s/n)[/bold yellow]")
+                escolha = input("> ").strip().lower()
+
+                if escolha == "s":
+                    console.print("[bold green]Digite o ID da instância da armadura que deseja equipar:[/bold green]")
+                    id_instancia_equipar = input("> ").strip()
+
+                    if not id_instancia_equipar.isdigit():
+                        console.print(Panel.fit(
+                            "⛔ [bold red]Entrada inválida! Por favor, insira um número válido.[/bold red]",
+                            border_style="red"
+                        ))
+                        return
+
+                    id_instancia_equipar = int(id_instancia_equipar)
+
+                    cursor.execute("CALL equipar_armadura(%s, %s)", (jogador_id, id_instancia_equipar))
+                    cursor.connection.commit()
+
+                    console.print(Panel.fit(
+                        "✅ [bold green]A armadura foi equipada com sucesso![/bold green]",
+                        border_style="green"
+                    ))
+                else:
+                    console.print("[bold cyan]Você decidiu não equipar nenhuma armadura.[/bold cyan]")
             else:
                 console.print(Panel.fit("🎒 [bold yellow]Nenhuma armadura no inventário![/bold yellow]", border_style="yellow"))
 
     except Exception as e:
-        console.print(Panel.fit(f"⛔ [bold red]Erro ao listar armaduras: {e}[/bold red]", border_style="red"))
+        console.print(Panel.fit(f"⛔ [bold red]Erro ao listar ou equipar armaduras: {e}[/bold red]", border_style="red"))
