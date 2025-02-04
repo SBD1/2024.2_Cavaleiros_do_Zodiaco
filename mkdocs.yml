@@ -27,7 +27,7 @@ nav:
       - Data Manipulation Language: "modulo02/DML.md"
       - Data Query Language: "modulo02/DQL.md"
     - Módulo 3:
-      - Triggers: "modulo03/triggers.md"
+      - Triggers: "modulo03/triggers01.md"
     - Apresentação: 
       - Modulo 01: "apresentacao/modulo1.md"
       - Modulo 02: "apresentacao/modulo2.md"
