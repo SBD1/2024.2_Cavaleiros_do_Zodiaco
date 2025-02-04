@@ -1,12 +1,10 @@
 ## Triggers
 
-### Versionamento
 
-| Versão | Data | Modificação | Autor |
-| --- | --- | --- | --- |
-| 0.1 | 02/02/2025 | Criação do Documento | Vinícius Rufino |
 
 ### Inserir uma Party
+
+Automatiza a criação de uma Party para cada novo jogador, garantindo que ele seja alocado em uma sala segura
 
 ```sql
 
@@ -27,6 +25,8 @@ EXECUTE FUNCTION insert_party_trigger_function();
 ```
 
 ### Instanciar uma Missão para o Player
+
+Garante que todos os jogadores tenham acesso a todas as missões disponíveis no momento de sua criação
 
 ```sql
 
@@ -53,7 +53,9 @@ EXECUTE FUNCTION instanciar_player_missao_procedure();
 
 ```
 
-    Sempre que for adicionada uma missão, todos os players terão uma instância nela
+### Sempre que for adicionada uma missão, todos os players terão uma instância nela
+
+Mantém a consistência do sistema, garantindo que todos os jogadores tenham acesso às novas missões adicionadas.
 
 ```sql
 
@@ -80,6 +82,10 @@ EXECUTE FUNCTION instanciar_player_missao_new_missao();
 
 ### Criar Inventário
 
+Automatiza a criação de um inventário para cada novo jogador, garantindo que ele comece com recursos básicos.
+
+Garante que todos os jogadores tenham acesso a todas as missões disponíveis no momento de sua criação.
+
 ```sql
 
 CREATE OR REPLACE FUNCTION after_player_insert_function()
@@ -100,6 +106,8 @@ EXECUTE FUNCTION after_player_insert_function();
 ```
 
 ### Inserir o tipo de item e o tipo de missão
+
+Garante que cada item de missão tenha um tipo de item associado, mantendo a integridade dos dados.
 
 ```sql
 
@@ -124,3 +132,20 @@ FOR EACH ROW
 EXECUTE FUNCTION  before_insert_item_missao();
 
 ```
+
+### Resumo dos Triggers
+
+| Trigger                          | Tabela Afetada   | Evento         | Função                                                                 |
+|----------------------------------|------------------|----------------|------------------------------------------------------------------------|
+| `trigger_insert_party`           | `Party`          | `AFTER INSERT` | Cria uma `Party` para um novo jogador.                                |
+| `instanciar_player_missao`       | `Player_missao`  | `AFTER INSERT` | Associa todas as missões existentes a um novo jogador.                |
+| `instancia_player_missao_new_missoes` | `Player_missao`  | `AFTER INSERT` | Associa uma nova missão a todos os jogadores existentes.              |
+| `after_player_insert`            | `inventario`     | `AFTER INSERT` | Cria um inventário para um novo jogador.                              |
+| `before_insert_item_missao_trigger` | `item_missao`    | `BEFORE INSERT`| Cria um tipo de item e o associa a um novo item de missão.            |
+
+### Versionamento
+
+| Versão | Data | Modificação | Autor |
+| --- | --- | --- | --- |
+| 0.1 | 02/02/2025 | Criação do Documento | Vinícius Rufino |
+| 1.0 | 03/02/2025 | Atualização do Módulo 03 | Vinícius Rufino |
