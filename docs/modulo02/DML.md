@@ -1,17 +1,8 @@
 ## DML
 
-### Versionamento
+### Data Manipulation Language (DML)
 
-| Versão | Data | Modificação | Autor |
-| --- | --- | --- | --- |
-| 0.1 | 11/12/2024 | Criação do Documento | Vinícius Rufino |
-| 1.0 | 11/12/2024 | Finalização do documento | [Lucas Avelar](https://github.com/LucasAvelar2711) |
-|  1.1 | 29/01/2025 | Melhoria do DML | Lucas Dourado |
-|  2.0 | 02/02/2025 | Atualização do Documento | Vinícius Rufino |
-
-### SQL
-
-    Utilizada para inserir, atualizar, excluir e gerenciar os dados armazenados nas tabelas.
+A Linguagem de Manipulação de Dados (DML) é utilizada para inserir, atualizar, excluir e gerenciar os dados armazenados nas tabelas. Comandos DML são fundamentais para a operação diária do banco de dados.
 
 ```sql
 ALTER TABLE santuario RENAME TO saga;
@@ -596,3 +587,13 @@ END;
 $$ LANGUAGE plpgsql;
 
 ```
+
+### Versionamento
+
+| Versão | Data | Modificação | Autor |
+| --- | --- | --- | --- |
+| 0.1 | 11/12/2024 | Criação do Documento | Vinícius Rufino |
+| 1.0 | 11/12/2024 | Finalização do documento | [Lucas Avelar](https://github.com/LucasAvelar2711) |
+|  1.1 | 29/01/2025 | Melhoria do DML | Lucas Dourado |
+|  2.0 | 02/02/2025 | Atualização do Documento | Vinícius Rufino |
+|  2.1 | 03/02/2025 | Atualização do DML | Vinícius Rufino |

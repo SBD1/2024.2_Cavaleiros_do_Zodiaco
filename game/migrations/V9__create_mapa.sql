@@ -1,7 +1,7 @@
-CREATE TABLE Santuario (
-    id_santuario SERIAL PRIMARY KEY,
+CREATE TABLE Saga (
+    id_saga SERIAL PRIMARY KEY,
     id_missao_requisito INTEGER,
-    id_missao_proximo_santuario INTEGER,
+    id_missao_proxima_saga INTEGER,
     nome VARCHAR UNIQUE NOT NULL,
     descricao VARCHAR,
     nivel_recomendado INTEGER NOT NULL
@@ -9,7 +9,7 @@ CREATE TABLE Santuario (
  
 CREATE TABLE Casa (
     id_casa SERIAL PRIMARY KEY,
-    id_santuario INTEGER NOT NULL,
+    id_saga INTEGER NOT NULL,
     id_missao_requisito INTEGER,
     id_missao_proxima_casa INTEGER,
     nome VARCHAR NOT NULL,
@@ -35,17 +35,17 @@ CREATE TABLE Sala_Segura (
 
 
 
-ALTER TABLE Santuario ADD CONSTRAINT FK_Santuario_2
+ALTER TABLE Saga ADD CONSTRAINT FK_Saga_2
     FOREIGN KEY (id_missao_requisito)
     REFERENCES Missao (id_missao);
  
-ALTER TABLE Santuario ADD CONSTRAINT FK_Santuario_3
-    FOREIGN KEY (id_missao_proximo_santuario)
+ALTER TABLE Saga ADD CONSTRAINT FK_Saga_3
+    FOREIGN KEY (id_missao_proxima_saga)
     REFERENCES Missao (id_missao);
 
 ALTER TABLE Casa ADD CONSTRAINT FK_Casa_2
-    FOREIGN KEY (id_santuario)
-    REFERENCES Santuario (id_santuario);
+    FOREIGN KEY (id_saga)
+    REFERENCES Saga (id_saga);
  
 ALTER TABLE Casa ADD CONSTRAINT FK_Casa_3
     FOREIGN KEY (id_missao_requisito)

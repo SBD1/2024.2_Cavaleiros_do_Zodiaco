@@ -1,16 +1,8 @@
 ## DQL
 
-### Versionamento
+### Data Query Language (DQL)
 
-| Versão | Data | Modificação | Autor |
-| --- | --- | --- | --- |
-| 0.1 | 11/12/2024 | Criação do Documento | Vinícius Rufino |
-| 1.0 | 29/01/2025 | Melhoria do DQL | Lucas Dourado |
-| 2.0 | 02/02/2025 | Atualização do Documento | Vinícius Rufino |
-
-### SQL
-
-    Focada na recuperação de informações armazenadas no banco de dados. Serve para consultar dados, aplicar filtros, ordenações e agrupamentos para obter resultados específicos. 
+A Linguagem de Consulta de Dados (DQL) é focada na recuperação de informações armazenadas no banco de dados. O comando mais comum é o SELECT, que permite consultar dados de uma ou mais tabelas, aplicar filtros, ordenações e agrupamentos para obter resultados específicos.
 
 ```sql
 -- 1. Listar informações do play
@@ -132,3 +124,12 @@ END;
 $$ LANGUAGE plpgsql;
 
 ```
+
+### Versionamento
+
+| Versão | Data | Modificação | Autor |
+| --- | --- | --- | --- |
+| 0.1 | 11/12/2024 | Criação do Documento | Vinícius Rufino |
+| 1.0 | 29/01/2025 | Melhoria do DQL | Lucas Dourado |
+| 2.0 | 02/02/2025 | Atualização do Documento | Vinícius Rufino |
+|  2.0 | 03/02/2025 | Atualização do DQL | Vinícius Rufino |

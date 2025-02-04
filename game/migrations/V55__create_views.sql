@@ -303,3 +303,49 @@ INNER JOIN party p ON p.id_sala = s.id_sala
 INNER JOIN player pl ON p.id_player = pl.id_player
 
 ORDER BY velocidade DESC;
+
+CREATE OR REPLACE VIEW player_info_view AS
+SELECT 
+    p.id_player,
+    p.nome,
+    p.nivel,
+    p.xp_atual,
+    p.hp_max,
+    p.magia_max,
+    p.hp_atual,
+    p.magia_atual,
+    p.velocidade,
+    p.ataque_fisico_base,
+    p.ataque_magico_base,
+    p.id_elemento,
+    e.nome AS elemento_nome,   -- Supondo que a tabela 'elemento' tenha um nome
+    i.dinheiro,
+    i.alma_armadura
+FROM 
+    public.player p
+JOIN 
+    public.elemento e ON p.id_elemento = e.id_elemento  -- Relacionando com a tabela 'elemento'
+JOIN 
+    public.inventario i ON p.id_player = i.id_player;   -- Relacionando com a tabela 'inventario'
+
+
+CREATE VIEW instancia_cavaleiro_view AS
+SELECT 
+    ic.id_cavaleiro,
+    c.nome AS nome_cavaleiro,
+    e.nome AS elemento_nome,
+    ic.nivel,
+    ic.xp_atual,
+    ic.hp_max,
+    ic.magia_max,
+    ic.hp_atual,
+    ic.magia_atual,
+    ic.velocidade,
+    ic.ataque_fisico,
+    ic.ataque_magico,
+    ic.id_party,
+    ic.id_player
+FROM instancia_cavaleiro ic
+INNER JOIN cavaleiro c ON ic.id_cavaleiro = c.id_cavaleiro
+INNER JOIN elemento e ON c.id_elemento = e.id_elemento;
+

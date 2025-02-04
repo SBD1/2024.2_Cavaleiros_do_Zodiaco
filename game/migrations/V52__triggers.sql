@@ -290,3 +290,66 @@ CREATE TRIGGER trigger_reviver_inimigos
 AFTER UPDATE OF id_sala ON party
 FOR EACH ROW
 EXECUTE FUNCTION reviver_inimigos_sala();
+
+
+CREATE OR REPLACE FUNCTION instanciar_cavaleiro()
+RETURNS TRIGGER AS $$
+DECLARE
+    p_id_cavaleiro INTEGER;
+    p_id_player INTEGER := NEW.id_player;
+    p_id_party INTEGER := NEW.ID_player; -- Defina a lógica correta para a party, se necessário
+    p_id_classe INTEGER;
+    p_id_elemento INTEGER;
+    p_nome TEXT;
+    p_nivel INTEGER;
+    p_hp_max INTEGER;
+    p_magia_max INTEGER;
+    p_velocidade INTEGER;
+    p_ataque_fisico INTEGER;
+    p_ataque_magico INTEGER;
+BEGIN
+    -- Obtém o cavaleiro desbloqueado pela missão concluída
+    SELECT m.id_cavaleiro_desbloqueado
+    INTO p_id_cavaleiro
+    FROM missao m
+    WHERE m.id_missao = NEW.id_missao;
+    
+    -- Se não houver cavaleiro a ser desbloqueado, não faz nada
+    IF p_id_cavaleiro IS NULL THEN
+        RETURN NEW;
+    END IF;
+
+    -- Obtém as informações do cavaleiro
+    SELECT c.id_classe, c.id_elemento, c.nome, c.nivel, c.hp_max, c.magia_max, 
+           c.velocidade_base, c.ataque_fisico_base, c.ataque_magico_base
+    INTO p_id_classe, p_id_elemento, p_nome, p_nivel, p_hp_max, p_magia_max, 
+         p_velocidade, p_ataque_fisico, p_ataque_magico
+    FROM cavaleiro c
+    WHERE c.id_cavaleiro = p_id_cavaleiro;
+
+    -- Verifica se o jogador já tem este cavaleiro para evitar duplicatas
+    IF NOT EXISTS (
+        SELECT 1 FROM instancia_cavaleiro 
+        WHERE id_player = p_id_player AND id_cavaleiro = p_id_cavaleiro
+    ) THEN
+        -- Insere o cavaleiro na instância do jogador
+        INSERT INTO instancia_cavaleiro (
+            id_cavaleiro, id_player, id_party, nivel, tipo_armadura, xp_atual, 
+            hp_max, magia_max, hp_atual, magia_atual, velocidade, 
+            ataque_fisico, ataque_magico
+        ) VALUES (
+            p_id_cavaleiro, p_id_player, p_id_party, p_nivel, 0, 0, 
+            p_hp_max, p_magia_max, p_hp_max, p_magia_max, p_velocidade, 
+            p_ataque_fisico, p_ataque_magico
+        );
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_liberar_cavaleiro
+AFTER UPDATE ON player_missao
+FOR EACH ROW
+WHEN (NEW.status_missao = 'c' AND old.status_missao != 'c')
+EXECUTE FUNCTION instanciar_cavaleiro();

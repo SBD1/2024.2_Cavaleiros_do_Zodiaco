@@ -7,7 +7,7 @@ from .ver_mapa import ver_mapa
 from .ver_salas_disponiveis import ver_salas_disponiveis
 from .verificar_se_esta_na_saga_orfanato import verificar_se_esta_na_saga_orfanato
 from .ver_inventario import ver_inventario
-from .ver_grupo import ver_grupo
+from .modificar_grupo import modificar_grupo
 from .trocar_cavaleiro import trocar_cavaleiro
 from .ver_missoes import ver_missoes
 from .verificar_npc_na_sala import verificar_npc_na_sala
@@ -18,6 +18,8 @@ from .verificar_desbloqueio_ferreiro import verificar_desbloqueio_ferreiro
 from .listar_equipamentos import listar_equipamentos
 from .interagir_npc_ferreiro import interagir_npc_ferreiro
 from .equipar_armadura import equipar_armadura
+from .modificar_grupo import modificar_grupo
+
 
 def obter_acoes_disponiveis(jogador_id):
 
@@ -30,7 +32,7 @@ def obter_acoes_disponiveis(jogador_id):
         ("[bold cyan]🎒 Ver Inventário[/bold cyan]", ver_inventario),
         ("[light_pink4]📜 Ver Receitas [/light_pink4]", listar_todas_receitas),
         ("[bold green]⚒️ Craftar Item[/bold green]", gerar_item),
-        ("[bold blue]⚔️ Ver Grupo[/bold blue]", ver_grupo),
+        ("[bold blue]⚔️ Ver Grupo[/bold blue]", modificar_grupo),
         ("[light_pink4]📜 Ver Missões[/light_pink4]", ver_missoes),
 
     ]

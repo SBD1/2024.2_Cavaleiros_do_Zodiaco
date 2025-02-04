@@ -1,8 +1,8 @@
-INSERT INTO Saga (id_saga, id_missao_requisito, id_missao_proxima_saga, nome, descricao, nivel_recomendado)
-VALUES (nextval('santuario_id_santuario_seq'::regclass), NULL, NULL, 'Saga Guerra Galáctica', 'Um torneio lendário onde os Cavaleiros de Atena lutam pelo prêmio supremo: a sagrada Armadura de Ouro de Sagitário. Cada batalha testa força, coragem e o poder do Cosmo, enquanto segredos e rivalidades ameaçam a paz no Santuário. O início de uma jornada épica pela proteção da deusa Atena!', 1);
+INSERT INTO Saga ( id_missao_requisito, id_missao_proxima_saga, nome, descricao, nivel_recomendado)
+VALUES ( NULL, NULL, 'Saga Guerra Galáctica', 'Um torneio lendário onde os Cavaleiros de Atena lutam pelo prêmio supremo: a sagrada Armadura de Ouro de Sagitário. Cada batalha testa força, coragem e o poder do Cosmo, enquanto segredos e rivalidades ameaçam a paz no Santuário. O início de uma jornada épica pela proteção da deusa Atena!', 1);
 
-INSERT INTO Casa (id_casa, id_saga, id_missao_requisito, id_missao_proxima_casa, nome, descricao, nivel_recomendado)
-VALUES (nextval('casa_id_casa_seq'::regclass), 2, NULL, NULL, 'Grécia', 'O lugar onde o cavaleiro de Pegasus conseguiu sua armadura.', 1);
+INSERT INTO Casa ( id_saga, id_missao_requisito, id_missao_proxima_casa, nome, descricao, nivel_recomendado)
+VALUES ( 2, NULL, NULL, 'Grécia', 'O lugar onde o cavaleiro de Pegasus conseguiu sua armadura.', 1);
 
 
 -- salas da casa 1 Grecia
@@ -46,11 +46,20 @@ VALUES ( nextval('sala_id_sala_seq'::regclass), 2, 'Arena Final', 10, NULL, NULL
 INSERT INTO public.item_missao (nome, descricao) 
 VALUES ('Orelha de Cassios', 'A orelha perdida de Cassios, símbolo de sua derrota após um combate feroz.');
 
-INSERT INTO public.missao (id_missao_anterior, item_necessario, nome, dialogo_inicial, dialogo_durante, dialogo_completa) 
-VALUES (NULL, 5, 'Derrote Cassios', 'Cassios, o imponente guerreiro treinado por Shaina, ameaça o equilíbrio do Santuário com sua força bruta.', 'Sua missão é enfrentar Cassios em combate. Cuidado, ele é forte e implacável. Apenas os mais habilidosos sobreviverão.', 'Você derrotou Cassios em um combate épico e adquiriu sua orelha como prova de sua vitória.');
+INSERT INTO public.cavaleiro (id_classe, id_elemento, nome, nivel, hp_max, magia_max, velocidade_base, ataque_fisico_base, ataque_magico_base)
+VALUES( 2, 3, 'Seiya de Pégaso', 3, 100, 50, 70, 25, 25);
+
+INSERT INTO public.missao (id_missao_anterior, item_necessario, id_cavaleiro_desbloqueado, nome, dialogo_inicial, dialogo_durante, dialogo_completa) 
+VALUES (NULL, 5, currval('cavaleiro_id_cavaleiro_seq'), 'Derrote Cassios', 'Cassios, o imponente guerreiro treinado por Shaina, ameaça o equilíbrio do Santuário com sua força bruta.', 'Sua missão é enfrentar Cassios em combate. Cuidado, ele é forte e implacável. Apenas os mais habilidosos sobreviverão.', 'Você derrotou Cassios em um combate épico e adquiriu sua orelha como prova de sua vitória.');
 
 INSERT INTO public.boss (id_sala, id_item_missao, nome, nivel, xp_acumulado, hp_max, hp_atual, magia_max, magia_atual, velocidade, ataque_fisico_base, ataque_magico_base, dinheiro, fala_inicio, fala_derrotar_player, fala_derrotado, fala_condicao) 
 VALUES (11, 5, 'Cassios', 2, 300, 200, 200, 50, 50, 60, 150, 30, 50, 'Você ousa desafiar Cassios, o campeão da força bruta? Prepare-se para ser esmagado!', 'Você é fraco demais para me enfrentar. Nem deveria ter tentado.', 'Impossível! Como um guerreiro tão insignificante conseguiu superar minha força bruta?', 'Se tem coragem para me enfrentar, venha com tudo ou será destruído!');
+
+
+
+
+
+
 
 -- id sala 12 boss shaina de cobra
 INSERT INTO Sala (id_sala, id_casa, nome, id_sala_norte, id_sala_sul, id_sala_leste, id_sala_oeste) 
