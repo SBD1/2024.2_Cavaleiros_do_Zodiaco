@@ -158,7 +158,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-<<<<<<< HEAD
 
 CREATE OR REPLACE FUNCTION obter_hp_inimigo(p_id_instancia_inimigo INTEGER)
 RETURNS TEXT AS $$
@@ -175,5 +174,3 @@ BEGIN
     RETURN COALESCE(v_hp, 'HP desconhecido');
 END;
 $$ LANGUAGE plpgsql;
-=======
->>>>>>> 90ac588cf44f88cdd883ac291b5b685912c9d593
