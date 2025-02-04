@@ -52,7 +52,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION cavaleiro_ataca_inimigo(
-    p_id_instancia_cavaleiro INT,
     p_id_instancia_inimigo INT,
     p_parte_corpo enum_parte_corpo
 ) RETURNS TABLE(mensagem TEXT) AS $$
@@ -68,14 +67,12 @@ DECLARE
 BEGIN
     SELECT c.nome INTO v_nome_cavaleiro FROM instancia_cavaleiro ic 
     INNER JOIN cavaleiro c ON ic.id_cavaleiro = c.id_cavaleiro
-    WHERE ic.id_instancia_cavaleiro = p_id_instancia_cavaleiro;
 
     SELECT i.nome INTO v_nome_inimigo FROM instancia_inimigo ii
     INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
     WHERE ii.id_instancia = p_id_instancia_inimigo;
 
     SELECT ataque_fisico / 8 INTO v_ataque_fisico FROM instancia_cavaleiro 
-    WHERE id_instancia_cavaleiro = p_id_instancia_cavaleiro;
 
     SELECT defesa_fisica INTO v_defesa_fisica FROM parte_corpo_inimigo 
     WHERE id_instancia = p_id_instancia_inimigo AND parte_corpo = p_parte_corpo;
@@ -166,54 +163,55 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION inimigo_ataca_cavaleiro(
-    p_id_instancia_inimigo INT,
-    p_id_instancia_cavaleiro INT,
-    p_parte_corpo enum_parte_corpo
-) RETURNS TABLE(mensagem TEXT) AS $$
-DECLARE
-    v_ataque_fisico INT;
-    v_defesa_fisica INT;
-    v_hp_atual INT;
-    v_dano INT;
-BEGIN
-    -- Obtém o ataque físico do inimigo
-    SELECT i.ataque_fisico_base INTO v_ataque_fisico
-    FROM instancia_inimigo ii
-    INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
-    WHERE ii.id_instancia = p_id_instancia_inimigo;
+-- TA COMENTADO POIS IA TER Q MEXER NA LOGICA INTEIRA 
 
-    -- Obtém a defesa da parte do corpo do cavaleiro
-    SELECT pcc.defesa_fisica_bonus INTO v_defesa_fisica
-    FROM parte_corpo_cavaleiro pcc
-    INNER JOIN instancia_cavaleiro ic 
-        ON ic.id_instancia_cavaleiro = pcc.id_instancia_cavaleiro
-    WHERE pcc.id_instancia_cavaleiro = p_id_instancia_cavaleiro
-        AND pcc.parte_corpo = p_parte_corpo;
+-- CREATE OR REPLACE FUNCTION inimigo_ataca_cavaleiro(
+--     p_id_instancia_inimigo INT,
+--     p_parte_corpo enum_parte_corpo
+-- ) RETURNS TABLE(mensagem TEXT) AS $$
+-- DECLARE
+--     v_ataque_fisico INT;
+--     v_defesa_fisica INT;
+--     v_hp_atual INT;
+--     v_dano INT;
+-- BEGIN
+--     -- Obtém o ataque físico do inimigo
+--     SELECT i.ataque_fisico_base INTO v_ataque_fisico
+--     FROM instancia_inimigo ii
+--     INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
+--     WHERE ii.id_instancia = p_id_instancia_inimigo;
 
-    -- Se ataque ou defesa não forem encontrados, retorna erro
-    IF v_ataque_fisico IS NULL OR v_defesa_fisica IS NULL THEN
-        RETURN QUERY SELECT 'Erro: Inimigo ou cavaleiro não encontrado!'::TEXT;
-    END IF;
+--     -- Obtém a defesa da parte do corpo do cavaleiro
+--     SELECT pcc.defesa_fisica_bonus INTO v_defesa_fisica
+--     FROM parte_corpo_cavaleiro pcc
+--     INNER JOIN instancia_cavaleiro ic 
+--         ON ic.id_instancia_cavaleiro = pcc.id_instancia_cavaleiro
+--     WHERE pcc.id_instancia_cavaleiro = p_id_instancia_cavaleiro
+--         AND pcc.parte_corpo = p_parte_corpo;
 
-    -- Calcula o dano causado
-    v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0); -- Garante que o dano não seja negativo
+--     -- Se ataque ou defesa não forem encontrados, retorna erro
+--     IF v_ataque_fisico IS NULL OR v_defesa_fisica IS NULL THEN
+--         RETURN QUERY SELECT 'Erro: Inimigo ou cavaleiro não encontrado!'::TEXT;
+--     END IF;
 
-    -- Atualiza o HP do cavaleiro
-    UPDATE instancia_cavaleiro
-    SET hp_atual = GREATEST(hp_atual - v_dano, 0) -- Garante que o HP não seja negativo
-    WHERE id_instancia_cavaleiro = p_id_instancia_cavaleiro;
+--     -- Calcula o dano causado
+--     v_dano := GREATEST(v_ataque_fisico - v_defesa_fisica, 0); -- Garante que o dano não seja negativo
 
-    -- Obtém o novo HP do cavaleiro
-    SELECT hp_atual INTO v_hp_atual
-    FROM instancia_cavaleiro
-    WHERE id_instancia_cavaleiro = p_id_instancia_cavaleiro;
+--     -- Atualiza o HP do cavaleiro
+--     UPDATE instancia_cavaleiro
+--     SET hp_atual = GREATEST(hp_atual - v_dano, 0) -- Garante que o HP não seja negativo
+--     WHERE id_instancia_cavaleiro = p_id_instancia_cavaleiro;
 
-    -- Retorna a mensagem do ataque
-    RETURN QUERY SELECT format(
-        '💀 Inimigo %s atacou o Cavaleiro %s na parte %s, causando %s de dano. HP Atual do Cavaleiro: %s',
-        p_id_instancia_inimigo, p_id_instancia_cavaleiro, p_parte_corpo, v_dano, v_hp_atual
-    );
-END;
-$$ LANGUAGE plpgsql;
+--     -- Obtém o novo HP do cavaleiro
+--     SELECT hp_atual INTO v_hp_atual
+--     FROM instancia_cavaleiro
+--     WHERE id_instancia_cavaleiro = p_id_instancia_cavaleiro;
+
+--     -- Retorna a mensagem do ataque
+--     RETURN QUERY SELECT format(
+--         '💀 Inimigo %s atacou o Cavaleiro %s na parte %s, causando %s de dano. HP Atual do Cavaleiro: %s',
+--         p_id_instancia_inimigo, p_id_instancia_cavaleiro, p_parte_corpo, v_dano, v_hp_atual
+--     );
+-- END;
+-- $$ LANGUAGE plpgsql;
 

@@ -203,7 +203,6 @@ GROUP BY
 -- VIEW cavaleiros_party_view
 CREATE OR REPLACE VIEW cavaleiros_party_view AS
 SELECT
-    ic.id_instancia_cavaleiro,
     p.id_player,
     p.id_sala
 FROM
@@ -286,16 +285,12 @@ WHERE
 -- VIEW view_fila_turnos_batalha
 CREATE OR REPLACE VIEW view_fila_turnos_batalha AS
 SELECT 
-    id_instancia_cavaleiro AS id_instancia, 
     'cavaleiro' AS tipo, 
     velocidade, 
     id_player
 FROM 
     instancia_cavaleiro 
-WHERE 
-    id_instancia_cavaleiro IN (
-        SELECT id_instancia_cavaleiro FROM cavaleiros_party_view
-    )
+
 
 UNION ALL
 
