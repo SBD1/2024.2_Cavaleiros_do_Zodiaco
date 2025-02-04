@@ -16,7 +16,7 @@ def modificar_grupo(console: Console, player_id):
                 # Atualiza as tabelas e listas de cavaleiros
                 limpar_terminal(console)
                 party_options, fora_party_options = listar_cavaleiros_party(console, player_id)
-
+                cursor.connection.commit()
                 # Exibe as opções de ações
                 options = []
                 if fora_party_options:

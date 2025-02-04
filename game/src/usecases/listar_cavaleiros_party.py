@@ -26,11 +26,12 @@ def obter_xp_maximo(cursor, nivel):
     return resultado[0] if resultado else "N/A"
 
 def listar_cavaleiros_party(console, player_id):
-    """Obtém e exibe as informações do grupo do jogador e permite alterações."""
+    """Lista os cavaleiros na party e fora da party, mantendo o player como o primeiro na party."""
     try:
-        with obter_cursor() as cursor:
-            cursor.connection.autocommit = False
+        party_options = []
+        fora_party_options = []
 
+        with obter_cursor() as cursor:
             # Obtém informações do jogador
             cursor.execute("""
                 SELECT nome, nivel, xp_atual, hp_max, hp_atual, magia_max, magia_atual,
@@ -38,27 +39,28 @@ def listar_cavaleiros_party(console, player_id):
                 FROM player_info_view WHERE id_player = %s;
             """, (player_id,))
             player = cursor.fetchone()
-            
+
             if not player:
                 console.print(Panel.fit("⛔ [bold red]Jogador não encontrado![/bold red]", border_style="red"))
-                return
-            
+                return [], []
+
             # Processa informações do jogador
             player_nome, player_nivel, player_xp_atual, player_hp_max, player_hp_atual, player_magia_max, \
             player_magia_atual, player_velocidade, player_ataque_fisico, player_ataque_magico, player_elemento = player
 
             player_xp_max = obter_xp_maximo(cursor, player_nivel)
             formatted_player_elemento = formatar_elemento(player_elemento)
-            
-            # Obtém todas as instâncias de cavaleiros (party e não party)
+
+            # Obtém todas as instâncias de cavaleiros (party e fora party)
             cursor.execute("""
-                SELECT id_cavaleiro, nome_cavaleiro, elemento_nome, nivel, xp_atual, hp_max, magia_max, 
-                    hp_atual, magia_atual, velocidade, ataque_fisico, ataque_magico, id_party
+                SELECT id_cavaleiro, nome_cavaleiro, elemento_nome, nivel, xp_atual, hp_max, magia_max,
+                       hp_atual, magia_atual, velocidade, ataque_fisico, ataque_magico, id_party
                 FROM instancia_cavaleiro_view
                 WHERE id_player = %s;
             """, (player_id,))
             cavaleiros = cursor.fetchall()
 
+            # Inicializa as tabelas para exibição
             tabela_party = Table(title=f"⚔️ Grupo de {player_nome}", show_lines=True)
             tabela_fora_party = Table(title="🛡️ Cavaleiros Fora da Party", show_lines=True)
 
@@ -74,50 +76,48 @@ def listar_cavaleiros_party(console, player_id):
                 tabela.add_column("Ataque Físico", style="orange1", justify="center", no_wrap=True)
                 tabela.add_column("Ataque Mágico", style="purple", justify="center", no_wrap=True)
 
-            # Adiciona Player na primeira linha da party (sem numeração)
+            # Adiciona o jogador como o primeiro na tabela da party
             tabela_party.add_row(
-                "—", player_nome, formatted_player_elemento, str(player_nivel), 
-                f"{player_xp_max} / {player_xp_atual}",
-                f"{player_hp_max} / {player_hp_atual}", f"{player_magia_max} / {player_magia_atual}",
-                str(player_velocidade), str(player_ataque_fisico), str(player_ataque_magico)
+                "—", player_nome, formatted_player_elemento, str(player_nivel),
+                f"{player_xp_max} / {player_xp_atual}", f"{player_hp_max} / {player_hp_atual}",
+                f"{player_magia_max} / {player_magia_atual}", str(player_velocidade),
+                str(player_ataque_fisico), str(player_ataque_magico)
             )
 
-            tem_cavaleiros_fora_party = False
-            party_options = []
-            fora_party_options = []
+            # Processa os cavaleiros e adiciona às tabelas e listas
+            for index, cav in enumerate(cavaleiros, start=1):
+                id_cavaleiro, nome, elemento, nivel, xp_atual, hp_max, magia_max, hp_atual, magia_atual, \
+                velocidade, ataque_fisico, ataque_magico, id_party = cav
 
-            # Adiciona cavaleiros às tabelas, verificando se estão na party
-            index_party, index_fora_party = 1, 1
-            for cav in cavaleiros:
-                id_cavaleiro, nome, elemento, nivel, xp_atual, hp_max, magia_max, hp_atual, magia_atual, velocidade, ataque_fisico, ataque_magico, id_party = cav
-                
+                # Formata os dados do cavaleiro
                 xp_max = obter_xp_maximo(cursor, nivel)
                 formatted_elemento = formatar_elemento(elemento)
                 cavaleiro_data = [
-                    str(len(party_options) + 1) if id_party else str(len(fora_party_options) + 1), 
-                    nome, formatted_elemento, str(nivel), f"{xp_max} / {xp_atual}",
+                    str(index), nome, formatted_elemento, str(nivel), f"{xp_max} / {xp_atual}",
                     f"{hp_max} / {hp_atual}", f"{magia_max} / {magia_atual}",
                     str(velocidade), str(ataque_fisico), str(ataque_magico)
                 ]
 
-                if id_party:
+                if id_party:  # Está na party (mas não o jogador)
                     tabela_party.add_row(*cavaleiro_data)
-                    party_options.append((id_cavaleiro))
-
-                else:
+                    party_options.append((index, id_cavaleiro))
+                else:  # Fora da party
                     tabela_fora_party.add_row(*cavaleiro_data)
-                    fora_party_options.append((id_cavaleiro))
-                    tem_cavaleiros_fora_party = True
+                    fora_party_options.append((index, id_cavaleiro))
 
-            console.print(tabela_party)
-            if tem_cavaleiros_fora_party:
-                console.print(tabela_fora_party)
-            else:
-                console.print(Panel.fit(
-                    "🌌 Nenhum guerreiro está aguardando! Todos os cavaleiros estão na batalha, protegendo Atena! ",
-                    border_style="red"
-                ))
+        # Exibe as tabelas (fora do bloco "with")
+        console.print(tabela_party)
+        if fora_party_options:
+            console.print(tabela_fora_party)
+        else:
+            console.print(Panel.fit(
+                "🌌 Nenhum guerreiro está aguardando! Todos os cavaleiros estão na batalha, protegendo Atena!",
+                border_style="red"
+            ))
 
-            return party_options, fora_party_options
+        # Retorna as listas de opções
+        return party_options, fora_party_options
+
     except Exception as e:
-        console.print(Panel.fit(f"⛔ [bold red]{e}[/bold red]", border_style="red"))
+        console.print(Panel.fit(f"⛔ [bold red]Erro ao listar cavaleiros: {e}[/bold red]", border_style="red"))
+        return [], []
