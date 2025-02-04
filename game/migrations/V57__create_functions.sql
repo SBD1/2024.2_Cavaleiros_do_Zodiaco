@@ -158,3 +158,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+CREATE OR REPLACE FUNCTION obter_hp_inimigo(p_id_instancia_inimigo INTEGER)
+RETURNS TEXT AS $$
+DECLARE
+    v_hp TEXT;
+BEGIN
+    SELECT ii.hp_atual || '/' || i.hp_max
+    INTO v_hp
+    FROM instancia_inimigo ii
+    INNER JOIN grupo_inimigo gi ON gi.id_grupo = ii.id_grupo
+    INNER JOIN inimigo i ON i.id_inimigo = ii.id_inimigo
+    WHERE ii.id_instancia = p_id_instancia_inimigo;
+
+    RETURN COALESCE(v_hp, 'HP desconhecido');
+END;
+$$ LANGUAGE plpgsql;
