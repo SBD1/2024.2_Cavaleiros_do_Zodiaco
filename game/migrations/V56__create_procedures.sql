@@ -725,3 +725,33 @@ BEGIN
     RAISE NOTICE 'Armadura desmanchada! Você recebeu % Almas de Armadura.', v_almas_recebidas;
 END;
 $$;
+
+CREATE PROCEDURE adicionar_cavaleiro_party(
+    IN p_id_cavaleiro INT,
+    IN p_id_player INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Verifica se o cavaleiro pertence ao jogador
+    IF EXISTS (
+        SELECT 1
+        FROM instancia_cavaleiro
+        WHERE id_cavaleiro = p_id_cavaleiro
+          AND id_player = p_id_player
+    ) THEN
+        -- Atualiza o id_party do cavaleiro para o id_player
+        UPDATE instancia_cavaleiro
+        SET id_party = p_id_player
+        WHERE id_cavaleiro = p_id_cavaleiro
+          AND id_player = p_id_player;
+
+        -- Mensagem de confirmação no log do servidor
+        RAISE NOTICE 'Cavaleiro ID % foi adicionado à party do jogador %', p_id_cavaleiro, p_id_player;
+
+    ELSE
+        -- Caso o cavaleiro não pertença ao jogador, lança um erro
+        RAISE EXCEPTION 'Cavaleiro não pertence ao jogador ou já está na party.';
+    END IF;
+END;
+$$;
