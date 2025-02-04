@@ -1,65 +1,65 @@
-import random
-import time
-from rich.panel import Panel
-from rich.console import Console
-from rich.table import Table
-from ..database import obter_cursor
-from collections import deque
-from dataclasses import dataclass
-from ..util import limpar_terminal
-@dataclass
-class Combatente:
-    id_instancia: int
-    tipo: str  
-    velocidade: int
-    id_player: int  
+# import random
+# import time
+# from rich.panel import Panel
+# from rich.console import Console
+# from rich.table import Table
+# from ..database import obter_cursor
+# from collections import deque
+# from dataclasses import dataclass
+# from ..util import limpar_terminal
+# @dataclass
+# class Combatente:
+#     id_instancia: int
+#     tipo: str  
+#     velocidade: int
+#     id_player: int  
 
-def exibir_fila(console, fila_turnos, cursor):
-    """ Exibe a fila de turnos atual """
-    table = Table(title="📜 Fila de Turnos", show_header=True, header_style="bold cyan")
-    table.add_column("Posição", justify="center")
-    table.add_column("Nome", justify="left")
-    table.add_column("Tipo", justify="center")
-    table.add_column("Velocidade", justify="center")
-    for i, combatente in enumerate(fila_turnos, start=1):
-        nome_combatente = obter_nome_combatente(cursor, combatente.tipo, combatente.id_instancia)
-        table.add_row(str(i), nome_combatente, combatente.tipo.capitalize(), str(combatente.velocidade))
-    console.print(table)
+# def exibir_fila(console, fila_turnos, cursor):
+#     """ Exibe a fila de turnos atual """
+#     table = Table(title="📜 Fila de Turnos", show_header=True, header_style="bold cyan")
+#     table.add_column("Posição", justify="center")
+#     table.add_column("Nome", justify="left")
+#     table.add_column("Tipo", justify="center")
+#     table.add_column("Velocidade", justify="center")
+#     for i, combatente in enumerate(fila_turnos, start=1):
+#         nome_combatente = obter_nome_combatente(cursor, combatente.tipo, combatente.id_instancia)
+#         table.add_row(str(i), nome_combatente, combatente.tipo.capitalize(), str(combatente.velocidade))
+#     console.print(table)
 
-def obter_hp_combatente(cursor, tipo, id_instancia):
-    """ Obtém o HP atual e máximo do combatente baseado no tipo e ID """
+# def obter_hp_combatente(cursor, tipo, id_instancia):
+#     """ Obtém o HP atual e máximo do combatente baseado no tipo e ID """
     
-    cursor.execute("""
-            SELECT ii.hp_atual || '/' || i.hp_max 
-            FROM instancia_inimigo ii
-            INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
-            WHERE ii.id_instancia = %s
+#     cursor.execute("""
+#             SELECT ii.hp_atual || '/' || i.hp_max 
+#             FROM instancia_inimigo ii
+#             INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
+#             WHERE ii.id_instancia = %s
             
-        """, (id_instancia,))
+#         """, (id_instancia,))
     
-    result = cursor.fetchone()
-    return result[0] if result else "N/A"
+#     result = cursor.fetchone()
+#     return result[0] if result else "N/A"
 
 
 # def obter_nome_combatente(cursor, tipo, id_instancia):
-    """ Obtém o nome do combatente baseado no tipo e ID """
-    # if tipo == "player":
-    #     cursor.execute("SELECT nome FROM player WHERE id_player = %s", (id_instancia,))
-    # elif tipo == "cavaleiro":
-    #     cursor.execute("""
-    #         SELECT c.nome FROM instancia_cavaleiro ic 
-    #         INNER JOIN cavaleiro c ON ic.id_cavaleiro = c.id_cavaleiro
-    #         WHERE ic.id_instancia_cavaleiro = %s
-    #     """, (id_instancia,))
-    # elif tipo == "inimigo":
-    #     cursor.execute("""
-    #         SELECT i.nome FROM instancia_inimigo ii
-    #         INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
-    #         WHERE ii.id_instancia = %s
-    #     """, (id_instancia,))
+#     """ Obtém o nome do combatente baseado no tipo e ID """
+#     if tipo == "player":
+#         cursor.execute("SELECT nome FROM player WHERE id_player = %s", (id_instancia,))
+#     elif tipo == "cavaleiro":
+#         cursor.execute("""
+#             SELECT c.nome FROM instancia_cavaleiro ic 
+#             INNER JOIN cavaleiro c ON ic.id_cavaleiro = c.id_cavaleiro
+#             WHERE ic.id_instancia_cavaleiro = %s
+#         """, (id_instancia,))
+#     elif tipo == "inimigo":
+#         cursor.execute("""
+#             SELECT i.nome FROM instancia_inimigo ii
+#             INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
+#             WHERE ii.id_instancia = %s
+#         """, (id_instancia,))
     
-    # result = cursor.fetchone()
-    # return result[0] if result else f"{tipo.capitalize()} {id_instancia}"
+#     result = cursor.fetchone()
+#     return result[0] if result else f"{tipo.capitalize()} {id_instancia}"
 
 # def batalhar(console, id_player):
 #     """⚔️ Inicia uma batalha entre o jogador, seus cavaleiros e os inimigos da sala, organizando a fila de ataque."""
@@ -208,9 +208,9 @@ def obter_hp_combatente(cursor, tipo, id_instancia):
 #                 time.sleep(2)
 #                 limpar_terminal(console)
 
-    except Exception as e:
-        console.print(Panel.fit(
-            f"❌ [bold red]Erro ao processar a batalha:[/bold red]\n{e}",
-            title="⛔ Erro de Banco de Dados",
-            border_style="red"
-        ))
+#     except Exception as e:
+#         console.print(Panel.fit(
+#             f"❌ [bold red]Erro ao processar a batalha:[/bold red]\n{e}",
+#             title="⛔ Erro de Banco de Dados",
+#             border_style="red"
+#         ))
