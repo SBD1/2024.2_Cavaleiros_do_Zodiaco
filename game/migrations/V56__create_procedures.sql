@@ -273,7 +273,7 @@ END $$;
 
 CREATE OR REPLACE PROCEDURE vender_item(
     p_id_player INT,
-    p_nome_item TEXT
+    p_id_item INT
 )
 LANGUAGE plpgsql
 AS $$
@@ -286,7 +286,7 @@ BEGIN
     INTO v_preco_venda, v_quantidade_atual
     FROM inventario_view
     WHERE id_player = p_id_player
-      AND nome = p_nome_item;
+      AND id_item = p_id_item;
 
     -- Verificar se o item existe no inventário
     IF NOT FOUND THEN
@@ -303,32 +303,12 @@ BEGIN
         UPDATE item_armazenado
         SET quantidade = quantidade - 1
         WHERE id_inventario = p_id_player
-          AND id_item = (
-              SELECT ti.id_item
-              FROM tipo_item ti
-              JOIN inventario_view iv ON ti.id_item = (
-                  SELECT ia.id_item
-                  FROM item_armazenado ia
-                  WHERE ia.id_inventario = p_id_player
-                  AND iv.nome = p_nome_item
-                  LIMIT 1
-              )
-          );
+          AND id_item = p_id_item;
     ELSE
         -- Remover o item do inventário se a quantidade for zero após a venda
         DELETE FROM item_armazenado
         WHERE id_inventario = p_id_player
-          AND id_item = (
-              SELECT ti.id_item
-              FROM tipo_item ti
-              JOIN inventario_view iv ON ti.id_item = (
-                  SELECT ia.id_item
-                  FROM item_armazenado ia
-                  WHERE ia.id_inventario = p_id_player
-                  AND iv.nome = p_nome_item
-                  LIMIT 1
-              )
-          );
+          AND id_item = p_id_item;
     END IF;
 
     -- Adicionar o valor do item ao dinheiro do jogador
@@ -713,6 +693,10 @@ BEGIN
     IF v_almas_recebidas IS NULL THEN
         RAISE EXCEPTION 'Erro ao calcular a quantidade de Almas recebidas ao desmanchar!';
     END IF;
+
+    UPDATE parte_corpo_player
+    SET instancia_armadura_equipada = NULL, armadura_equipada = NULL
+    WHERE id_player = p_id_player AND instancia_armadura_equipada = p_id_instancia;
 
     -- Remover a armadura da tabela armadura_instancia
     DELETE FROM armadura_instancia WHERE id_instancia = p_id_instancia;
