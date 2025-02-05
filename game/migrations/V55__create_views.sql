@@ -204,7 +204,8 @@ GROUP BY
 CREATE OR REPLACE VIEW cavaleiros_party_view AS
 SELECT
     p.id_player,
-    p.id_sala
+    p.id_sala,
+    ic.id_cavaleiro
 FROM
     party p
 INNER JOIN instancia_cavaleiro ic ON ic.id_party = p.id_player;
@@ -285,12 +286,16 @@ WHERE
 -- VIEW view_fila_turnos_batalha
 CREATE OR REPLACE VIEW view_fila_turnos_batalha AS
 SELECT 
+    id_cavaleiro,
     'cavaleiro' AS tipo, 
     velocidade, 
     id_player
 FROM 
     instancia_cavaleiro 
-
+WHERE 
+    id_cavaleiro IN (
+        SELECT id_cavaleiro FROM cavaleiros_party_view
+    )
 
 UNION ALL
 
