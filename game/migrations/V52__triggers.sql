@@ -353,3 +353,30 @@ AFTER UPDATE ON player_missao
 FOR EACH ROW
 WHEN (NEW.status_missao = 'c' AND old.status_missao != 'c')
 EXECUTE FUNCTION instanciar_cavaleiro();
+
+CREATE OR REPLACE FUNCTION mover_sala_segura_pos_morte()
+RETURNS TRIGGER AS $$
+BEGIN
+
+    UPDATE inventario
+    SET dinheiro = dinheiro / 2
+    WHERE inventario.id_player = OLD.id_player;
+
+    RAISE NOTICE '% foi derrotado, Saori Kido o resgata mas com um custo...', OLD.id_player;
+
+
+    UPDATE party
+    SET id_sala = (SELECT id_sala FROM public.sala_segura LIMIT 1)  -- Usar parênteses no SELECT
+    WHERE party.id_player = OLD.id_player;
+
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_player_morreu
+BEFORE UPDATE ON player
+FOR EACH ROW
+WHEN (NEW.hp_atual <= 0) 
+EXECUTE FUNCTION mover_sala_segura_pos_morte();
