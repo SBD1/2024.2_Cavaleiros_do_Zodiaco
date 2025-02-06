@@ -8,8 +8,8 @@ RETURNS TABLE (
     hp_atual INTEGER,
     magia_atual INTEGER,
     velocidade INTEGER,
-    ataque_fisico_base INTEGER,
-    ataque_magico_base INTEGER,
+    ataque_fisico INTEGER,
+    ataque_magico INTEGER,
     elemento TEXT
 ) AS $$
 BEGIN
@@ -23,8 +23,8 @@ BEGIN
         p.hp_atual,
         p.magia_atual,
         p.velocidade,
-        p.ataque_fisico_base,
-        p.ataque_magico_base,
+        p.ataque_fisico,
+        p.ataque_magico,
         e.nome::TEXT   -- Conversão explícita para TEXT
     FROM player p
     INNER JOIN elemento e ON e.id_elemento = p.id_elemento

@@ -6,7 +6,7 @@ import time
 from ..database import obter_cursor  # Importa a conexão com o banco de dados
 
 def tocar_musica(nome_audio,tempo_minimo):
-    """🎵 Toca uma música com base no nome fornecido."""
+    """🎵 Toca uma música com  no nome fornecido."""
     try:
         # Obtém o nome do arquivo de áudio no banco de dados
         with obter_cursor() as cursor:

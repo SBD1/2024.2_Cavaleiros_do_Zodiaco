@@ -114,8 +114,7 @@ SELECT
     a.defesa_fisica,
     a.ataque_magico,
     a.ataque_fisico,
-    a.durabilidade_max,
-    a.preco_venda
+    a.durabilidade_max  
 FROM 
     item_a_venda iv
 JOIN 
@@ -325,8 +324,8 @@ SELECT
     p.hp_atual,
     p.magia_atual,
     p.velocidade,
-    p.ataque_fisico_base,
-    p.ataque_magico_base,
+    p.ataque_fisico,
+    p.ataque_magico,
     p.id_elemento,
     e.nome AS elemento_nome,   -- Supondo que a tabela 'elemento' tenha um nome
     i.dinheiro,

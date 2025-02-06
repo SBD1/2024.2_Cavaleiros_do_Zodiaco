@@ -147,11 +147,11 @@ BEGIN
         ELSE FALSE
     END
     INTO desbloqueado
-    FROM npc_ferreiro nf
+    FROM ferreiro nf
     LEFT JOIN player_missao pm
         ON pm.id_missao = nf.id_missao_desbloqueia
         AND pm.id_player = p_id_player
-    WHERE nf.id_npc_ferreiro = 1; -- Garantir que é o NPC Ferreiro com ID 1
+    WHERE nf.id_npc = 1; -- Garantir que é o NPC Ferreiro com ID 1
 
     -- Retornar o resultado
     RETURN COALESCE(desbloqueado, FALSE);

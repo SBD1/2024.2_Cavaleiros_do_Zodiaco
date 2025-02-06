@@ -6,11 +6,11 @@ from ..database import obter_cursor
 
 
 # Função para interagir com Saori Kido e listar missões disponíveis
-def interagir_npc_quest(console,selected_player_id):
+def interagir_quest(console,selected_player_id):
     with obter_cursor() as cursor:
         try:
 
-            cursor.execute("SELECT nome, dialogo_inicial FROM npc_quest LIMIT 1")
+            cursor.execute("SELECT nome, dialogo_inicial FROM quest LIMIT 1")
             npc = cursor.fetchone()
 
             if not npc:

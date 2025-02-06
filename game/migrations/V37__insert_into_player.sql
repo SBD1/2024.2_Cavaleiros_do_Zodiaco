@@ -36,8 +36,8 @@ BEGIN
         hp_atual,
         magia_atual,
         velocidade,
-        ataque_fisico_base,
-        ataque_magico_base
+        ataque_fisico,
+        ataque_magico
     )
     VALUES (
         floor(random() * (id_elemento_max - id_elemento_min + 1) + id_elemento_min), -- ID do elemento aleatório dentro do intervalo válido
@@ -49,8 +49,8 @@ BEGIN
         20, -- HP Atual fixo
         20, -- Magia Atual fixa
         floor(random() * 61), -- Velocidade aleatória (0 a 60)
-        floor(random() * 61), -- Ataque físico base aleatório (0 a 60)
-        floor(random() * 61) -- Ataque mágico base aleatório (0 a 60)
+        floor(random() * 61), -- Ataque físico  aleatório (0 a 60)
+        floor(random() * 61) -- Ataque mágico  aleatório (0 a 60)
     );
     
     RAISE NOTICE 'Novo jogador % foi criado com sucesso!', nome_cdz;
@@ -62,10 +62,10 @@ LANGUAGE plpgsql;
 SELECT insert_random_cdz_player();
 SELECT insert_random_cdz_player();
 
-INSERT INTO inventario (id_player, dinheiro)
+INSERT INTO inventario (id_player, dinheiro, alma_armadura)
 VALUES 
-    (1, 50),
-    (2, 50);
+    (1, 50, 999),
+    (2, 50, 999);
 
 
 INSERT INTO public.parte_corpo (id_parte_corpo, nome, defesa_magica, defesa_fisica, chance_acerto, chance_acerto_critico)

@@ -6,9 +6,9 @@ CREATE TABLE Cavaleiro (
     nivel INTEGER NOT NULL,
     hp_max INTEGER NOT NULL,
     magia_max INTEGER NOT NULL,
-    velocidade_base INTEGER NOT NULL,
-    ataque_fisico_base INTEGER NOT NULL,
-    ataque_magico_base INTEGER NOT NULL
+    velocidade INTEGER NOT NULL,
+    ataque_fisico INTEGER NOT NULL,
+    ataque_magico INTEGER NOT NULL
 );
  
 

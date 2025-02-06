@@ -7,7 +7,7 @@ from .listar_equipamentos import listar_equipamentos
 from ..util import limpar_terminal
 from ..database import obter_cursor
 
-def interagir_npc_ferreiro(console, jogador_id):
+def interagir_ferreiro(console, jogador_id):
     """
     Interação com o NPC Ferreiro para restaurar durabilidade, melhorar raridade ou desmanchar armaduras.
     """
@@ -17,7 +17,7 @@ def interagir_npc_ferreiro(console, jogador_id):
             # Buscar informações do NPC Ferreiro
             cursor.execute("""
                 SELECT nome, descricao, dialogo_inicial, dialogo_reparar, dialogo_upgrade, dialogo_desmanchar, dialogo_sair 
-                FROM npc_ferreiro LIMIT 1
+                FROM ferreiro LIMIT 1
             """)
             npc = cursor.fetchone()
 

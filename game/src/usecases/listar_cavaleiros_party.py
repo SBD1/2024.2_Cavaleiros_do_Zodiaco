@@ -35,7 +35,7 @@ def listar_cavaleiros_party(console, player_id):
             # Obtém informações do jogador
             cursor.execute("""
                 SELECT nome, nivel, xp_atual, hp_max, hp_atual, magia_max, magia_atual,
-                       velocidade, ataque_fisico_base, ataque_magico_base, elemento_nome
+                       velocidade, ataque_fisico, ataque_magico, elemento_nome
                 FROM player_info_view WHERE id_player = %s;
             """, (player_id,))
             player = cursor.fetchone()

@@ -18,7 +18,7 @@
 --     INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
 --     WHERE ii.id_instancia = p_id_instancia_inimigo;
 
---     SELECT ataque_fisico_base / 8 INTO v_ataque_fisico FROM player WHERE id_player = p_id_player;
+--     SELECT ataque_fisico / 8 INTO v_ataque_fisico FROM player WHERE id_player = p_id_player;
 --     SELECT pci.defesa_fisica INTO v_defesa_fisica FROM parte_corpo_inimigo pci
 --     WHERE pci.id_instancia = p_id_instancia_inimigo AND pci.parte_corpo = p_parte_corpo;
 
@@ -126,7 +126,7 @@
 --     INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
 --     WHERE ii.id_instancia = p_id_instancia_inimigo;
 
---     SELECT ataque_fisico_base / 8 INTO v_ataque_fisico FROM instancia_inimigo ii
+--     SELECT ataque_fisico / 8 INTO v_ataque_fisico FROM instancia_inimigo ii
 --     INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
 --     WHERE ii.id_instancia = p_id_instancia_inimigo;
 
@@ -176,13 +176,13 @@
 --     v_dano INT;
 -- BEGIN
 --     -- Obtém o ataque físico do inimigo
---     SELECT i.ataque_fisico_base INTO v_ataque_fisico
+--     SELECT i.ataque_fisico INTO v_ataque_fisico
 --     FROM instancia_inimigo ii
 --     INNER JOIN inimigo i ON ii.id_inimigo = i.id_inimigo
 --     WHERE ii.id_instancia = p_id_instancia_inimigo;
 
 --     -- Obtém a defesa da parte do corpo do cavaleiro
---     SELECT pcc.defesa_fisica_bonus INTO v_defesa_fisica
+--     SELECT pcc.defesa_fisica INTO v_defesa_fisica
 --     FROM parte_corpo_cavaleiro pcc
 --     INNER JOIN instancia_cavaleiro ic 
 --         ON ic.id_instancia_cavaleiro = pcc.id_instancia_cavaleiro

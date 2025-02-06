@@ -144,7 +144,7 @@ BEGIN
         p_id_player,
         p_id_cavaleiro_novo, 
         id_sala_var,  -- Corrigido para `id_sala_var`
-        nivel, 0, hp_max, magia_max, hp_max, magia_max, velocidade_base, ataque_fisico_base, ataque_magico_base
+        nivel, 0, hp_max, magia_max, hp_max, magia_max, velocidade, ataque_fisico, ataque_magico
     FROM cavaleiro
     WHERE id_cavaleiro = p_id_cavaleiro_novo;
 
@@ -488,7 +488,7 @@ BEGIN
         RETURN;
     END IF;
 
-    -- Buscar o custo de alma da restauração com base na durabilidade atual
+    -- Buscar o custo de alma da restauração com  na durabilidade atual
     SELECT id, custo_alma INTO v_id_custo_ferreiro, v_custo_alma
     FROM custos_ferreiro
     WHERE tipo_acao = 'restaurar'

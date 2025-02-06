@@ -38,7 +38,7 @@ def mostrar_menu_acoes(console):
         limpar_terminal(console)
 
         if verificar_inimigos(console,jogador_selecionado_id):
-            batalhar(console,jogador_selecionado_id)
+            # batalhar(console,jogador_selecionado_id)
             limpar_terminal(console)
         elif verificar_boss(console,jogador_selecionado_id):
             limpar_terminal(console)

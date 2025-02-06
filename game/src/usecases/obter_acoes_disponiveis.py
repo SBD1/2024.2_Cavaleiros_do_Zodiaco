@@ -1,4 +1,4 @@
-from .interagir_npc_mercador import interagir_npc_mercador
+from .interagir_mercador import interagir_mercador
 from .mudar_casa import mudar_casa
 from .mudar_de_sala import mudar_de_sala
 from .mudar_para_orfanato import mudar_para_orfanato
@@ -11,12 +11,12 @@ from .modificar_grupo import modificar_grupo
 from .trocar_cavaleiro import trocar_cavaleiro
 from .ver_missoes import ver_missoes
 from .verificar_npc_na_sala import verificar_npc_na_sala
-from .interagir_npc_quest import interagir_npc_quest
+from .interagir_quest import interagir_quest
 from .listar_todas_receitas import listar_todas_receitas
 from .gerar_item import gerar_item
 from .verificar_desbloqueio_ferreiro import verificar_desbloqueio_ferreiro
 from .listar_equipamentos import listar_equipamentos
-from .interagir_npc_ferreiro import interagir_npc_ferreiro
+from .interagir_ferreiro import interagir_ferreiro
 from .equipar_armadura import equipar_armadura
 from .modificar_grupo import modificar_grupo
 
@@ -47,13 +47,13 @@ def obter_acoes_disponiveis(jogador_id):
     check_npc = verificar_npc_na_sala(jogador_id)
 
     if check_npc == "Ferreiro" and verificar_desbloqueio_ferreiro(jogador_id):
-        opcoes.insert(0, ("[orange4]🔨 Falar com Mu (Ferreiro)[/orange4]", interagir_npc_ferreiro))
+        opcoes.insert(0, ("[orange4]🔨 Falar com Mu (Ferreiro)[/orange4]", interagir_ferreiro))
 
     elif check_npc == "Missao":
-        opcoes.insert(0, ("[sea_green1]💬 Falar com Saori Kido (Missões)[/sea_green1]", interagir_npc_quest))
+        opcoes.insert(0, ("[sea_green1]💬 Falar com Saori Kido (Missões)[/sea_green1]", interagir_quest))
 
     elif check_npc == "Mercador":
-        opcoes.insert(0, ("[chartreuse2]💰 Falar com Jabu (Mercador)[/chartreuse2]", interagir_npc_mercador))
+        opcoes.insert(0, ("[chartreuse2]💰 Falar com Jabu (Mercador)[/chartreuse2]", interagir_mercador))
 
     opcoes.append(("[bold red]❌ Sair do Menu de Ações[/bold red]", None))
 

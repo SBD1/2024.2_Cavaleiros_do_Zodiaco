@@ -1,7 +1,7 @@
 CREATE OR REPLACE FUNCTION gerar_partes_corpo_boss()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO public.parte_corpo_boss (id_boss, parte_corpo, defesa_fisica, defesa_magica, chance_acerto_base, chance_acerto_critico)
+    INSERT INTO public.parte_corpo_boss (id_boss, parte_corpo, defesa_fisica, defesa_magica, chance_acerto, chance_acerto_critico)
     SELECT 
         NEW.id_boss,                     
         pc.id_parte_corpo,               
@@ -29,9 +29,9 @@ BEGIN
         id_cavaleiro, 
         parte_corpo,  
         id_player, 
-        defesa_fisica_bonus, 
+        defesa_fisica, 
         defesa_magico_bonus, 
-        chance_acerto_base, 
+        chance_acerto, 
         chance_acerto_critico
     )
     SELECT 
@@ -102,7 +102,7 @@ BEGIN
         parte_corpo, 
         defesa_fisica, 
         defesa_magica, 
-        chance_acerto_base, 
+        chance_acerto, 
         chance_acerto_critico
     )
     SELECT 
@@ -132,7 +132,7 @@ INSERT INTO public.parte_corpo_inimigo (
     parte_corpo, 
     defesa_fisica, 
     defesa_magica, 
-    chance_acerto_base, 
+    chance_acerto, 
     chance_acerto_critico
 )
 SELECT 

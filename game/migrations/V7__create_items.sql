@@ -14,7 +14,6 @@ CREATE TABLE Armadura (
     ataque_magico INTEGER,
     ataque_fisico INTEGER,
     durabilidade_max INTEGER,
-    preco_venda INTEGER,
     PRIMARY KEY (id_armadura, id_parte_corpo)
 );
  

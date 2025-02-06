@@ -10,8 +10,8 @@ CREATE TABLE Instancia_Inimigo (
     id_grupo INTEGER,
     hp_atual INTEGER NOT NULL,
     magia_atual INTEGER NOT NULL,
-    defesa_fisica_bonus INTEGER,
-    defesa_magica_bonus INTEGER,
+    defesa_fisica INTEGER,
+    defesa_magica INTEGER,
     PRIMARY KEY (id_inimigo, id_instancia)
 );
  

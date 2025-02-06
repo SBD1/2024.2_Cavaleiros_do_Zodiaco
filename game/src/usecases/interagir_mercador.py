@@ -7,11 +7,11 @@ from ..database import obter_cursor
 
 # Função para interagir com o NPC Mercador
 # Função para interagir com o NPC Mercador
-def interagir_npc_mercador(console, selected_player_id):
+def interagir_mercador(console, selected_player_id):
     with obter_cursor() as cursor:
         try:
             # Buscar informações do NPC Mercador
-            cursor.execute("SELECT nome, dialogo_inicial, dialogo_comprar, dialogo_vender, dialogo_sair FROM npc_mercador LIMIT 1")
+            cursor.execute("SELECT nome, dialogo_inicial, dialogo_comprar, dialogo_vender, dialogo_sair FROM mercador LIMIT 1")
             npc = cursor.fetchone()
 
             if not npc:

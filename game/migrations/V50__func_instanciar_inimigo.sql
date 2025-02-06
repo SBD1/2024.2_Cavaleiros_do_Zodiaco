@@ -19,8 +19,8 @@ BEGIN
         id_grupo,
         hp_atual,
         magia_atual,
-        defesa_fisica_bonus,
-        defesa_magica_bonus
+        defesa_fisica,
+        defesa_magica
     )
     VALUES (
         p_id_inimigo,              -- ID do inimigo

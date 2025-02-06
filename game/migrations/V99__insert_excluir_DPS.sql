@@ -117,11 +117,11 @@ VALUES(currval('tipo_item_id_item_seq'), 2, 1);
 
 -- Cabeça
 INSERT INTO public.armadura
-( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max, preco_venda)
+( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max)
 VALUES
 ('c', 'Elmo de Pégaso', 
 'Protege a cabeça do cavaleiro com sua resistência mágica e física, refletindo a energia indomável do cosmos.', 
-'Bronze', 50, 70, 10, 15, 100, 500);
+'Bronze', 50, 70, 10, 15, 100);
 
 INSERT INTO public.item_a_venda
 (id_item, preco_compra, nivel_minimo)
@@ -129,11 +129,11 @@ VALUES(currval('tipo_item_id_item_seq'), 2, 1);
 
 -- Tronco
 INSERT INTO public.armadura
-( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max, preco_venda)
+( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max)
 VALUES
 ('t', 'Peitoral de Pégaso', 
 'Oferece excelente proteção contra ataques físicos e mágicos, simbolizando a coragem do cavaleiro.', 
-'Bronze', 80, 100, 20, 25, 100, 1000);
+'Bronze', 80, 100, 20, 25, 100);
 
 INSERT INTO public.item_a_venda
 (id_item, preco_compra, nivel_minimo)
@@ -141,11 +141,11 @@ VALUES(currval('tipo_item_id_item_seq'), 2, 1);
 
 -- Braços
 INSERT INTO public.armadura
-( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max, preco_venda)
+( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max)
 VALUES
 ('b', 'Braçadeiras de Pégaso', 
 'Aumentam a força física e protegem os braços em combates ferozes, permitindo golpes precisos e poderosos.', 
-'Bronze', 30, 40, 15, 20, 100, 400);
+'Bronze', 30, 40, 15, 20, 100);
 
 INSERT INTO public.item_a_venda
 (id_item, preco_compra, nivel_minimo)
@@ -153,11 +153,11 @@ VALUES(currval('tipo_item_id_item_seq'), 2, 1);
 
 -- Pernas
 INSERT INTO public.armadura
-( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max, preco_venda)
+( id_parte_corpo, nome, descricao, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max)
 VALUES
 ('p', 'Grevas de Pégaso', 
 'Garantem proteção total às pernas do cavaleiro e aumentam a mobilidade e equilíbrio nos combates.', 
-'Bronze', 40, 50, 10, 15, 100, 450);
+'Bronze', 40, 50, 10, 15, 100);
 
 INSERT INTO public.item_a_venda
 (id_item, preco_compra, nivel_minimo)

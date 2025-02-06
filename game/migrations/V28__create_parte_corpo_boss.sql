@@ -5,7 +5,7 @@ CREATE TABLE Parte_Corpo_Boss (
     parte_corpo enum_parte_corpo,
     defesa_fisica INTEGER NOT NULL,
     defesa_magica INTEGER NOT NULL,
-    chance_acerto_base INTEGER NOT NULL,
+    chance_acerto INTEGER NOT NULL,
     chance_acerto_critico INTEGER NOT NULL,
     PRIMARY KEY (id_boss, parte_corpo)
 );

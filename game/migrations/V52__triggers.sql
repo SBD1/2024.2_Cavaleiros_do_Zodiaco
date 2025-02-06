@@ -63,8 +63,8 @@ CREATE OR REPLACE FUNCTION after_player_insert_function()
 RETURNS TRIGGER AS $$
 BEGIN
 
-    INSERT INTO inventario (id_player, dinheiro)
-    VALUES (NEW.id_player, 200);
+    INSERT INTO inventario (id_player, dinheiro, alma_armadura)
+    VALUES (NEW.id_player, 200, 200);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -321,7 +321,7 @@ BEGIN
 
     -- Obtém as informações do cavaleiro
     SELECT c.id_classe, c.id_elemento, c.nome, c.nivel, c.hp_max, c.magia_max, 
-           c.velocidade_base, c.ataque_fisico_base, c.ataque_magico_base
+           c.velocidade, c.ataque_fisico, c.ataque_magico
     INTO p_id_classe, p_id_elemento, p_nome, p_nivel, p_hp_max, p_magia_max, 
          p_velocidade, p_ataque_fisico, p_ataque_magico
     FROM cavaleiro c

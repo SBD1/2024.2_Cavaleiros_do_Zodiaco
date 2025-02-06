@@ -4,6 +4,7 @@ CREATE TABLE Habilidade (
     elemento_habilidade INTEGER,
     nome VARCHAR,
     custo INTEGER,
+    dano INTEGER,
     descricao VARCHAR,
     frase_uso VARCHAR,
     nivel_necessario INTEGER

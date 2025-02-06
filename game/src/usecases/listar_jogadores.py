@@ -41,7 +41,7 @@ def listar_jogadores():
 
 
                 # Preenchendo a tabela com os jogadores
-                for index, (id_player, nome, nivel, elemento, hp_max, magia_max, hp_atual, magia_atual, ataque_fisico_base, ataque_magico_base, dinheiro) in enumerate(jogadores):
+                for index, (id_player, nome, nivel, elemento, hp_max, magia_max, hp_atual, magia_atual, ataque_fisico, ataque_magico, dinheiro) in enumerate(jogadores):
                     elemento_icon = elementos_config.get(elemento, {}).get("emoji", "❓")
                     elemento_cor = elementos_config.get(elemento, {}).get("cor", "bold white")
                     
@@ -53,8 +53,8 @@ def listar_jogadores():
                         f"[bold red]{hp_max}/{hp_atual}[/bold red]",  # HP formatado como "hp_max/hp_atual"
                         f"[bold blue]{magia_max}/{magia_atual}[/bold blue]",  # Magia formatada como "magia_max/magia_atual"
                         f"[bold green]{dinheiro}[/bold green]", 
-                        f"[bold grey]{ataque_fisico_base}[/bold grey]",
-                        f"[slate_blue3]{ataque_magico_base}[/slate_blue3]"
+                        f"[bold grey]{ataque_fisico}[/bold grey]",
+                        f"[slate_blue3]{ataque_magico}[/slate_blue3]"
                     )
 
                     # Adiciona uma linha divisória entre os jogadores (exceto o último)

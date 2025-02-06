@@ -8,8 +8,8 @@ CREATE TABLE Inimigo (
     hp_max INTEGER NOT NULL,
     magia_max INTEGER NOT NULL,
     velocidade INTEGER NOT NULL,
-    ataque_fisico_base INTEGER NOT NULL,
-    ataque_magico_base INTEGER NOT NULL,
+    ataque_fisico INTEGER NOT NULL,
+    ataque_magico INTEGER NOT NULL,
     dinheiro INTEGER NOT NULL,
     fala_inicio VARCHAR
 );
