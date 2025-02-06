@@ -15,7 +15,10 @@ A figura 1 a seguir mostra a primeira versão do Diagrama Entidade Relacionament
 
 <center>
 
-**Figura 1 - Primeira versão do DER**
+
+<details>
+
+<summary> Figura 1 - Primeira versão do DER </summary>
 
 <iframe 
     frameborder="0" 
@@ -24,14 +27,17 @@ A figura 1 a seguir mostra a primeira versão do Diagrama Entidade Relacionament
     src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1IY94sIUTh1pMHKPSnjLbu7Q5a9m6m4tW%26export%3Ddownload">
 </iframe>
 
-_** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
+<p><em><strong>Fonte:</strong> <a href="https://github.com/lucasdray" target="_blank">Pedro Lucas</a></em></p>
 
-</center>
+</details>
 
 
-<center>
 
-**Figura 2 - DER Versão 1.1**
+<details>
+
+<summary> Figura 2 - DER Versão 1.1 </summary>
+
+
 
 <iframe 
     frameborder="0" 
@@ -40,24 +46,42 @@ _** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
     src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=DER%20V1.1#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1gXPT85k_hdsABKSYvHnIu5JwqM4PP0p4%26export%3Ddownload">
 </iframe>
 
-_** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
+<p><em><strong>Fonte:</strong> <a href="https://github.com/lucasdray" target="_blank">Pedro Lucas</a></em></p>
 
-</center>
-<center>
+</details>
 
-**Figura 3 - DER Versão 2.0**
+<details>
+<summary> Figura 3 - DER Versão 2.0</summary>
 
 <iframe 
     frameborder="0" 
     width="100%" 
     height="600px"
-    src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=DER%202.0.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1hnu9QFhT-UIqXl9tar8-YFjfSFKe8fRg%26export%3Ddownload">
+    src=https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=DER%203.0.drawio.png#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1i-UcAkrAAEAonNrE5XELAjEiaz4LaEBl%26export%3Ddownload>
     
+</iframe>
+
+<p><em><strong>Fonte:</strong> <a href="https://github.com/lucasdray" target="_blank">Pedro Lucas</a></em></p>
+
+</details>
+
+
+**Figura 4 - DER Versão 3.0**
+
+<iframe 
+    frameborder="0" 
+    width="100%" 
+    height="600px"
+    src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=DER%203.0.drawio.png#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1i-UcAkrAAEAonNrE5XELAjEiaz4LaEBl%26export%3Ddownload">
 </iframe>
 
 _** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
 
 </center>
+
+
+
+
 
 ## Referência Bibliográfica
 
@@ -75,3 +99,4 @@ _** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
 | ---------- | --------------------- | ------------------------------------------- |
 | 24/11/2024 | Versão inicial do DER | [Pedro Lucas](https://github.com/lucasdray) |
 | 12/01/2024 | Versão 2.0 do DER     | [Pedro Lucas](https://github.com/lucasdray) |
+| 05/02/2024 | Versão 3.0 do DER     | [Pedro Lucas](https://github.com/lucasdray) |

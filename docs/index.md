@@ -10,7 +10,24 @@ Figura 1 - Logo do desenho
 
 ## Sobre o projeto
 
-Projeto criado para a disciplina de Sistema de Banco de Dados 1 ministrada pelo professor Mauricio Serrano. Neste projeto, será desenvolvido um jogo MUD onde os conceitos de bancos de dados serão aplicados. Ao fim do projeto, será entregue um jogo funcional inspirado no famoso desenho Cavaleiros do Zodiaco criado pelo Masami Kurumada.
+Cavaleiros do Zodíaco é um MUD de RPG imersivo ambientado no universo dos Cavaleiros do Zodíaco, onde estratégia, exploração e batalhas épicas se unem para criar uma experiência única. Como um aspirante a Cavaleiro, você deve embarcar em missões desafiadoras, enfrentar inimigos formidáveis e evoluir suas habilidades para se tornar um verdadeiro protetor de Athena.
+
+A jornada é repleta de escolhas estratégicas. Você pode formar uma party com até 3 cavaleiros diferentes para enfrentar desafios mais difíceis, batalhar contra grupos de inimigos e testar suas habilidades contra poderosos adversários. A cada missão completada, novos Cavaleiros são desbloqueados, permitindo que você aumente suas opções de combate e fortaleça seu time.
+
+Além dos combates, a gestão de equipamentos é essencial. Desbloqueie o ferreiro Mu para reparar, melhorar ou desmontar armaduras, garantindo que sua defesa esteja sempre à altura dos desafios. O Mercador Jabu oferece um vasto leque de itens, permitindo que você compre e venda suprimentos valiosos para sua jornada.
+
+O mundo de Cavaleiros do Zodíaco é dinâmico, evoluindo conforme as sagas se desenrolam. Novos eventos, inimigos e desafios surgem conforme você avança pelo mapa, explorando santuários, templos e arenas de batalha lendárias.
+
+Com um sistema de movimentação tática, interações profundas com NPCs e mecânicas clássicas de RPG, Cavaleiros do Zodíaco oferece uma boa experiência envolvente para os fãs de aventuras baseadas em texto. Prepare-se para vestir sua armadura, desbloquear cavaleiros e lutar pelo destino do universo!
+
+
+![Menu Cavaleiros](./assets/images/menu.png)
+
+Figura 2 - Menu do jogo Cavaleiros do Zodíaco
+
+![Mapa Cavaleiros](./assets/images/mapa.jpeg)
+
+Figura 2 - Primeiro Mapa Cavaleiros do Zodíaco
 
 ## Entregas
 
