@@ -1,5 +1,4 @@
 CREATE TABLE Instancia_Cavaleiro (
-    id_instancia_cavaleiro SERIAL,
     id_cavaleiro INTEGER,
     id_player INTEGER,
     id_party INTEGER,
@@ -13,7 +12,7 @@ CREATE TABLE Instancia_Cavaleiro (
     velocidade INTEGER,
     ataque_fisico INTEGER,
     ataque_magico INTEGER,
-    PRIMARY KEY (id_cavaleiro, id_instancia_cavaleiro, id_player)
+    PRIMARY KEY (id_cavaleiro, id_player)
 );
  
 ALTER TABLE Instancia_Cavaleiro ADD CONSTRAINT FK_Instancia_Cavaleiro_2

@@ -13,7 +13,6 @@ from src.usecases.iniciar_jogo import iniciar_jogo
 from src.usecases.criar_jogador import criar_jogador
 from src.usecases.verificar_inimigos import verificar_inimigos
 from src.usecases.verificar_boss import verificar_boss
-from src.usecases.batalhar import batalhar
 from .util import limpar_terminal
 from src.usecases.tocar_tema_encerramento import tocar_tema_encerramento
 

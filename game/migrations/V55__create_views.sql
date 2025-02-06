@@ -12,7 +12,8 @@ SELECT
         ELSE 'Outro'
     END AS tipo_item,
     quantidade,
-    id_player
+    id_player,
+    id_item
 FROM (
     SELECT
         c.nome,
@@ -20,7 +21,8 @@ FROM (
         c.descricao,
         ti.tipo_item,
         ia.quantidade,
-        p.id_player 
+        p.id_player,
+        c.id_item
     FROM inventario i
     JOIN player p ON p.id_player = i.id_player
     JOIN item_armazenado ia ON ia.id_inventario = i.id_player
@@ -35,7 +37,8 @@ FROM (
         l.descricao,
         ti.tipo_item,
         ia.quantidade,
-        p.id_player 
+        p.id_player,
+        l.id_item
     FROM inventario i
     JOIN player p ON p.id_player = i.id_player
     JOIN item_armazenado ia ON ia.id_inventario = i.id_player
@@ -50,7 +53,8 @@ FROM (
         m.descricao,
         ti.tipo_item,
         ia.quantidade,
-        p.id_player 
+        p.id_player,
+        m.id_material
     FROM inventario i
     JOIN player p ON p.id_player = i.id_player
     JOIN item_armazenado ia ON ia.id_inventario = i.id_player
@@ -65,7 +69,8 @@ FROM (
         im.descricao,
         ti.tipo_item,
         ia.quantidade,
-        p.id_player 
+        p.id_player,
+        im.id_item
     FROM inventario i
     JOIN player p ON p.id_player = i.id_player
     JOIN item_armazenado ia ON ia.id_inventario = i.id_player
@@ -198,9 +203,9 @@ GROUP BY
 -- VIEW cavaleiros_party_view
 CREATE OR REPLACE VIEW cavaleiros_party_view AS
 SELECT
-    ic.id_instancia_cavaleiro,
     p.id_player,
-    p.id_sala
+    p.id_sala,
+    ic.id_cavaleiro
 FROM
     party p
 INNER JOIN instancia_cavaleiro ic ON ic.id_party = p.id_player;
@@ -222,7 +227,7 @@ CREATE OR REPLACE VIEW armaduras_jogador_view AS
 SELECT 
     ai.id_instancia,
     ai.id_armadura,
-    ai.id_parte_corpo_armadura,
+    pc.nome as parte_corpo,
     a.nome,
     a.descricao,
     ai.raridade_armadura,
@@ -241,13 +246,15 @@ JOIN
     parte_corpo_player pcp ON ai.id_armadura = pcp.armadura_equipada
     AND ai.id_instancia = pcp.instancia_armadura_equipada
     AND ai.id_parte_corpo_armadura = pcp.parte_corpo
+JOIN parte_corpo pc 
+ON pc.id_parte_corpo = pcp.parte_corpo
 
 UNION ALL
 
 SELECT 
     ai.id_instancia,
     ai.id_armadura,
-    ai.id_parte_corpo_armadura,
+    pc.nome as parte_corpo ,
     a.nome,
     a.descricao,
     ai.raridade_armadura,
@@ -264,6 +271,9 @@ FROM
 JOIN armadura a ON a.id_armadura = ai.id_armadura
 JOIN 
     inventario i ON ai.id_inventario = i.id_player
+join 
+	parte_corpo pc
+	on pc.id_parte_corpo = a.id_parte_corpo 
 WHERE 
     NOT EXISTS (
         SELECT 1
@@ -276,15 +286,15 @@ WHERE
 -- VIEW view_fila_turnos_batalha
 CREATE OR REPLACE VIEW view_fila_turnos_batalha AS
 SELECT 
-    id_instancia_cavaleiro AS id_instancia, 
+    id_cavaleiro,
     'cavaleiro' AS tipo, 
     velocidade, 
     id_player
 FROM 
     instancia_cavaleiro 
 WHERE 
-    id_instancia_cavaleiro IN (
-        SELECT id_instancia_cavaleiro FROM cavaleiros_party_view
+    id_cavaleiro IN (
+        SELECT id_cavaleiro FROM cavaleiros_party_view
     )
 
 UNION ALL

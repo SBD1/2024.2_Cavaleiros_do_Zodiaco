@@ -27,8 +27,7 @@ BEGIN
    
     INSERT INTO public.parte_corpo_cavaleiro (
         id_cavaleiro, 
-        parte_corpo, 
-        id_instancia_cavaleiro, 
+        parte_corpo,  
         id_player, 
         defesa_fisica_bonus, 
         defesa_magico_bonus, 
@@ -38,7 +37,6 @@ BEGIN
     SELECT 
         NEW.id_cavaleiro,        
         pc.id_parte_corpo,        
-        NEW.id_instancia_cavaleiro, 
         NEW.id_player,            
         pc.defesa_fisica,          
         pc.defesa_magica,         
