@@ -43,7 +43,7 @@ theme:
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.top
-    
+
 
   palette:
 
@@ -70,7 +70,7 @@ theme:
 plugins:
    - glightbox
 
-
+use_directory_urls: false
 
 extra:
   version:
