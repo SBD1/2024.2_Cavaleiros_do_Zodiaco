@@ -43,6 +43,7 @@ theme:
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.top
+    
 
   palette:
 
@@ -66,10 +67,12 @@ theme:
 
   language: pt-BR
   
-
+plugins:
+   - glightbox
 
 
 
 extra:
   version:
     provider: mike
+  

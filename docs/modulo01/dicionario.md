@@ -1,20 +1,36 @@
 # Dicionário de Dados
+## Introdução
+Segundo Elmasri e Navathe1, a modelagem conceitual é uma etapa essencial no desenvolvimento de uma aplicação de banco de dados bem-sucedida. Essa fase abrange o design de estruturas e restrições do banco de dados, além da criação de programas que realizam consultas e atualizações. A modelagem conceitual não apenas facilita a compreensão e o planejamento do banco de dados, mas também garante que as operações sejam eficientes e seguras.
 
+## Objetivo
+Este documento tem como objetivo detalhar as tabelas, colunas e relacionamentos do banco de dados no contexto do modelo de dados físico. Ele descreve cada entidade do sistema, suas restrições e as relações entre elas, conforme definido no processo de modelagem conceitual. A representação gráfica deste modelo pode ser visualizada no artefato de Diagrama Entidade-Relacionamento (DER), que serve como base para a implementação deste dicionário de dados.
 ## Tabelas e Relações
 
-### Tabela: **Npc_Ferreiro**
-| Atributo                      | Tipo     | Restrições                                                                  |
-|--------------------------------|----------|-----------------------------------------------------------------------------|
-| `id_npc_ferreiro`              | INTEGER  | PRIMARY KEY                                                                 |
-| `id_sala`                      | INTEGER  | FOREIGN KEY (`id_sala`) REFERENCES `Sala(id_sala)`                         |
-| `id_missao_desbloqueia`        | INTEGER  | FOREIGN KEY (`id_missao_desbloqueia`) REFERENCES `Missao(id_missao)`       |
-| `nome`                         | VARCHAR  | NOT NULL                                                                     |
-| `descricao`                    | VARCHAR  |                                                                             |
-| `dialogo_inicial`              | VARCHAR  |                                                                             |
-| `dialogo_reparar`              | VARCHAR  |                                                                             |
-| `dialogo_upgrade`              | VARCHAR  |                                                                             |
+<details>
+<summary> Tabela: Armadura</summary>
 
----
+<br>
+
+|                 |                                                                                                                                                                                                 |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Descrição**   | A tabela `public.armadura` é usada para armazenar informações sobre as armaduras disponíveis no jogo. Ela inclui atributos como parte do corpo, defesa, ataque, durabilidade, e preço de venda. |
+| **Observações** | A tabela utiliza chaves estrangeiras para referenciar outras tabelas (`tipo_item` e `parte_corpo`). E `enum_parte_corpo` pode assumir os valores [c, t, b, p].                                  |
+
+| Nome                | Definição Lógica                                        | Tipo e Formato de Dado    | Tamanho |           Restrições de Domínio           |
+| :------------------ | :------------------------------------------------------ | :------------------------ | :-----: | :---------------------------------------: |
+| `id_armadura`       | Identificador único da armadura                         | INTEGER                   |    -    | PRIMARY KEY, FOREIGN KEY para `tipo_item` |
+| `id_parte_corpo`    | Parte do corpo onde a armadura é equipada               | ENUM (`enum_parte_corpo`) |    -    | NOT NULL, FOREIGN KEY para `parte_corpo`  |
+| `nome`              | Nome da armadura                                        | VARCHAR                   |    -    |                 NOT NULL                  |
+| `descricao`         | Descrição da armadura                                   | VARCHAR                   |    -    |                   NULL                    |
+| `raridade_armadura` | Raridade da armadura                                    | VARCHAR                   |    -    |                 NOT NULL                  |
+| `defesa_magica`     | Quantidade de defesa mágica proporcionada pela armadura | INTEGER                   |    -    |                   NULL                    |
+| `defesa_fisica`     | Quantidade de defesa física proporcionada pela armadura | INTEGER                   |    -    |                   NULL                    |
+| `ataque_magico`     | Quantidade de ataque mágico proporcionada pela armadura | INTEGER                   |    -    |                   NULL                    |
+| `ataque_fisico`     | Quantidade de ataque físico proporcionada pela armadura | INTEGER                   |    -    |                   NULL                    |
+| `durabilidade_max`  | Durabilidade máxima da armadura                         | INTEGER                   |    -    |                   NULL                    |
+
+</details>
+
 
 ### Tabela: **Npc_Quest**
 | Atributo                      | Tipo     | Restrições                                                                  |

@@ -15,21 +15,14 @@ A figura 1 a seguir mostra a primeira versão do Diagrama Entidade Relacionament
 
 <center>
 
-
 <details>
-
-<summary> Figura 1 - Primeira versão do DER </summary>
-
-<iframe 
-    frameborder="0" 
-    width="100%" 
-    height="600px" 
-    src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1IY94sIUTh1pMHKPSnjLbu7Q5a9m6m4tW%26export%3Ddownload">
-</iframe>
-
-<p><em><strong>Fonte:</strong> <a href="https://github.com/lucasdray" target="_blank">Pedro Lucas</a></em></p>
-
+  <summary> Figura 1 - Primeira versão do DER </summary>
+  <p align="center">
+    <img src="../assets/der/DER 1.0.png" width="600">
+  </p>
+  <p><em><strong>Fonte:</strong> <a href="https://github.com/lucasdray" target="_blank">Pedro Lucas</a></em></p>
 </details>
+
 
 
 
@@ -37,14 +30,7 @@ A figura 1 a seguir mostra a primeira versão do Diagrama Entidade Relacionament
 
 <summary> Figura 2 - DER Versão 1.1 </summary>
 
-
-
-<iframe 
-    frameborder="0" 
-    width="100%" 
-    height="600px" 
-    src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=DER%20V1.1#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1gXPT85k_hdsABKSYvHnIu5JwqM4PP0p4%26export%3Ddownload">
-</iframe>
+![DER 1.1](../assets/der/DER%201.1.png)
 
 <p><em><strong>Fonte:</strong> <a href="https://github.com/lucasdray" target="_blank">Pedro Lucas</a></em></p>
 
@@ -53,13 +39,7 @@ A figura 1 a seguir mostra a primeira versão do Diagrama Entidade Relacionament
 <details>
 <summary> Figura 3 - DER Versão 2.0</summary>
 
-<iframe 
-    frameborder="0" 
-    width="100%" 
-    height="600px"
-    src=https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=DER%203.0.drawio.png#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1i-UcAkrAAEAonNrE5XELAjEiaz4LaEBl%26export%3Ddownload>
-    
-</iframe>
+![DER 2.0](../assets/der/DER%202.0.png)
 
 <p><em><strong>Fonte:</strong> <a href="https://github.com/lucasdray" target="_blank">Pedro Lucas</a></em></p>
 
@@ -68,12 +48,9 @@ A figura 1 a seguir mostra a primeira versão do Diagrama Entidade Relacionament
 
 **Figura 4 - DER Versão 3.0**
 
-<iframe 
-    frameborder="0" 
-    width="100%" 
-    height="600px"
-    src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=DER%203.0.drawio.png#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1i-UcAkrAAEAonNrE5XELAjEiaz4LaEBl%26export%3Ddownload">
-</iframe>
+![DER 3.0](../assets/der/3.0.png)
+
+
 
 _** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
 
