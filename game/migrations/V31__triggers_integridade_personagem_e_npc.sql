@@ -1,27 +1,61 @@
--- Criar a função para inserir em Tipo_Personagem antes de inserir em Player
 CREATE OR REPLACE FUNCTION inserir_tipo_personagem()
 RETURNS TRIGGER AS $$
 DECLARE
     v_id_personagem INTEGER;
 BEGIN
-    -- Inserir em Tipo_Personagem e capturar o id_personagem gerado
-    INSERT INTO Tipo_Personagem (tipo_personagem)
-    VALUES ('p') -- Aqui pode ser alterado para dinamizar conforme o tipo
-    RETURNING id_personagem INTO v_id_personagem;
+    IF TG_TABLE_NAME = 'player' THEN
+        INSERT INTO Tipo_Personagem (tipo_personagem)
+        VALUES ('p')
+        RETURNING id_personagem INTO v_id_personagem;
+        NEW.id_player := v_id_personagem;
 
-    -- Atribuir o ID gerado ao campo id_player de Player
-    NEW.id_player := v_id_personagem;
+    ELSIF TG_TABLE_NAME = 'cavaleiro' THEN
+        INSERT INTO Tipo_Personagem (tipo_personagem)
+        VALUES ('c')
+        RETURNING id_personagem INTO v_id_personagem;
+        NEW.id_cavaleiro := v_id_personagem;
 
-    -- Retornar a nova linha para completar a inserção em Player
+    ELSIF TG_TABLE_NAME = 'inimigo' THEN
+        INSERT INTO Tipo_Personagem (tipo_personagem)
+        VALUES ('i')
+        RETURNING id_personagem INTO v_id_personagem;
+        NEW.id_inimigo := v_id_personagem;
+
+    ELSIF TG_TABLE_NAME = 'boss' THEN
+        INSERT INTO Tipo_Personagem (tipo_personagem)
+        VALUES ('b')
+        RETURNING id_personagem INTO v_id_personagem;
+        NEW.id_boss:= v_id_personagem;
+    ELSE
+        RAISE EXCEPTION 'Tabela desconhecida para a trigger inserir_tipo_personagem';
+    END IF;
+
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- Criar a trigger associada
-CREATE TRIGGER trigger_inserir_tipo_personagem
+
+CREATE TRIGGER trigger_inserir_tipo_personagem_personagem
 BEFORE INSERT ON Player
 FOR EACH ROW
 EXECUTE FUNCTION inserir_tipo_personagem();
+
+CREATE TRIGGER trigger_inserir_tipo_personagem_cavaleiro
+BEFORE INSERT ON Cavaleiro
+FOR EACH ROW
+EXECUTE FUNCTION inserir_tipo_personagem();
+
+CREATE TRIGGER trigger_inserir_tipo_personagem_inimigo
+BEFORE INSERT ON Inimigo
+FOR EACH ROW
+EXECUTE FUNCTION inserir_tipo_personagem();
+
+CREATE TRIGGER trigger_inserir_tipo_personagem_boss
+BEFORE INSERT ON Boss
+FOR EACH ROW
+EXECUTE FUNCTION inserir_tipo_personagem();
+
 
 
 -- Criar a função para inserir em Tipo_NPC antes de inserir em Ferreiro, Mercador ou Quest

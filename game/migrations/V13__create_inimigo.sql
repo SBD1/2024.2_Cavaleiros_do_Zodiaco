@@ -16,7 +16,7 @@ CREATE TABLE Inimigo (
  
 ALTER TABLE Inimigo ADD CONSTRAINT FK_Inimigo_1
     FOREIGN KEY (id_inimigo)
-    REFERENCES Tipo_Personagem (id_inimigo);
+    REFERENCES Tipo_Personagem (id_personagem);
  
 ALTER TABLE Inimigo ADD CONSTRAINT FK_Inimigo_2
     FOREIGN KEY (id_elemento)

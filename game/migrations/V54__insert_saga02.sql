@@ -13,7 +13,7 @@ VALUES (2, 'Entrada Campo de Treinamento', 5, NULL, NULL, NULL);
 INSERT INTO Grupo_inimigo(id_sala)
 VALUES(4);
 
-SELECT public.criar_instancia_inimigo(1,1);
+SELECT public.criar_instancia_inimigo(3,1);
 
 INSERT INTO Sala (id_casa, nome, id_sala_norte, id_sala_sul, id_sala_leste, id_sala_oeste) -- id 5
 VALUES (2, 'Campo de Treinamento', 6, 4, 7, 8);
@@ -21,8 +21,8 @@ VALUES (2, 'Campo de Treinamento', 6, 4, 7, 8);
 INSERT INTO Grupo_inimigo(id_sala)
 VALUES(5);
 
-SELECT public.criar_instancia_inimigo(1,2);
-SELECT public.criar_instancia_inimigo(3,2);
+SELECT public.criar_instancia_inimigo(4,2);
+SELECT public.criar_instancia_inimigo(5,2);
 
 INSERT INTO Sala  (id_casa, nome, id_sala_norte, id_sala_sul, id_sala_leste, id_sala_oeste) -- id 6
 VALUES ( currval('casa_id_casa_seq'::regclass), 'Floresta da Perseverança', 12, 5, NULL, NULL);
