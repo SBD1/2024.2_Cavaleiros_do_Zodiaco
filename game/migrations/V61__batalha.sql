@@ -215,3 +215,126 @@
 -- END;
 -- $$ LANGUAGE plpgsql;
 
+create or replace view info_batalha as		 
+select 
+	c.nome,
+	c.id_elemento,
+	c.nivel,
+	c.hp_max ,
+	ic.hp_atual,
+	c.magia_max ,
+	ic.magia_atual,
+	ic.velocidade,
+	ic.ataque_fisico ,
+	ic.ataque_magico ,
+	pcc.defesa_magica ,
+	pcc.defesa_fisica ,
+	pcc.parte_corpo ,
+	p.id_player, -- 
+	'c' as tipo_personagem,
+	ic.id_cavaleiro as id
+	from 
+	party p
+inner join instancia_cavaleiro ic on
+	ic.id_player = p.id_player
+inner join cavaleiro c on
+	c.id_cavaleiro = ic.id_cavaleiro
+inner join parte_corpo_cavaleiro pcc 
+on
+	pcc.id_cavaleiro = ic.id_cavaleiro
+union all
+select
+	   inim.nome,
+	   inim.id_elemento,
+	   inim.nivel ,
+	   inim.hp_max,
+	   ii.hp_atual ,
+	   inim.magia_max,
+	   ii.magia_atual,
+	   ii.velocidade,
+	   ii.ataque_fisico,
+	   ii.ataque_magico,
+	   ii.defesa_magica ,
+	   ii.defesa_fisica ,
+	   pci.parte_corpo ,
+	   p.id_player, -- id_player que ta batalhando
+	   'i' as tipo_personagem,
+	   ii.id_instancia as id
+from
+	grupo_inimigo gi
+inner join instancia_inimigo ii 
+		 on
+	ii.id_grupo = gi.id_grupo
+inner join inimigo inim
+		 on
+	ii.id_inimigo = inim.id_inimigo
+inner join party p 
+		 on
+	p.id_sala = gi.id_sala
+inner join parte_corpo_inimigo pci 
+		 on
+	pci.id_inimigo = ii.id_inimigo
+	and pci.id_instancia = ii.id_instancia
+union all
+select
+	p.nome,
+	p.id_elemento,
+	p.nivel,
+	p.hp_max,
+	p.hp_atual,
+	p.magia_max,
+	p.magia_atual,
+	p.velocidade,
+	p.ataque_fisico + aev.ataque_fisico as ataque_fisico_armadura,
+	p.ataque_magico + aev.ataque_magico as ataque_magico_armadura,
+	pcp.defesa_magica + aev.defesa_magica as defesa_magica,
+	aev.defesa_fisica + pcp.defesa_fisica as defesa_fisica,
+	aev.durabilidade_atual,
+	pcp.parte_corpo,
+	p.id_player, 
+	'p' as tipo_personagem,
+	p.id_player as id -- repeti essa coluna pois preciso que union traga colunas iguais
+from
+	player p
+inner join armadura_equipada ae 
+on
+	ae.id_player = p.id_player
+inner join armadura_equipada_view aev
+on
+	aev.id_inventario = p.id_player
+inner join parte_corpo_player pcp 
+on
+	pcp.id_player = p.id_player
+	and pcp.parte_corpo = aev.id_parte_corpo_armadura;
+
+CREATE OR REPLACE VIEW fila AS
+WITH min_speed AS (
+  SELECT MIN(velocidade) AS min_vel FROM info_batalha
+),
+ataques AS (
+  SELECT 
+    i.id,
+    i.tipo_personagem,
+    i.velocidade,
+    (i.velocidade / m.min_vel)::int AS num_attacks
+  FROM info_batalha i
+  CROSS JOIN min_speed m
+),
+rounds AS (
+  SELECT 
+    a.id,
+    a.tipo_personagem,
+    a.velocidade,
+    gs AS round_num
+  FROM ataques a
+  CROSS JOIN LATERAL generate_series(1, a.num_attacks) AS gs(round_num)
+)
+SELECT id, tipo_personagem
+FROM rounds
+ORDER BY round_num, velocidade DESC;
+
+-- como 
+-- como usar a view fila, voce filtro pelo id_player como where id_player = 'id do player que tá batalhando"
+
+
+-- select * from info_batalha where player_id = 1
