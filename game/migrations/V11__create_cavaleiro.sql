@@ -13,7 +13,9 @@ CREATE TABLE Cavaleiro (
  
 
 
-
+ALTER TABLE Cavaleiro ADD CONSTRAINT FK_Cavaleiro_1
+    FOREIGN KEY (id_cavaleiro)
+    REFERENCES Tipo_Personagem (id_personagem);
 
 ALTER TABLE Cavaleiro ADD CONSTRAINT FK_Cavaleiro_2
     FOREIGN KEY (id_classe)

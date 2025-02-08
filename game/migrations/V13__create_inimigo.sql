@@ -14,6 +14,10 @@ CREATE TABLE Inimigo (
     fala_inicio VARCHAR
 );
  
+ALTER TABLE Inimigo ADD CONSTRAINT FK_Inimigo_1
+    FOREIGN KEY (id_inimigo)
+    REFERENCES Tipo_Personagem (id_inimigo);
+ 
 ALTER TABLE Inimigo ADD CONSTRAINT FK_Inimigo_2
     FOREIGN KEY (id_elemento)
     REFERENCES Elemento (id_elemento);

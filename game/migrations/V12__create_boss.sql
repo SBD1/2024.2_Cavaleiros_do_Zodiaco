@@ -21,6 +21,10 @@ CREATE TABLE Boss (
     fala_condicao VARCHAR
 );
  
+ALTER TABLE Boss ADD CONSTRAINT FK_Boss_1
+    FOREIGN KEY (id_boss)
+    REFERENCES Tipo_Personagem (id_personagem);
+
 ALTER TABLE Boss ADD CONSTRAINT FK_Boss_2
     FOREIGN KEY (id_sala)
     REFERENCES Sala (id_sala);
