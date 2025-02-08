@@ -1,1 +1,5 @@
 CREATE USER aplicacao WITH PASSWORD 'sbd1_2024.2@cdz';
+
+
+GRANT USAGE ON SCHEMA public TO aplicacao;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO aplicacao;
