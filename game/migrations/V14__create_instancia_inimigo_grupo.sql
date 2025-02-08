@@ -12,6 +12,9 @@ CREATE TABLE Instancia_Inimigo (
     magia_atual INTEGER NOT NULL,
     defesa_fisica INTEGER,
     defesa_magica INTEGER,
+    velocidade INTEGER,
+    ataque_fisico INTEGER,
+    ataque_magico INTEGER,
     PRIMARY KEY (id_inimigo, id_instancia)
 );
  
