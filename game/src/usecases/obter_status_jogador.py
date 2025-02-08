@@ -30,7 +30,7 @@ def obter_status_jogador(player_id):
                 table.add_row("❤️ HP Máximo", f"{hp_max}")
                 table.add_row("🔮 Magia Máxima", f"{magia_max}")
                 table.add_row("💖 HP Atual", f"{hp_atual}")
-                table.add_row("🌀 Magia Atual", f"{magia_atual}")
+                table.add_row("🌀 Cosmo", f"{magia_atual}")
                 table.add_row("⚡ Velocidade", f"{velocidade}")
                 table.add_row("💥 Ataque Físico ", f"{ataque_fisico}")
                 table.add_row("🔥 Ataque Mágico ", f"{ataque_magico}")
