@@ -23,7 +23,7 @@ def listar_jogadores():
                 table.add_column("Nível", justify="center", style="bold yellow", width=7)
                 table.add_column("Elemento", justify="center", style="bold magenta", width=10)
                 table.add_column("HP", justify="left", style="dim", max_width=40, overflow="fold")
-                table.add_column("Magia", justify="center", style="bold red", width=12)
+                table.add_column("Cosmo", justify="center", style="bold red", width=12)
                 table.add_column("Dinheiro", justify="center", style="bold red", width=12)
                 table.add_column("Ataque Fisico", justify="center", style="bold green", width=12)
                 table.add_column("Ataque Mágico", justify="center", style="bold green", width=12)

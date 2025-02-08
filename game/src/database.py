@@ -15,8 +15,8 @@ def obter_conexao():
     try:
         conn = psycopg2.connect(
             dbname=os.getenv("POSTGRES_DB"),
-            user=os.getenv("POSTGRES_USER"),
-            password=os.getenv("POSTGRES_PASSWORD"),
+            user=os.getenv("POSTGRES_USER_APLICACAO"),
+            password=os.getenv("POSTGRES_PASSWORD_APLICACAO"),
             host=os.getenv("DATABASE_HOST"),
             port=os.getenv("POSTGRES_PORT"),
         )
