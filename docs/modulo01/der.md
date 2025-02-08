@@ -30,7 +30,10 @@ A figura 1 a seguir mostra a primeira versão do Diagrama Entidade Relacionament
 
 <summary> Figura 2 - DER Versão 1.1 </summary>
 
-![DER 1.1](../assets/der/DER%201.1.png)
+<p align="center">
+    <img src="../assets/der/DER 1.1.png" width="600">
+</p>
+
 
 <p><em><strong>Fonte:</strong> <a href="https://github.com/lucasdray" target="_blank">Pedro Lucas</a></em></p>
 
@@ -39,7 +42,9 @@ A figura 1 a seguir mostra a primeira versão do Diagrama Entidade Relacionament
 <details>
 <summary> Figura 3 - DER Versão 2.0</summary>
 
-![DER 2.0](../assets/der/DER%202.0.png)
+<p align="center">
+    <img src="../assets/der/DER 2.0.png" width="600">
+</p>
 
 <p><em><strong>Fonte:</strong> <a href="https://github.com/lucasdray" target="_blank">Pedro Lucas</a></em></p>
 

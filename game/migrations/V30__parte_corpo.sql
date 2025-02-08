@@ -30,7 +30,7 @@ BEGIN
         parte_corpo,  
         id_player, 
         defesa_fisica, 
-        defesa_magico_bonus, 
+        defesa_magica, 
         chance_acerto, 
         chance_acerto_critico
     )
@@ -61,13 +61,21 @@ BEGIN
         id_player, 
         parte_corpo, 
         armadura_equipada, 
-        instancia_armadura_equipada
+        instancia_armadura_equipada,
+        defesa_fisica, 
+        defesa_magica, 
+        chance_acerto, 
+        chance_acerto_critico
     )
     SELECT 
         NEW.id_player,   
         pc.id_parte_corpo, 
         NULL,             
-        NULL              
+        NULL,
+        pc.defesa_fisica,          
+        pc.defesa_magica,         
+        pc.chance_acerto,          
+        pc.chance_acerto_critico 
     FROM public.parte_corpo pc;
 
     RETURN NEW;
@@ -125,27 +133,3 @@ AFTER INSERT ON public.instancia_inimigo
 FOR EACH ROW
 EXECUTE FUNCTION gerar_partes_corpo_inimigo();
 
-
-INSERT INTO public.parte_corpo_inimigo (
-    id_instancia, 
-    id_inimigo,
-    parte_corpo, 
-    defesa_fisica, 
-    defesa_magica, 
-    chance_acerto, 
-    chance_acerto_critico
-)
-SELECT 
-    ii.id_instancia,       -- ID da instância do inimigo
-    ii.id_inimigo,         -- ID do tipo de inimigo
-    pc.id_parte_corpo,     -- Partes do corpo baseadas na tabela parte_corpo
-    pc.defesa_fisica,      -- Atributos originais da parte do corpo
-    pc.defesa_magica,     
-    pc.chance_acerto,      
-    pc.chance_acerto_critico  
-FROM public.instancia_inimigo ii
-CROSS JOIN public.parte_corpo pc
-WHERE NOT EXISTS (
-    SELECT 1 FROM public.parte_corpo_inimigo pi 
-    WHERE pi.id_instancia = ii.id_instancia AND pi.parte_corpo = pc.id_parte_corpo
-);
