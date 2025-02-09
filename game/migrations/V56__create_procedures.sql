@@ -323,75 +323,120 @@ BEGIN
     RAISE NOTICE 'Item vendido com sucesso!';
 END $$;
 
-CREATE OR REPLACE PROCEDURE comprar_armadura(
-    p_id_player INTEGER,
-    p_id_item INTEGER
+CREATE OR REPLACE PROCEDURE fabricar_armadura(
+    IN p_id_player INT,
+    IN p_id_item_gerado INT
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    v_preco_compra INTEGER;
-    v_nivel_minimo INTEGER;
-    v_jogador_nivel INTEGER;
-    v_dinheiro_disponivel INTEGER;
-    v_raridade TEXT; -- Declarado como TEXT
-    v_defesa_magica INTEGER;
-    v_defesa_fisica INTEGER;
-    v_ataque_magico INTEGER;
-    v_ataque_fisico INTEGER;
-    v_durabilidade_max INTEGER;
+    material RECORD; 
+    insuficiente BOOLEAN := FALSE;
+    alma_necessaria INT;
+    alma_disponivel INT;
+    raridade_armadura TEXT;
+    defesa_magica INT;
+    defesa_fisica INT;
+    ataque_magico INT;
+    ataque_fisico INT;
+    durabilidade_max INT;
+    id_parte_corpo enum_parte_corpo;
 BEGIN
-    -- Buscar informações da armadura à venda
-    SELECT iv.preco_compra, iv.nivel_minimo, a.raridade_armadura::TEXT, -- Conversão explícita para TEXT
-           a.defesa_magica, a.defesa_fisica, a.ataque_magico, a.ataque_fisico, a.durabilidade_max
-    INTO v_preco_compra, v_nivel_minimo, v_raridade, 
-         v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max
-    FROM item_a_venda iv
-    JOIN tipo_item ti ON ti.id_item = iv.id_item
-    JOIN armadura a ON a.id_armadura = ti.id_item
-    WHERE iv.id_item = p_id_item;
+    -- Obter a quantidade de Alma de Armadura necessária e os atributos da armadura
+    SELECT 
+        r.alma_armadura, 
+        ar.raridade_armadura, 
+        ar.defesa_magica, 
+        ar.defesa_fisica, 
+        ar.ataque_magico, 
+        ar.ataque_fisico, 
+        ar.durabilidade_max, 
+        ar.id_parte_corpo
+    INTO 
+        alma_necessaria, 
+        raridade_armadura, 
+        defesa_magica, 
+        defesa_fisica, 
+        ataque_magico, 
+        ataque_fisico, 
+        durabilidade_max, 
+        id_parte_corpo
+    FROM receitas_armadura_view r
+    JOIN armadura ar ON r.id_item_gerado = ar.id_armadura
+    WHERE r.id_item_gerado = p_id_item_gerado;
 
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Armadura não encontrada para compra.';
-    END IF;
-
-    -- Verificar o nível do jogador
-    SELECT nivel, i.dinheiro
-    INTO v_jogador_nivel, v_dinheiro_disponivel
-    FROM player p 
-    JOIN inventario i 
-    ON p.id_player = i.id_player
-    WHERE p.id_player = p_id_player;
-
-    IF v_jogador_nivel < v_nivel_minimo THEN
-        RAISE EXCEPTION 'Você precisa ser nível % para comprar esta armadura.', v_nivel_minimo;
-    END IF;
-
-    -- Verificar se o jogador tem dinheiro suficiente
-    IF v_dinheiro_disponivel < v_preco_compra THEN
-        RAISE EXCEPTION 'Dinheiro insuficiente para comprar esta armadura.';
-    END IF;
-
-    -- Subtrair o valor da compra do dinheiro do jogador
-    UPDATE inventario
-    SET dinheiro = dinheiro - v_preco_compra
+    -- Verificar se há Alma de Armadura suficiente no inventário
+    SELECT alma_armadura
+    INTO alma_disponivel
+    FROM inventario
     WHERE id_player = p_id_player;
 
-    -- Gerar a instância da armadura
-    INSERT INTO armadura_instancia (
-        id_armadura, id_parte_corpo_armadura, id_inventario, raridade_armadura,
-        defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_atual
-    )
-    SELECT 
-        a.id_armadura, a.id_parte_corpo, p_id_player, v_raridade,
-        v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max
-    FROM armadura a
-    WHERE a.id_armadura = p_id_item;
+    IF alma_disponivel < alma_necessaria THEN
+        RAISE EXCEPTION 'Você não tem Alma de Armadura suficiente para fabricar esta armadura.';
+    END IF;
 
-    -- Mensagem de sucesso
-    RAISE NOTICE 'Armadura comprada e adicionada ao inventário com sucesso!';
+    -- Verificar se o jogador possui os materiais necessários
+    FOR material IN 
+        SELECT mr.id_material, mr.quantidade
+        FROM material_receita mr
+        WHERE mr.id_receita = p_id_item_gerado
+    LOOP
+        IF (SELECT quantidade 
+            FROM item_armazenado 
+            WHERE id_inventario = p_id_player 
+              AND id_item = material.id_material) < material.quantidade THEN
+            insuficiente := TRUE;
+        END IF;
+    END LOOP;
+
+    IF insuficiente THEN
+        RAISE EXCEPTION 'Você não tem materiais suficientes para fabricar esta armadura.';
+    END IF;
+
+    -- Consumir a Alma de Armadura
+    UPDATE inventario
+    SET alma_armadura = alma_armadura - alma_necessaria
+    WHERE id_player = p_id_player;
+
+    -- Consumir os materiais necessários
+    UPDATE item_armazenado ia
+    SET quantidade = ia.quantidade - mr.quantidade
+    FROM material_receita mr
+    WHERE ia.id_inventario = p_id_player
+      AND ia.id_item = mr.id_material
+      AND mr.id_receita = p_id_item_gerado;
+
+    -- Criar a instância da armadura
+    INSERT INTO armadura_instancia (
+        id_armadura, 
+        id_parte_corpo_armadura, 
+        id_inventario, 
+        raridade_armadura, 
+        defesa_magica, 
+        defesa_fisica, 
+        ataque_magico, 
+        ataque_fisico, 
+        durabilidade_atual
+    )
+    VALUES (
+        p_id_item_gerado,         -- ID da armadura gerada
+        id_parte_corpo,           -- Parte do corpo da armadura
+        p_id_player,              -- ID do inventário do jogador (correspondente ao ID do jogador)
+        raridade_armadura,        -- Raridade da armadura
+        defesa_magica,            -- Defesa mágica
+        defesa_fisica,            -- Defesa física
+        ataque_magico,            -- Ataque mágico
+        ataque_fisico,            -- Ataque físico
+        durabilidade_max          -- Durabilidade máxima
+    );
+
+    RAISE NOTICE 'Armadura fabricada com sucesso e adicionada ao inventário!';
 END;
 $$;
+
+
+
+
 
 CREATE OR REPLACE PROCEDURE equipar_armadura(
     p_id_player INTEGER,

@@ -93,10 +93,13 @@ def listar_equipamentos(console, jogador_id):
 
             if tabela_inventario.row_count > 0:
                 console.print(tabela_inventario)
+                return True
             else:
                 console.print(Panel.fit("🎒 [bold yellow]Nenhuma armadura no inventário![/bold yellow]", border_style="yellow"))
+                return False
 
-            return True
+                
+            
         
     except Exception as e:
         console.print(Panel.fit(f"⛔ [bold red]Erro ao listar ou equipar armaduras: {e}[/bold red]", border_style="red"))

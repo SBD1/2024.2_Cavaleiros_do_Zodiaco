@@ -142,8 +142,8 @@ JOIN instancia_cavaleiro ic ON ic.id_party = pt.id_player
 JOIN cavaleiro c ON c.id_cavaleiro = ic.id_cavaleiro
 JOIN elemento e ON e.id_elemento = c.id_elemento;
 
--- VIEW armadura_venda_view
-CREATE OR REPLACE VIEW armadura_venda_view AS
+-- VIEW armadura_fabricada_view
+CREATE OR REPLACE VIEW armadura_fabricada_view AS
 SELECT 
     a.id_armadura,
     a.nome,
@@ -399,3 +399,43 @@ FROM instancia_cavaleiro ic
 INNER JOIN cavaleiro c ON ic.id_cavaleiro = c.id_cavaleiro
 INNER JOIN elemento e ON c.id_elemento = e.id_elemento;
 
+CREATE VIEW receitas_materiais_view AS
+    SELECT r.id_item_gerado, m.nome AS item_gerado, STRING_AGG(mat.nome || ' (' || mr.quantidade || ')', ', ') AS materiais, r.nivel_minimo AS nivel_minimo
+    FROM receita r
+    JOIN material m ON r.id_item_gerado = m.id_material
+    JOIN material_receita mr ON r.id_item_gerado = mr.id_receita
+    JOIN material mat ON mr.id_material = mat.id_material
+    GROUP BY r.id_item_gerado, m.nome;
+
+CREATE OR REPLACE VIEW receitas_armadura_view AS
+    SELECT 
+        r.id_item_gerado, 
+        ar.nome AS item_gerado, 
+        COALESCE(
+            STRING_AGG(mat.nome || ' (' || mr.quantidade || ')', ', '), 
+            '-'  -- Substitui valores nulos por "-"
+        ) AS materiais, 
+        r.nivel_minimo, 
+        r.alma_armadura, 
+        pc.nome AS parte_corpo,
+        ar.raridade_armadura,
+        ar.defesa_magica,
+        ar.defesa_fisica,
+        ar.ataque_magico,
+        ar.ataque_fisico
+    FROM receita r
+    JOIN armadura ar ON ar.id_armadura = r.id_item_gerado
+    LEFT JOIN material_receita mr ON r.id_item_gerado = mr.id_receita
+    LEFT JOIN material mat ON mat.id_material = mr.id_material
+    JOIN parte_corpo pc ON ar.id_parte_corpo = pc.id_parte_corpo
+    GROUP BY 
+        r.id_item_gerado, 
+        ar.nome, 
+        r.nivel_minimo, 
+        r.alma_armadura, 
+        pc.nome,
+        ar.raridade_armadura,
+        ar.defesa_magica,
+        ar.defesa_fisica,
+        ar.ataque_magico,
+        ar.ataque_fisico;

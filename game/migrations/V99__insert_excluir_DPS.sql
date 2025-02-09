@@ -37,6 +37,10 @@ VALUES
 ('Pedaço de Bronze', 10, 'Um pedaço de bronze refinado, formado por 10 pepitas de bronze.'),
 ('Bloco de Bronze', 50, 'Um bloco sólido de bronze, formado por 5 pedaços de bronze.');
 
+INSERT INTO item_a_venda
+(id_item, preco_compra, nivel_minimo)
+VALUES (currval('tipo_item_id_item_seq'), 2, 5), (currval('tipo_item_id_item_seq')-1, 2, 1), (currval('tipo_item_id_item_seq')-2, 2, 1);
+
 
 -- ⚪ Materiais de PRATA
 INSERT INTO public.material (nome, preco_venda, descricao)
@@ -53,14 +57,14 @@ VALUES
 ('Bloco de Ouro', 250, 'Um bloco sólido de ouro, formado por 5 pedaços de ouro.');
 
 -- Receitas para criar Pedaços e Blocos
-INSERT INTO Receita (id_item_gerado, descricao)
+INSERT INTO Receita (id_item_gerado, descricao, nivel_minimo)
 VALUES 
-(currval('tipo_item_id_item_seq') - 7, 'Criar Pedaço de Bronze com Pepitas'),
-(currval('tipo_item_id_item_seq') - 6, 'Criar Bloco de Bronze com Pedaços'),
-(currval('tipo_item_id_item_seq') - 4, 'Criar Pedaço de Prata com Pepitas'),
-(currval('tipo_item_id_item_seq') - 3, 'Criar Bloco de Prata com Pedaços'),
-(currval('tipo_item_id_item_seq') - 1, 'Criar Pedaço de Ouro com Pepitas'),
-(currval('tipo_item_id_item_seq') , 'Criar Bloco de Ouro com Pedaços');
+(currval('tipo_item_id_item_seq') - 7, 'Criar Pedaço de Bronze com Pepitas', 1),
+(currval('tipo_item_id_item_seq') - 6, 'Criar Bloco de Bronze com Pedaços', 15),
+(currval('tipo_item_id_item_seq') - 4, 'Criar Pedaço de Prata com Pepitas', 20),
+(currval('tipo_item_id_item_seq') - 3, 'Criar Bloco de Prata com Pedaços', 25),
+(currval('tipo_item_id_item_seq') - 1, 'Criar Pedaço de Ouro com Pepitas',30),
+(currval('tipo_item_id_item_seq') , 'Criar Bloco de Ouro com Pedaços', 35);
 
 
 INSERT INTO Material_Receita (id_receita, id_material, quantidade)
@@ -123,9 +127,9 @@ VALUES
 'Protege a cabeça do cavaleiro com sua resistência mágica e física, refletindo a energia indomável do cosmos.', 
 'Bronze', 50, 70, 10, 15, 100);
 
-INSERT INTO public.item_a_venda
-(id_item, preco_compra, nivel_minimo)
-VALUES(currval('tipo_item_id_item_seq'), 2, 1);
+INSERT INTO Receita
+(id_item_gerado, descricao, nivel_minimo, alma_armadura)
+VALUES(currval('tipo_item_id_item_seq'), 'Gerar cabeça de armadura foda', 1,100);
 
 -- Tronco
 INSERT INTO public.armadura

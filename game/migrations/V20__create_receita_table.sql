@@ -2,7 +2,9 @@
 
 CREATE TABLE Receita (
     id_item_gerado INTEGER PRIMARY KEY,
-    descricao VARCHAR
+    descricao VARCHAR,
+    nivel_minimo INTEGER,
+    alma_armadura INTEGER
 );
  
 ALTER TABLE Receita ADD CONSTRAINT FK_Receita_2

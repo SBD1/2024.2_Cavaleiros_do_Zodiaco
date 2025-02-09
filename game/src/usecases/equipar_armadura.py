@@ -40,7 +40,7 @@ def equipar_armadura(console, jogador_id):
                         break
                 else:
                     console.print("[bold cyan]Você não possui armaduras disponíveis para equipar.[/bold cyan]")
-                    console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+                    break
         except Exception as e:
             console.print(Panel.fit(f"⛔ [bold red]Erro ao equipar armadura: {e}[/bold red]", border_style="red"))
             cursor.connection.rollback()

@@ -11,7 +11,7 @@ from .modificar_grupo import modificar_grupo
 from .ver_missoes import ver_missoes
 from .verificar_npc_na_sala import verificar_npc_na_sala
 from .interagir_quest import interagir_quest
-from .listar_todas_receitas import listar_todas_receitas
+from .listar_todas_receitas_materiais import listar_todas_receitas_materiais
 from .gerar_item import gerar_item
 from .verificar_desbloqueio_ferreiro import verificar_desbloqueio_ferreiro
 from .listar_equipamentos import listar_equipamentos
@@ -29,7 +29,7 @@ def obter_acoes_disponiveis(jogador_id):
         ("[bold purple]🗺️ Ver Mapa[/bold purple]", ver_mapa),
         ("[bold orange]🪖 Ver Equipamento[/bold orange]", equipar_armadura),
         ("[bold cyan]🎒 Ver Inventário[/bold cyan]", ver_inventario),
-        ("[light_pink4]📜 Ver Receitas [/light_pink4]", listar_todas_receitas),
+        ("[light_pink4]📜 Ver Receitas [/light_pink4]", listar_todas_receitas_materiais),
         ("[bold green]⚒️ Craftar Item[/bold green]", gerar_item),
         ("[bold blue]⚔️ Ver Grupo[/bold blue]", modificar_grupo),
         ("[light_pink4]📜 Ver Missões[/light_pink4]", ver_missoes),
