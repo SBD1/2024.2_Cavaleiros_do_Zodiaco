@@ -3,13 +3,14 @@ from rich.panel import Panel
 from rich.table import Table
 from src.util import limpar_terminal
 from ..database import obter_cursor
-
+from .tocar_musica import tocar_musica
 
 # Função para interagir com o NPC Mercador
 # Função para interagir com o NPC Mercador
 def interagir_mercador(console, selected_player_id):
     with obter_cursor() as cursor:
         try:
+            tocar_musica("mercador.mp3", 0.5)
             # Buscar informações do NPC Mercador
             cursor.execute("SELECT nome, dialogo_inicial, dialogo_comprar, dialogo_vender, dialogo_sair FROM mercador LIMIT 1")
             npc = cursor.fetchone()

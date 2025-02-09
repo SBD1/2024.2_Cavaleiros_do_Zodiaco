@@ -5,7 +5,7 @@ from rich.table import Table
 from .listar_todas_receitas_armaduras import listar_todas_receitas_armaduras
 from .fabricar_armadura import fabricar_armadura
 from .listar_equipamentos import listar_equipamentos
-
+from .tocar_musica import tocar_musica
 from ..util import limpar_terminal
 from ..database import obter_cursor
 
@@ -17,6 +17,7 @@ def interagir_ferreiro(console, jogador_id):
 
     try:
         with obter_cursor() as cursor:
+            tocar_musica("ferreiro.mp3", 0.1)
             # Buscar informações do NPC Ferreiro
             cursor.execute("""
                 SELECT nome, descricao, dialogo_inicial, dialogo_reparar, dialogo_upgrade, dialogo_desmanchar, dialogo_sair 

@@ -2,14 +2,16 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from ..database import obter_cursor
+from .tocar_musica import tocar_musica, parar_musica
+import pygame
 
 
 
 # Função para interagir com Saori Kido e listar missões disponíveis
 def interagir_quest(console,selected_player_id):
     with obter_cursor() as cursor:
-        try:
-
+        try:    
+            tocar_musica("quest.mp3", 0.4)
             cursor.execute("SELECT nome, dialogo_inicial FROM quest LIMIT 1")
             npc = cursor.fetchone()
 
@@ -52,9 +54,12 @@ def interagir_quest(console,selected_player_id):
             console.print(table)
 
             # Opções do jogador
-            console.print("\n[bold green]Digite o número da missão para aceitar ou 'T' para aceitar todas.[/bold green]")
+            console.print("\n[bold green]Digite o número da missão para aceitar ou 'T' para aceitar todas (Digite 'M' para parar a música).[/bold green]")
             escolha = input("🎯 Escolha uma opção: ").strip().lower()
 
+            if escolha == 'm':
+                parar_musica()
+                
             if escolha == 't':
                 for id_missao, _ in missoes:
                     cursor.execute("""

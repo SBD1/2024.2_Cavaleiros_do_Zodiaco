@@ -15,6 +15,7 @@ from src.usecases.verificar_inimigos import verificar_inimigos
 from src.usecases.verificar_boss import verificar_boss
 from .util import limpar_terminal
 from src.usecases.tocar_tema_encerramento import tocar_tema_encerramento
+from .usecases.tocar_musica import tocar_musica, parar_musica
 
 
 
@@ -26,6 +27,8 @@ def executar_com_interface(console, func, *args, **kwargs):
     func(console, *args, **kwargs)
     console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
     input()
+    parar_musica()
+    
 
 
 def mostrar_menu_acoes(console):
