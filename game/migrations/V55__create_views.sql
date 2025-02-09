@@ -277,17 +277,18 @@ SELECT
     ai.defesa_fisica,
     ai.defesa_magica,
     'equipada' AS status_armadura,
-    pcp.parte_corpo AS parte_corpo_equipada,
-    pcp.id_player
+    i.id_player
 FROM 
     armadura_instancia ai
 JOIN armadura a ON a.id_armadura = ai.id_armadura
 JOIN 
-    parte_corpo_player pcp ON ai.id_armadura = pcp.armadura_equipada
-    AND ai.id_instancia = pcp.instancia_armadura_equipada
-    AND ai.id_parte_corpo_armadura = pcp.parte_corpo
+    inventario i ON ai.id_inventario = i.id_player
+JOIN 
+    armadura_equipada ae ON ai.id_armadura = ae.id_armadura 
+    AND ai.id_instancia = ae.id_armadura_instanciada 
+    AND ai.id_parte_corpo_armadura = ae.id_parte_corpo_armadura 
 JOIN parte_corpo pc 
-ON pc.id_parte_corpo = pcp.parte_corpo
+ON pc.id_parte_corpo = ae.id_parte_corpo_armadura 
 
 UNION ALL
 
@@ -304,7 +305,6 @@ SELECT
     ai.defesa_fisica,
     ai.defesa_magica,
     'inventario' AS status_armadura,
-    NULL AS parte_corpo_equipada,
     i.id_player
 FROM 
     armadura_instancia ai
@@ -317,10 +317,10 @@ join
 WHERE 
     NOT EXISTS (
         SELECT 1
-        FROM parte_corpo_player pcp
-        WHERE pcp.armadura_equipada = ai.id_armadura
-          AND pcp.instancia_armadura_equipada = ai.id_instancia
-          AND pcp.parte_corpo = ai.id_parte_corpo_armadura
+        FROM armadura_equipada ae
+        WHERE ae.id_armadura = ai.id_armadura
+          AND ae.id_armadura_instanciada = ai.id_instancia
+          AND ae.id_parte_corpo_armadura = ai.id_parte_corpo_armadura
     );
 
 -- VIEW view_fila_turnos_batalha

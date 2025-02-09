@@ -30,6 +30,7 @@ def listar_equipamentos(console, jogador_id):
                 ORDER BY status_armadura DESC, parte_corpo;
             """, (jogador_id,))
             
+            ## pegar status do player
             armaduras = cursor.fetchall()
 
             equipamentos_equipados = []

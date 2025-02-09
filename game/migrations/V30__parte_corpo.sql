@@ -1,3 +1,5 @@
+-- 30
+
 CREATE OR REPLACE FUNCTION gerar_partes_corpo_boss()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -60,8 +62,6 @@ BEGIN
     INSERT INTO public.parte_corpo_player (
         id_player, 
         parte_corpo, 
-        armadura_equipada, 
-        instancia_armadura_equipada,
         defesa_fisica, 
         defesa_magica, 
         chance_acerto, 
@@ -70,8 +70,6 @@ BEGIN
     SELECT 
         NEW.id_player,   
         pc.id_parte_corpo, 
-        NULL,             
-        NULL,
         pc.defesa_fisica,          
         pc.defesa_magica,         
         pc.chance_acerto,          
@@ -87,17 +85,6 @@ AFTER INSERT ON public.player
 FOR EACH ROW
 EXECUTE FUNCTION gerar_partes_corpo_player();
 
-INSERT INTO public.parte_corpo_player (id_player, parte_corpo, armadura_equipada, instancia_armadura_equipada)
-SELECT 
-    p.id_player,        
-    pc.id_parte_corpo,   
-    NULL,                
-    NULL                 
-FROM public.player p
-CROSS JOIN public.parte_corpo pc
-WHERE NOT EXISTS (
-    SELECT 1 FROM public.parte_corpo_player pp WHERE pp.id_player = p.id_player AND pp.parte_corpo = pc.id_parte_corpo
-);
 
 
 CREATE OR REPLACE FUNCTION gerar_partes_corpo_inimigo()

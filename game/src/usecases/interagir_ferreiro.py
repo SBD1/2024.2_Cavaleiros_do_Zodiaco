@@ -2,9 +2,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from .listar_todas_receitas_armaduras import listar_todas_receitas_armaduras
 from .fabricar_armadura import fabricar_armadura
-from .listar_equipamentos import listar_equipamentos
+from .listar_equipamentos_ferreiro import listar_equipamentos_ferreiro
 from .tocar_musica import tocar_musica
 from ..util import limpar_terminal
 from ..database import obter_cursor
@@ -35,7 +34,7 @@ def interagir_ferreiro(console, jogador_id):
                 limpar_terminal(console)
                 console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]{dialogo_inicial}[/italic]", expand=False))
 
-                listar_equipamentos(console, jogador_id)
+                equipamentos, tabela_geral = listar_equipamentos_ferreiro(console, jogador_id)
 
                 # Opções do jogador
                 console.print("\n[bold cyan]Escolha uma ação:[/bold cyan]")
@@ -60,30 +59,40 @@ def interagir_ferreiro(console, jogador_id):
                 # Exibir diálogo do NPC para a ação escolhida
                 limpar_terminal(console)
 
+                
+
                 if escolha == "1":
                     console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]{dialogo_reparar}[/italic]", expand=False))
+                    console.print(tabela_geral)
                     mensagem_id = "Digite o ID da armadura que deseja reparar:"
                 elif escolha == "2":
                     console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]{dialogo_upgrade}[/italic]", expand=False))
+                    console.print(tabela_geral)
                     mensagem_id = "Digite o ID da armadura que deseja melhorar:"
                 elif escolha == "3":
                     console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]{dialogo_desmanchar}[/italic]", expand=False))
+                    console.print(tabela_geral)
                     mensagem_id = "Digite o ID da armadura que deseja desmanchar:"
                 elif escolha == "4":
                     console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]Vamos fabricar uma nova armadura![/italic]", expand=False))
+                    console.print(tabela_geral)
                     fabricar_armadura(console, jogador_id)
                     continue  # Volta ao menu após fabricar
 
                 # Solicitar o ID da armadura apenas para as opções 1, 2 e 3
                 if escolha in ["1", "2", "3"]:
                     console.print(f"\n[bold cyan]{mensagem_id}[/bold cyan]")
-                    id_instancia_escolhida = input("> ").strip()
+                    escolha2 = input("> ").strip()
 
-                    if not id_instancia_escolhida.isdigit():
+                    if not escolha2.isdigit():
                         console.print(Panel.fit("⛔ [bold red]Entrada inválida![/bold red]", border_style="red"))
                         continue
+                        
 
-                    id_instancia_escolhida = int(id_instancia_escolhida)
+                    for equipamento in equipamentos:
+                        if equipamento["indice"] == int(escolha2):
+                            id_instancia_escolhida = equipamento["id_instancia"]
+                    
 
                     # Chamar a procedure correta de acordo com a escolha
                     try:

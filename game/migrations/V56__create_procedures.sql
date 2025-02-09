@@ -446,7 +446,7 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
     v_id_armadura INTEGER;
-    v_id_parte_corpo_armadura enum_parte_corpo; -- Altere para o tipo ENUM correspondente ao id_parte_corpo_armadura
+    v_id_parte_corpo_armadura enum_parte_corpo;
     v_armadura_atual INTEGER;
     v_instancia_atual INTEGER;
 BEGIN
@@ -462,35 +462,35 @@ BEGIN
     END IF;
 
     -- Verificar se o jogador já possui uma armadura equipada na mesma parte do corpo
-    SELECT armadura_equipada, instancia_armadura_equipada
+    SELECT id_armadura, id_armadura_instanciada
     INTO v_armadura_atual, v_instancia_atual
-    FROM Parte_Corpo_Player
+    FROM Armadura_Equipada
     WHERE id_player = p_id_player
-      AND parte_corpo = v_id_parte_corpo_armadura;
+      AND id_parte_corpo_armadura = v_id_parte_corpo_armadura;
 
+    -- Se o jogador já tem uma armadura equipada, removê-la e devolvê-la ao inventário
     IF FOUND THEN
-        -- Se uma armadura já estiver equipada, ela é devolvida ao inventário
+        -- Atualiza a armadura antiga para voltar ao inventário do jogador
         UPDATE Armadura_Instancia
         SET id_inventario = p_id_player
-        WHERE id_armadura = v_armadura_atual
-          AND id_instancia = v_instancia_atual;
+        WHERE id_instancia = v_instancia_atual
+          AND id_armadura = v_armadura_atual;
+
+        -- Remove a armadura equipada
+        DELETE FROM Armadura_Equipada
+        WHERE id_player = p_id_player
+          AND id_parte_corpo_armadura = v_id_parte_corpo_armadura;
     END IF;
 
-    -- Atualizar a nova armadura como equipada
-    UPDATE Parte_Corpo_Player
-    SET armadura_equipada = v_id_armadura,
-        instancia_armadura_equipada = p_id_instancia
-    WHERE id_player = p_id_player
-      AND parte_corpo = v_id_parte_corpo_armadura;
+    -- Equipar a nova armadura
+    INSERT INTO Armadura_Equipada (id_player, id_armadura, id_armadura_instanciada, id_parte_corpo_armadura)
+    VALUES (p_id_player, v_id_armadura, p_id_instancia, v_id_parte_corpo_armadura);
 
-    -- Remover a armadura equipada do inventário
-    UPDATE Armadura_Instancia
-    SET id_inventario = NULL
-    WHERE id_instancia = p_id_instancia;
 
     RAISE NOTICE 'A armadura foi equipada com sucesso!';
 END;
 $$;
+
 
 CREATE OR REPLACE PROCEDURE restaurar_durabilidade(
     p_id_player INT,
@@ -623,6 +623,7 @@ DECLARE
     v_quantidade_necessaria INT;
     v_quantidade_disponivel INT;
     v_material_nome TEXT;
+    v_nome_armadura TEXT;
 BEGIN
     -- Buscar o ID do inventário do jogador
     SELECT id_player INTO v_id_inventario
@@ -633,6 +634,12 @@ BEGIN
     IF v_id_inventario IS NULL THEN
         RAISE EXCEPTION 'Inventário não encontrado para o jogador!';
     END IF;
+
+    -- Pega o nome da armadura
+    SELECT  a.nome into v_nome_armadura
+    FROM armadura_instancia ai
+    JOIN armadura a on a.id_armadura = ai.id_armadura
+    WHERE id_instancia = p_id_instancia;
 
     -- Buscar a raridade atual da armadura
     SELECT raridade_armadura INTO v_raridade_atual
@@ -665,7 +672,7 @@ BEGIN
 
     -- Se o jogador não tem almas ou não tem o suficiente, retorna erro
     IF v_almas_disponiveis IS NULL OR v_almas_disponiveis < v_custo_alma THEN
-        RAISE EXCEPTION 'Você não tem Almas de Armadura suficientes para melhorar esta armadura! Custo: %, Disponível: %', v_custo_alma, COALESCE(v_almas_disponiveis, 0);
+        RAISE EXCEPTION 'Você não tem Almas de Armadura suficientes para melhorar a Armadura % ! Custo: %, Disponível: %', v_nome_armadura, v_custo_alma, COALESCE(v_almas_disponiveis, 0);
     END IF;
 
     -- Verificar materiais necessários na tabela material_necessario_ferreiro
@@ -683,7 +690,7 @@ BEGIN
 
         -- Se não houver quantidade suficiente do material, retorna erro
         IF v_quantidade_disponivel IS NULL OR v_quantidade_disponivel < v_quantidade_necessaria THEN
-            RAISE EXCEPTION 'Você não possui materiais suficientes para melhorar a armadura! Material: %, Necessário: %, Disponível: %', v_material_nome, v_quantidade_necessaria, COALESCE(v_quantidade_disponivel, 0);
+            RAISE EXCEPTION 'Você não possui materiais suficientes para melhorar a Armadura %! Material: %, Necessário: %, Disponível: %', v_nome_armadura, v_material_nome, v_quantidade_necessaria, COALESCE(v_quantidade_disponivel, 0);
         END IF;
     END LOOP;
 
