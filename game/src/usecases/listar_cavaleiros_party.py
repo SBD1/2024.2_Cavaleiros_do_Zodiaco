@@ -71,7 +71,7 @@ def listar_cavaleiros_party(console, player_id):
                 tabela.add_column("Nível", style="green", justify="center", no_wrap=True)
                 tabela.add_column("XP", style="yellow", justify="center", no_wrap=True)
                 tabela.add_column("HP", style="red", justify="center", no_wrap=True)
-                tabela.add_column("Magia", style="magenta", justify="center", no_wrap=True)
+                tabela.add_column("Cosmo", style="magenta", justify="center", no_wrap=True)
                 tabela.add_column("Velocidade", style="white", justify="center", no_wrap=True)
                 tabela.add_column("Ataque Físico", style="orange1", justify="center", no_wrap=True)
                 tabela.add_column("Ataque Mágico", style="purple", justify="center", no_wrap=True)
@@ -84,26 +84,33 @@ def listar_cavaleiros_party(console, player_id):
                 str(player_ataque_fisico), str(player_ataque_magico)
             )
 
-            # Processa os cavaleiros e adiciona às tabelas e listas
-            for index, cav in enumerate(cavaleiros, start=1):
+            # Processa os cavaleiros da party
+            party_index = 1
+            fora_party_index = 1
+            for cav in cavaleiros:
                 id_cavaleiro, nome, elemento, nivel, xp_atual, hp_max, magia_max, hp_atual, magia_atual, \
                 velocidade, ataque_fisico, ataque_magico, id_party = cav
-
-                # Formata os dados do cavaleiro
                 xp_max = obter_xp_maximo(cursor, nivel)
                 formatted_elemento = formatar_elemento(elemento)
-                cavaleiro_data = [
-                    str(index), nome, formatted_elemento, str(nivel), f"{xp_max} / {xp_atual}",
-                    f"{hp_max} / {hp_atual}", f"{magia_max} / {magia_atual}",
-                    str(velocidade), str(ataque_fisico), str(ataque_magico)
-                ]
-
                 if id_party:  # Está na party (mas não o jogador)
-                    tabela_party.add_row(*cavaleiro_data)
-                    party_options.append((index, id_cavaleiro))
-                else:  # Fora da party
-                    tabela_fora_party.add_row(*cavaleiro_data)
-                    fora_party_options.append((index, id_cavaleiro))
+
+                    tabela_party.add_row(
+                        str(party_index), nome, formatted_elemento, str(nivel), f"{xp_max} / {xp_atual}",
+                        f"{hp_max} / {hp_atual}", f"{magia_max} / {magia_atual}",
+                        str(velocidade), str(ataque_fisico), str(ataque_magico)
+                    )
+                    party_options.append((party_index, id_cavaleiro, nome))
+                    party_index += 1
+
+            # Processa os cavaleiros fora da party
+                if not id_party:  # Fora da party
+                    tabela_fora_party.add_row(
+                        str(fora_party_index), nome, formatted_elemento, str(nivel), f"{xp_max} / {xp_atual}",
+                        f"{hp_max} / {hp_atual}", f"{magia_max} / {magia_atual}",
+                        str(velocidade), str(ataque_fisico), str(ataque_magico)
+                    )
+                    fora_party_options.append((fora_party_index, id_cavaleiro, nome))
+                    fora_party_index += 1
 
         # Exibe as tabelas (fora do bloco "with")
         console.print(tabela_party)

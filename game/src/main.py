@@ -35,39 +35,43 @@ def mostrar_menu_acoes(console):
     
 
     while True:
-        limpar_terminal(console)
-
-        if verificar_inimigos(console,jogador_selecionado_id):
-            # batalhar(console,jogador_selecionado_id)
+        try:
             limpar_terminal(console)
-        elif verificar_boss(console,jogador_selecionado_id):
+
+            if verificar_inimigos(console,jogador_selecionado_id):
+                # batalhar(console,jogador_selecionado_id)
+                limpar_terminal(console)
+            elif verificar_boss(console,jogador_selecionado_id):
+                limpar_terminal(console)
+            
+
+
+            ver_localizacao_atual(console, jogador_selecionado_id)
+
+            opcoes = obter_acoes_disponiveis(jogador_selecionado_id)
+            
+            console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", expand=False))
+
+            for opcao in opcoes:
+                console.print(f"{opcoes.index(opcao) + 1}. {opcao[0]}")
+
+
+            escolha = int(input("\n🎯 Escolha uma ação: ").strip())
+
+            if 1 <= int(escolha) < len(opcoes):
+                executar_com_interface(console, opcoes[escolha - 1][1], jogador_selecionado_id)
+            elif escolha == len(opcoes):
+                console.print(Panel("[bold red]👋 Saindo do Menu de Ações...[/bold red]", expand=False))
+                input("\n[💾 Pressione ENTER para continuar...]")
+                break
+            else:
+                console.print("[bold red]⚠ Opção inválida! Tente novamente.[/bold red]")
+                time.sleep(1)
+
+        except ValueError:
             limpar_terminal(console)
-        
-
-
-        ver_localizacao_atual(console, jogador_selecionado_id)
-
-        opcoes = obter_acoes_disponiveis(jogador_selecionado_id)
-        
-        console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", expand=False))
-
-        for opcao in opcoes:
-            console.print(f"{opcoes.index(opcao) + 1}. {opcao[0]}")
-
-
-        escolha = int(input("\n🎯 Escolha uma ação: ").strip())
-
-        if 1 <= int(escolha) < len(opcoes):
-            executar_com_interface(console, opcoes[escolha - 1][1], jogador_selecionado_id)
-        elif escolha == len(opcoes):
-            console.print(Panel("[bold red]👋 Saindo do Menu de Ações...[/bold red]", expand=False))
-            input("\n[💾 Pressione ENTER para continuar...]")
-            break
-        else:
-            console.print("[bold red]⚠ Opção inválida! Tente novamente.[/bold red]")
+            console.print("[bold red]⚠ Entrada inválida! Digite um número válido.[/bold red]")
             time.sleep(1)
-
-
 def run():
     """Menu principal do jogo."""
     global jogador_selecionado_id

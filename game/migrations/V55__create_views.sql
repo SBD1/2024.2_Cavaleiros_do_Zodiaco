@@ -1,82 +1,123 @@
--- VIEW inventario_view
 CREATE OR REPLACE VIEW inventario_view AS
 SELECT 
     nome,
     preco_venda,
     descricao,
     CASE 
-        WHEN tipo_item = 'm' THEN 'Material'
-        WHEN tipo_item = 'c' THEN 'Consumível'
-        WHEN tipo_item = 'l' THEN 'Livro'
-        WHEN tipo_item = 'i' THEN 'Item de Missão'
+        WHEN tipo_item = 'nc' AND tipo_nao_craftavel = 'i' THEN 'Item de Missão'
+        WHEN tipo_item = 'nc' AND tipo_nao_craftavel = 'c' THEN 'Consumível'
+        WHEN tipo_item = 'nc' AND tipo_nao_craftavel = 'l' THEN 'Livro'
+        WHEN tipo_item = 'c' AND tipo_craftavel = 'm' THEN 'Material'
         ELSE 'Outro'
     END AS tipo_item,
     quantidade,
     id_player,
     id_item
 FROM (
+    -- Itens não craftáveis: Consumíveis
     SELECT
         c.nome,
         c.preco_venda,
         c.descricao,
         ti.tipo_item,
+        CAST(nc.tipo_nao_craftavel AS TEXT) AS tipo_nao_craftavel,
+        NULL AS tipo_craftavel,
         ia.quantidade,
         p.id_player,
         c.id_item
-    FROM inventario i
+    FROM item_armazenado ia
+    JOIN inventario i ON ia.id_inventario = i.id_player
     JOIN player p ON p.id_player = i.id_player
-    JOIN item_armazenado ia ON ia.id_inventario = i.id_player
     JOIN tipo_item ti ON ti.id_item = ia.id_item
-    JOIN consumivel c ON c.id_item = ti.id_item
+    JOIN nao_craftavel nc ON nc.id_nao_craftavel = ti.id_item
+    JOIN consumivel c ON c.id_item = nc.id_nao_craftavel
 
     UNION 
 
+    -- Itens não craftáveis: Livros
     SELECT
         l.nome,
         l.preco_venda,
         l.descricao,
         ti.tipo_item,
+        CAST(nc.tipo_nao_craftavel AS TEXT) AS tipo_nao_craftavel,
+        NULL AS tipo_craftavel,
         ia.quantidade,
         p.id_player,
         l.id_item
-    FROM inventario i
+    FROM item_armazenado ia
+    JOIN inventario i ON ia.id_inventario = i.id_player
     JOIN player p ON p.id_player = i.id_player
-    JOIN item_armazenado ia ON ia.id_inventario = i.id_player
     JOIN tipo_item ti ON ti.id_item = ia.id_item
-    JOIN livro l ON l.id_item = ti.id_item
+    JOIN nao_craftavel nc ON nc.id_nao_craftavel = ti.id_item
+    JOIN livro l ON l.id_item = nc.id_nao_craftavel
 
     UNION 
 
+    -- Itens não craftáveis: Materiais
     SELECT
         m.nome,
         m.preco_venda,
         m.descricao,
         ti.tipo_item,
+        CAST(nc.tipo_nao_craftavel AS TEXT) AS tipo_nao_craftavel,
+        NULL AS tipo_craftavel,
         ia.quantidade,
         p.id_player,
         m.id_material
-    FROM inventario i
+    FROM item_armazenado ia
+    JOIN inventario i ON ia.id_inventario = i.id_player
     JOIN player p ON p.id_player = i.id_player
-    JOIN item_armazenado ia ON ia.id_inventario = i.id_player
     JOIN tipo_item ti ON ti.id_item = ia.id_item
-    JOIN material m ON m.id_material = ti.id_item
+    JOIN nao_craftavel nc ON nc.id_nao_craftavel = ti.id_item
+    JOIN material m ON m.id_material = nc.id_nao_craftavel
 
     UNION 
 
+    -- Itens de Missão (sem preço)
     SELECT
         im.nome,
         0, -- Itens de missão não têm preço
         im.descricao,
         ti.tipo_item,
+        CAST(nc.tipo_nao_craftavel AS TEXT) AS tipo_nao_craftavel,
+        NULL AS tipo_craftavel,
         ia.quantidade,
         p.id_player,
         im.id_item
-    FROM inventario i
+    FROM item_armazenado ia
+    JOIN inventario i ON ia.id_inventario = i.id_player
     JOIN player p ON p.id_player = i.id_player
-    JOIN item_armazenado ia ON ia.id_inventario = i.id_player
     JOIN tipo_item ti ON ti.id_item = ia.id_item
-    JOIN item_missao im ON im.id_item = ti.id_item
+    JOIN nao_craftavel nc ON nc.id_nao_craftavel = ti.id_item
+    JOIN item_missao im ON im.id_item = nc.id_nao_craftavel
+
+    UNION
+
+    -- Itens Craftáveis: Materiais
+    SELECT
+        m.nome,
+        m.preco_venda,
+        m.descricao,
+        ti.tipo_item,
+        NULL AS tipo_nao_craftavel,
+        CAST(c.tipo_craftavel AS TEXT) AS tipo_craftavel,
+        ia.quantidade,
+        p.id_player,
+        m.id_material
+    FROM item_armazenado ia
+    JOIN inventario i ON ia.id_inventario = i.id_player
+    JOIN player p ON p.id_player = i.id_player
+    JOIN tipo_item ti ON ti.id_item = ia.id_item
+    JOIN craftavel c ON c.id_craftavel = ti.id_item
+    JOIN material m ON m.id_material = c.id_craftavel
 ) AS subquery;
+
+
+
+
+
+
 
 -- VIEW grupo_view
 CREATE OR REPLACE VIEW grupo_view AS

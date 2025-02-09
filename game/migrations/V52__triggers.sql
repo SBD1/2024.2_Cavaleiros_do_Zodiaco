@@ -91,92 +91,8 @@ FOR EACH ROW
 EXECUTE FUNCTION verificar_dinheiro();
 
 
--- inserir em tipo_item item_missao
-
-CREATE OR REPLACE FUNCTION before_insert_item_missao()
-RETURNS TRIGGER AS $$
-DECLARE
-    new_id_item INTEGER;
-BEGIN
-    INSERT INTO tipo_item (tipo_item)
-    VALUES ('i')
-    RETURNING id_item INTO new_id_item;
-
-    NEW.id_item := new_id_item;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER  before_insert_item_missao_trigger
-BEFORE INSERT ON item_missao
-FOR EACH ROW
-EXECUTE FUNCTION  before_insert_item_missao();
-
--- Trigger para inserir em "livro"
-CREATE OR REPLACE FUNCTION before_insert_livro()
-RETURNS TRIGGER AS $$
-DECLARE
-    new_id_item INTEGER;
-BEGIN
-    INSERT INTO tipo_item (tipo_item)
-    VALUES ('l') -- 'l' para livro
-    RETURNING id_item INTO new_id_item;
-
-    NEW.id_item := new_id_item;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER before_insert_livro_trigger
-BEFORE INSERT ON livro
-FOR EACH ROW
-EXECUTE FUNCTION before_insert_livro();
 
 
--- Trigger para inserir em "material"
-CREATE OR REPLACE FUNCTION before_insert_material()
-RETURNS TRIGGER AS $$
-DECLARE
-    new_id_material INTEGER;
-BEGIN
-    INSERT INTO tipo_item (tipo_item)
-    VALUES ('m') -- 'm' para material
-    RETURNING id_item INTO new_id_material;
-
-    NEW.id_material := new_id_material;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER before_insert_material_trigger
-BEFORE INSERT ON material
-FOR EACH ROW
-EXECUTE FUNCTION before_insert_material();
-
-
--- Trigger para inserir em "armadura"
-CREATE OR REPLACE FUNCTION before_insert_armadura()
-RETURNS TRIGGER AS $$
-DECLARE
-    new_id_armadura INTEGER;
-BEGIN
-    INSERT INTO tipo_item (tipo_item)
-    VALUES ('a') -- 'a' para armadura
-    RETURNING id_item INTO new_id_armadura;
-
-    NEW.id_armadura := new_id_armadura;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER before_insert_armadura_trigger
-BEFORE INSERT ON armadura
-FOR EACH ROW
-EXECUTE FUNCTION before_insert_armadura();
 
 CREATE OR REPLACE FUNCTION subir_de_nivel()
 RETURNS TRIGGER AS $$
@@ -334,11 +250,11 @@ BEGIN
     ) THEN
         -- Insere o cavaleiro na instância do jogador
         INSERT INTO instancia_cavaleiro (
-            id_cavaleiro, id_player, id_party, nivel, tipo_armadura, xp_atual, 
+            id_cavaleiro, id_player, nivel, tipo_armadura, xp_atual, 
             hp_max, magia_max, hp_atual, magia_atual, velocidade, 
             ataque_fisico, ataque_magico
         ) VALUES (
-            p_id_cavaleiro, p_id_player, p_id_party, p_nivel, 0, 0, 
+            p_id_cavaleiro, p_id_player, p_nivel, 0, 0, 
             p_hp_max, p_magia_max, p_hp_max, p_magia_max, p_velocidade, 
             p_ataque_fisico, p_ataque_magico
         );

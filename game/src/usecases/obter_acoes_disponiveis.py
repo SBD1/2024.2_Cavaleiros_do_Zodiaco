@@ -8,7 +8,6 @@ from .ver_salas_disponiveis import ver_salas_disponiveis
 from .verificar_se_esta_na_saga_orfanato import verificar_se_esta_na_saga_orfanato
 from .ver_inventario import ver_inventario
 from .modificar_grupo import modificar_grupo
-from .trocar_cavaleiro import trocar_cavaleiro
 from .ver_missoes import ver_missoes
 from .verificar_npc_na_sala import verificar_npc_na_sala
 from .interagir_quest import interagir_quest

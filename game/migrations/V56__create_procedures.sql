@@ -109,10 +109,13 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
     total_cavaleiros INT;
-    id_sala_var INT; -- Nome atualizado para evitar ambiguidades
+    id_sala_var INT;
 BEGIN
     -- Obtém o ID da sala (party) do jogador
-    SELECT id_sala INTO id_sala_var FROM party WHERE id_player = p_id_player LIMIT 1;
+    SELECT id_sala INTO id_sala_var
+    FROM party
+    WHERE id_player = p_id_player
+    LIMIT 1;
 
     -- Se a party não existir, sair com erro
     IF id_sala_var IS NULL THEN
@@ -120,37 +123,38 @@ BEGIN
     END IF;
 
     -- Conta quantos cavaleiros já estão na party
-    SELECT COUNT(*) INTO total_cavaleiros 
-    FROM instancia_cavaleiro ic
-    WHERE ic.id_party = id_sala_var; -- Agora está claro que estamos referenciando a variável correta
+    SELECT COUNT(*) INTO total_cavaleiros
+    FROM instancia_cavaleiro
+    WHERE id_party = id_sala_var;
 
-    -- Se a party já tiver 3 cavaleiros, verifica se o cavaleiro escolhido pertence à party
+    -- Se a party já tiver 3 cavaleiros
     IF total_cavaleiros >= 3 THEN
-        IF NOT EXISTS (SELECT 1 FROM instancia_cavaleiro WHERE id_party = id_sala_var AND id_cavaleiro = p_id_cavaleiro_removido) THEN
+        -- Verifica se o cavaleiro escolhido para remoção está na party
+        IF NOT EXISTS (
+            SELECT 1
+            FROM instancia_cavaleiro
+            WHERE id_party = id_sala_var AND id_cavaleiro = p_id_cavaleiro_removido
+        ) THEN
             RAISE EXCEPTION 'O cavaleiro escolhido para remoção não está na party.';
         END IF;
 
-        -- Em vez de deletar, apenas remove o cavaleiro da party (seta NULL)
-        UPDATE instancia_cavaleiro 
-        SET id_party = NULL 
+        -- Remove o cavaleiro da party
+        UPDATE instancia_cavaleiro
+        SET id_party = NULL
         WHERE id_party = id_sala_var AND id_cavaleiro = p_id_cavaleiro_removido;
 
-        RAISE NOTICE 'Cavaleiro % foi removido da party e está disponível novamente.', p_id_cavaleiro_removido;
+        RAISE NOTICE 'Cavaleiro % foi removido da party.', p_id_cavaleiro_removido;
     END IF;
 
-    -- Adiciona o novo cavaleiro na party
-    INSERT INTO instancia_cavaleiro (id_player,id_cavaleiro, id_party, nivel, xp_atual, hp_max, magia_max, hp_atual, magia_atual, velocidade, ataque_fisico, ataque_magico)
-    SELECT 
-        p_id_player,
-        p_id_cavaleiro_novo, 
-        id_sala_var,  -- Corrigido para `id_sala_var`
-        nivel, 0, hp_max, magia_max, hp_max, magia_max, velocidade, ataque_fisico, ataque_magico
-    FROM cavaleiro
+    -- Adiciona o novo cavaleiro à party
+    UPDATE instancia_cavaleiro
+    SET id_party = id_sala_var
     WHERE id_cavaleiro = p_id_cavaleiro_novo;
 
     RAISE NOTICE 'Cavaleiro % foi adicionado à party.', p_id_cavaleiro_novo;
 END;
 $$;
+
 
 CREATE OR REPLACE PROCEDURE criar_item(
     IN p_id_player INT,
@@ -376,11 +380,11 @@ BEGIN
     -- Gerar a instância da armadura
     INSERT INTO armadura_instancia (
         id_armadura, id_parte_corpo_armadura, id_inventario, raridade_armadura,
-        defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_atual, preco_venda
+        defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_atual
     )
     SELECT 
         a.id_armadura, a.id_parte_corpo, p_id_player, v_raridade,
-        v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max, v_preco_compra
+        v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max
     FROM armadura a
     WHERE a.id_armadura = p_id_item;
 
@@ -736,6 +740,37 @@ BEGIN
     ELSE
         -- Caso o cavaleiro não pertença ao jogador, lança um erro
         RAISE EXCEPTION 'Cavaleiro não pertence ao jogador ou já está na party.';
+    END IF;
+END;
+$$;
+
+CREATE PROCEDURE remover_cavaleiro_party(
+    IN p_id_cavaleiro INT,
+    IN p_id_player INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Verifica se o cavaleiro pertence ao jogador e está na party
+    IF EXISTS (
+        SELECT 1
+        FROM instancia_cavaleiro
+        WHERE id_cavaleiro = p_id_cavaleiro
+          AND id_player = p_id_player
+          AND id_party = p_id_player
+    ) THEN
+        -- Atualiza o id_party do cavaleiro para NULL, removendo da party
+        UPDATE instancia_cavaleiro
+        SET id_party = NULL
+        WHERE id_cavaleiro = p_id_cavaleiro
+          AND id_player = p_id_player;
+
+        -- Mensagem de confirmação no log do servidor
+        RAISE NOTICE 'Cavaleiro ID % foi removido da party do jogador %', p_id_cavaleiro, p_id_player;
+
+    ELSE
+        -- Caso o cavaleiro não pertença ao jogador ou não esteja na party, lança um erro
+        RAISE EXCEPTION 'Cavaleiro não pertence ao jogador ou não está na party.';
     END IF;
 END;
 $$;

@@ -72,8 +72,8 @@ def comprar_armadura(console, cursor, selected_player_id, dialogo_comprar, nome_
 
             if not armaduras:
                 console.print("\n[bold yellow]⚠ Nenhuma armadura disponível para venda.[/bold yellow]")
-                input("\n[Pressione Enter para voltar ao menu...]")
                 console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+                input
                 limpar_terminal(console)
                 break
 
@@ -125,6 +125,7 @@ def comprar_armadura(console, cursor, selected_player_id, dialogo_comprar, nome_
                 cursor.execute("CALL comprar_armadura(%s, %s)", (selected_player_id, id_armadura))
                 console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]Parabéns, você adquiriu a armadura [bold green]{nome_armadura}[/bold green] por [yellow]{preco} moedas![/yellow][/italic]", expand=False))
                 console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+                input()
 
             except Exception as e:
                 console.print(f"[bold red]Erro ao comprar a armadura:[/bold red] {str(e)}")
@@ -141,8 +142,6 @@ def comprar_armadura(console, cursor, selected_player_id, dialogo_comprar, nome_
 # Função para listar itens por categoria e processar a compra
 def listar_itens_por_categoria(console, cursor, categoria, selected_player_id, dialogo_comprar, nome_npc):
     try:
-        limpar_terminal(console)
-        console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]{dialogo_comprar}[/italic]", expand=False))
         categorias_para_visoes = {
             "consumivel": "consumivel_venda_view",
             "livro": "livro_venda_view",
@@ -177,39 +176,42 @@ def listar_itens_por_categoria(console, cursor, categoria, selected_player_id, d
         for idx, item in enumerate(itens, start=1):
             _, nome, preco, descricao, nivel_minimo = item
             table.add_row(str(idx), nome, descricao, f"{preco}", str(nivel_minimo))
-
-        console.print("\n", table)
-
-        # Perguntar se o jogador quer comprar um item
-        console.print("[bold green]\nDigite o número do item para comprá-lo ou 'S' para sair.[/bold green]")
-        escolha = input("🎯 Escolha uma opção: ").strip()
-
-        if escolha.lower() == 's':
-            console.print("[bold cyan]Você voltou ao menu do mercador.[/bold cyan]")
-            console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+        while True:
             limpar_terminal(console)
-            return
+            console.print(Panel(f"[bold cyan]{nome_npc}[/bold cyan]: [italic]{dialogo_comprar}[/italic]", expand=False))
+            console.print("\n", table)
 
-        if not escolha.isdigit() or int(escolha) < 1 or int(escolha) > len(itens):
-            console.print("[bold red]❌ Opção inválida![/bold red]")
-            console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
-            limpar_terminal(console)
-            return
         
+            console.print("[bold green]\nDigite o número do item para comprá-lo ou 'S' para sair.[/bold green]")
+            escolha = input("🎯 Escolha uma opção: ").strip()
+
+            if escolha.lower() == 's':
+                console.print("[bold cyan]Você voltou ao menu do mercador.[/bold cyan]")
+                console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+                limpar_terminal(console)
+                return
+
+            if not escolha.isdigit() or int(escolha) < 1 or int(escolha) > len(itens):
+                console.print("[bold red]❌ Opção inválida![/bold red]")
+                console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+                limpar_terminal(console)
+                return
             
-        escolha_idx = int(escolha) - 1
-        id_item, nome_item, preco, descricao, nivel_minimo = itens[escolha_idx]
+                
+            escolha_idx = int(escolha) - 1
+            id_item, nome_item, preco, descricao, nivel_minimo = itens[escolha_idx]
 
-        
-        try:
-            cursor.execute("CALL comprar_item(%s, %s)", (selected_player_id, id_item))
-            console.print(Panel(f"[italic]Você comprou [cyan]{nome_item}[/cyan] por [yellow]{preco} moedas![/yellow][/italic]", expand=False))
-            input()
-        except Exception as e:
-            console.print(f"[bold red]Erro ao comprar o item:[/bold red] {e.diag.message_primary}")
-            console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
-            input()
-            limpar_terminal(console)
+            
+            try:
+                cursor.execute("CALL comprar_item(%s, %s)", (selected_player_id, id_item))
+                console.print(Panel(f"[italic]Você comprou [cyan]{nome_item}[/cyan] por [yellow]{preco} moedas![/yellow][/italic]", expand=False))
+                input()
+                limpar_terminal(console)
+            except Exception as e:
+                console.print(f"[bold red]Erro ao comprar o item:[/bold red] {e.diag.message_primary}")
+                console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+                input()
+                limpar_terminal(console)
 
     except Exception as e:
         console.print(f"[bold red]Erro:[/bold red] {e}")

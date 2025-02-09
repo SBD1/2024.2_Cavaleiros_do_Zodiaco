@@ -17,8 +17,8 @@ def adicionar_cavaleiro_party(cursor, console, player_id):
 
         # Exibir cavaleiros fora da party
         console.print("\n[bold cyan]Escolha um cavaleiro para adicionar à party:[/bold cyan]")
-        for idx, (_, id_cavaleiro) in enumerate(fora_party_options, 1):
-            console.print(f"{idx}. Cavaleiro ID: {id_cavaleiro}")
+        for idx, (_, _, nome) in enumerate(fora_party_options, 1):
+            console.print(f"{idx}. {nome}")
 
         try:
             # Escolha do cavaleiro para adicionar
@@ -26,30 +26,36 @@ def adicionar_cavaleiro_party(cursor, console, player_id):
 
             if 1 <= adicionar <= len(fora_party_options):
                 cavaleiro_adicionado = fora_party_options[adicionar - 1][1]
-
                 # Atualiza a lista para verificar se a party já está cheia
-                if len(party_options) > 1:  # Verifica se há limite para a party
+                if len(party_options) >= 3:  # Verifica se há limite para a party
                     console.print("\n[bold red]Escolha um cavaleiro para remover da party:[/bold red]")
-                    for idx, (_, id_cavaleiro) in enumerate(party_options, 1):
-                        console.print(f"{idx}. Cavaleiro ID: {id_cavaleiro}")
+                    for idx, (_, _, nome) in enumerate(party_options, 1):
+                        console.print(f"{idx}. {nome} ")
 
                     remover = int(input("\n🎯 Escolha o número do cavaleiro para remover: ").strip())
-
+                    
                     if 1 <= remover <= len(party_options):
-                        cavaleiro_removido = party_options[remover - 1][1]
-                        cursor.execute("CALL trocar_cavaleiro_party(%s, %s, %s);", (player_id, cavaleiro_adicionado, cavaleiro_removido))
-                        console.print(Panel.fit("[bold green]✅ Cavaleiro trocado com sucesso![/bold green]", border_style="green"))
+                            cavaleiro_removido = party_options[remover - 1][1]
+                            cursor.execute("CALL trocar_cavaleiro_party(%s, %s, %s);", (player_id, cavaleiro_adicionado, cavaleiro_removido))
+                            console.print(Panel.fit("[bold green]✅ Cavaleiro trocado com sucesso![/bold green]", border_style="green"))
+                            console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+                            input()
+
+
                 else:
                     # Adiciona o cavaleiro diretamente, sem remoção
-                    cursor.execute("CALL adicionar_cavaleiro_party(%s, %s);", (player_id, cavaleiro_adicionado))
+                    cursor.execute("CALL adicionar_cavaleiro_party(%s, %s);", (cavaleiro_adicionado, player_id))
                     console.print(Panel.fit("[bold green]✅ Cavaleiro adicionado à party com sucesso![/bold green]", border_style="green"))
+                    console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+                    input()
 
                 # Atualiza a exibição após a modificação
-                limpar_terminal(console)
-                listar_cavaleiros_party(console, player_id)
                 break  # Sai do loop após adicionar
             else:
                 console.print(Panel.fit("[bold red]❌ Escolha inválida![/bold red]", border_style="red"))
-
+                console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+                input()
         except ValueError:
             console.print(Panel.fit("[bold red]❌ Entrada inválida! Digite um número válido.[/bold red]", border_style="red"))
+            console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+            input()

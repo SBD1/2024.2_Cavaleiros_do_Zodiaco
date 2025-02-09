@@ -40,7 +40,7 @@ def ver_inventario(console, player_id):
             tabela.add_column("Tipo", style="magenta", justify="center")
             
             for item in inventario:
-                nome, preco_venda, descricao, tipo_item,quantidade, _ = item  # Ignoramos o id_player
+                nome, preco_venda, descricao, tipo_item,quantidade, id_item, _ = item  # Ignoramos o id_player
                 tabela.add_row(nome,str(quantidade), f"R$ {preco_venda:.2f}", descricao, tipo_item)
 
             console.print(tabela)
