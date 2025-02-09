@@ -139,9 +139,9 @@ VALUES
 'Oferece excelente proteção contra ataques físicos e mágicos, simbolizando a coragem do cavaleiro.', 
 'Bronze', 80, 100, 20, 25, 100);
 
-INSERT INTO public.item_a_venda
-(id_item, preco_compra, nivel_minimo)
-VALUES(currval('tipo_item_id_item_seq'), 2, 1);
+INSERT INTO Receita
+(id_item_gerado, descricao, nivel_minimo, alma_armadura)
+VALUES(currval('tipo_item_id_item_seq'), 'Gerar tronco de armadura foda', 1,100);
 
 -- Braços
 INSERT INTO public.armadura
@@ -151,9 +151,9 @@ VALUES
 'Aumentam a força física e protegem os braços em combates ferozes, permitindo golpes precisos e poderosos.', 
 'Bronze', 30, 40, 15, 20, 100);
 
-INSERT INTO public.item_a_venda
-(id_item, preco_compra, nivel_minimo)
-VALUES(currval('tipo_item_id_item_seq'), 2, 1);
+INSERT INTO Receita
+(id_item_gerado, descricao, nivel_minimo, alma_armadura)
+VALUES(currval('tipo_item_id_item_seq'), 'Gerar braçadeira de armadura foda', 1,100);
 
 -- Pernas
 INSERT INTO public.armadura
@@ -163,10 +163,9 @@ VALUES
 'Garantem proteção total às pernas do cavaleiro e aumentam a mobilidade e equilíbrio nos combates.', 
 'Bronze', 40, 50, 10, 15, 100);
 
-INSERT INTO public.item_a_venda
-(id_item, preco_compra, nivel_minimo)
-VALUES(currval('tipo_item_id_item_seq'), 2, 1);
-
+INSERT INTO Receita
+(id_item_gerado, descricao, nivel_minimo, alma_armadura)
+VALUES(currval('tipo_item_id_item_seq'), 'Gerar perna de armadura foda', 1,100);
 
 
 -- INSERT INTO public.item_armazenado
