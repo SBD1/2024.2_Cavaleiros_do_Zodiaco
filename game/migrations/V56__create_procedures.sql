@@ -826,3 +826,28 @@ BEGIN
     END IF;
 END;
 $$;
+
+
+CREATE OR REPLACE PROCEDURE adicionar_drop_boss(
+    p_id_boss INT, 
+    p_id_player INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    r_item RECORD;
+BEGIN
+    -- Percorre todos os itens que o boss dropa
+    FOR r_item IN
+        SELECT id_item, quantidade
+        FROM item_boss_dropa
+        WHERE id_boss = p_id_boss
+    LOOP
+        -- Insere ou atualiza os itens no inventário do jogador
+        INSERT INTO item_armazenado (id_inventario, id_item, quantidade)
+        VALUES (p_id_player, r_item.id_item, r_item.quantidade)
+        ON CONFLICT (id_inventario, id_item)
+        DO UPDATE SET quantidade = item_armazenado.quantidade + EXCLUDED.quantidade;
+    END LOOP;
+END;
+$$;

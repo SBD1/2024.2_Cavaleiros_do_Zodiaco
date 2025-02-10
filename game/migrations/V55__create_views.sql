@@ -543,7 +543,7 @@ SELECT
     e.nome as cavaleiro_elemento_nome,
     e.fraco_contra as id_fraqueza,
     e.forte_contra as id_vantagem,
-    c.nome as cavaleiro_classe_nome,
+    cl.nome as cavaleiro_classe_nome,
     c.id_classe as cavaleiro_classe_id,
     e.id_elemento as cavaleiro_elemento_id
 FROM 

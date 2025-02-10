@@ -7,7 +7,8 @@ CREATE TABLE Habilidade (
     dano INTEGER,
     descricao VARCHAR,
     frase_uso VARCHAR,
-    nivel_necessario INTEGER
+    nivel_necessario INTEGER,
+    audio VARCHAR
 );
  
 ALTER TABLE Habilidade ADD CONSTRAINT FK_Habilidade_2

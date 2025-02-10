@@ -37,7 +37,7 @@ def listar_cavaleiros_party(console, player_id):
                 SELECT player_nome, player_nivel, player_xp_atual, player_hp_max, player_hp_atual, player_magia_max, player_magia_atual,
                        player_velocidade,  elemento_nome, ataque_fisico_base, ataque_magico_base, ataque_fisico_armaduras, ataque_fisico_armaduras, ataque_magico_armaduras,
                       COALESCE(
-                           STRING_AGG(h.nome, ', ' ORDER BY h.nome), 'Nenhuma Habilidade'
+                           STRING_AGG(CONCAT(hp.slot, '. ', h.nome), ', \n' ORDER BY hp.slot), 'Nenhuma Habilidade'
                        ) AS habilidades     
                                 FROM player_info_view p
                 LEFT JOIN habilidade_player hp ON hp.id_player = p.id_player
@@ -66,7 +66,7 @@ def listar_cavaleiros_party(console, player_id):
                 SELECT ic.id_cavaleiro, ic.nome_cavaleiro, ic.elemento_nome, ic.nivel, ic.xp_atual, ic.hp_max, ic.magia_max,
                        ic.hp_atual, ic.magia_atual, ic.velocidade, ic.ataque_fisico, ic.ataque_magico, ic.id_party, ic.classe_nome,
                        COALESCE(
-                           STRING_AGG(h.nome, ', ' ORDER BY h.nome), 'Nenhuma Habilidade'
+                           STRING_AGG(CONCAT(hc.slot, '. ', h.nome), ', ' ORDER BY hc.slot), 'Nenhuma Habilidade'
                        ) AS habilidades
                 FROM instancia_cavaleiro_view ic
                 LEFT JOIN habilidade_cavaleiro hc ON hc.id_cavaleiro = ic.id_cavaleiro

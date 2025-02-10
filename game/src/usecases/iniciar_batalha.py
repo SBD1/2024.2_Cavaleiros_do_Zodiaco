@@ -5,11 +5,11 @@ from rich.columns import Columns
 from rich.panel import Panel
 from rich.table import Table
 from rich.console import Console
-import random
+from .tocar_musica import tocar_musica, tocar_efeito_sonoro
 
 
 def iniciar_batalha(console: Console, player_id: int, boss_id: int):
-    
+    print(tocar_musica("batalha_boss.mp3"))
     dados_batalha = obter_dados_batalha(player_id, boss_id)
 
     if not dados_batalha:
@@ -201,7 +201,7 @@ def criar_fila_turnos(player, cavaleiros, boss):
             id_cavaleiro, id_player, id_party, cavaleiro_nome, cavaleiro_nivel, 
             tipo_armadura, cavaleiro_xp_atual, cavaleiro_hp_max, cavaleiro_hp_atual, 
             cavaleiro_magia_max, cavaleiro_magia_atual, cavaleiro_velocidade, 
-            cavaleiro_ataque_fisico, cavaleiro_ataque_magico, elemento_cavaleiro, id_fraqueza_cavaleiro, id_vantagem_cavaleiro
+            cavaleiro_ataque_fisico, cavaleiro_ataque_magico, elemento_cavaleiro, id_fraqueza_cavaleiro, id_vantagem_cavaleiro, cavaleiro_nome_classe, cavaleiro_classe_id, cavaleiro_elemento_id 
             ) = cavaleiro
             fila.append({
                 "id": id_cavaleiro,
@@ -330,30 +330,26 @@ def executar_turnos(console, player, cavaleiros, boss):
                                             # mostrar quais itens ganhou, dinheiro, xp e quest concluida
 
                                             with obter_cursor() as cursor:
-                                                    # 🔹 Busca a missão associada ao Boss derrotado
+                                                    # 🔹 Busca os itens que o Boss pode dropar
                                                     cursor.execute("""
-                                                        SELECT pm.id_missao, pm.status_missao, c.nome
-                                                        FROM boss b
-                                                        join missao m on b.id_item_missao = m.item_necessario 
-                                                        join player_missao pm on m.id_missao = pm.id_missao AND id_player = %s
-                                                        join cavaleiro c on c.id_cavaleiro = m.id_cavaleiro_desbloqueado
-                                                        WHERE b.id_boss = %s and pm.status_missao = 'i';
-                                                    """, (player[0], boss_dict["id"]))
-                                                    
-                                                    missao = cursor.fetchone()
+                                                        SELECT 
+                                                            COALESCE(co.nome, m.nome, a.nome, l.nome, co.nome) AS nome_item,
+                                                            ibd.quantidade
+                                                        FROM item_boss_dropa ibd
+                                                        JOIN tipo_item ti ON ibd.id_item = ti.id_item
+                                                        LEFT JOIN craftavel c ON ti.tipo_item = 'c' AND ti.id_item = c.id_craftavel
+                                                        LEFT JOIN material m ON c.tipo_craftavel = 'm' AND ti.id_item = m.id_material
+                                                        LEFT JOIN armadura a ON c.tipo_craftavel = 'a' AND ti.id_item = a.id_armadura
+                                                        LEFT JOIN nao_craftavel nc ON ti.tipo_item = 'nc' AND ti.id_item = nc.id_nao_craftavel
+                                                        LEFT JOIN livro l ON nc.tipo_nao_craftavel = 'l' AND ti.id_item = l.id_item
+                                                        LEFT JOIN consumivel co ON nc.tipo_nao_craftavel = 'c' AND ti.id_item = co.id_item
+                                                        WHERE ibd.id_boss = %s;
 
-                                                    if missao:
-                                                        id_missao, _, cavaleiro_desbloqueado = missao
-                                                        cursor.execute("""
-                                                                UPDATE player_missao
-                                                                SET status_missao = 'c'
-                                                                WHERE id_missao = %s and id_player = %s;
-                                                            """, (id_missao, player[0]))
-                                                        console.print(f"[bold cyan]🏆 Missão concluída! Voce desbloqueou {cavaleiro_desbloqueado}[/bold cyan]"
-)
-                                                    # Exibe mensagem de vitória
-                                                    # Exibir mensagem de vitória com as recompensas
-                                                    
+                                                    """, (boss_dict["id"],))
+
+                                                    itens_dropados = cursor.fetchall()
+
+                                                    # 🔹 Atualiza o inventário do jogador com dinheiro e XP
                                                     cursor.execute("""
                                                         UPDATE inventario
                                                         SET dinheiro = dinheiro + %s
@@ -365,14 +361,22 @@ def executar_turnos(console, player, cavaleiros, boss):
                                                         SET xp_atual = xp_atual + %s
                                                         WHERE id_player = %s;
                                                     """, (boss_dict['xp_dropado'], player[0]))
+                                                    
+                                                    cursor.execute("CALL adicionar_drop_boss(%s, %s);", (boss_dict["id"], player[0]))
+                                                    # 🔹 Construindo a mensagem de recompensas
+                                                    itens_texto = ""
+                                                    for item_nome, quantidade in itens_dropados:
+                                                        itens_texto += f"📦 {item_nome} x{quantidade}\n"
 
                                                     console.print(Panel(
                                                         f"\n[bold green]🎉 Vitória! O Boss foi derrotado![/bold green]\n\n"
                                                         f"[bold cyan]🏆 Recompensas:[/bold cyan]\n"
                                                         f"💰 Dinheiro ganho: [bold yellow]{boss_dict['dinheiro_dropado']}[/bold yellow]\n"
-                                                        f"✨ XP ganho: [bold blue]{boss_dict['xp_dropado']}[/bold blue]\n",
+                                                        f"✨ XP ganho: [bold blue]{boss_dict['xp_dropado']}[/bold blue]\n"
+                                                        f"{itens_texto if itens_texto else '🎁 Nenhum item foi dropado.'}",
                                                         title="⚔️ Batalha Encerrada"
                                                     ))
+
                                                     
                                                     return  # 🔹 Sai da batalha imediatamente
 
@@ -393,10 +397,65 @@ def executar_turnos(console, player, cavaleiros, boss):
 
 
                         elif escolha == "2":  # 🔹 Se escolher habilidade, pode voltar
-                            console.print("[bold blue]⚠️ Habilidades ainda não implementadas.[/bold blue]")
-                            console.print("\n[bold red]5. 🔙 Voltar[/bold red]")
-                            console.print("\n[bold white]Digite a opção desejada: [/bold white]")
-                            escolha_habilidade = input().strip()
+                            # Obtém as habilidades disponíveis
+                            with obter_cursor() as cursor:
+                                if personagem["tipo"] == "player":
+                                    cursor.execute("""
+                                        SELECT h.id_habilidade, h.nome, h.audio 
+                                        FROM habilidade_player hp
+                                        JOIN habilidade h ON hp.id_habilidade = h.id_habilidade
+                                        WHERE hp.id_player = %s;
+                                    """, (personagem["id"],))
+                                else:
+                                    cursor.execute("""
+                                        SELECT h.id_habilidade, h.nome, h.audio 
+                                        FROM habilidade_cavaleiro hc
+                                        JOIN habilidade h ON hc.id_habilidade = h.id_habilidade
+                                        WHERE hc.id_cavaleiro = %s;
+                                    """, (personagem["id"],))
+
+                                habilidades = cursor.fetchall()
+
+                            if not habilidades:
+                                console.print("[bold red]❌ Nenhuma habilidade disponível![/bold red]")
+                                input()
+                                continue
+
+                            console.print(Panel("[bold blue]📜 Escolha uma habilidade:[/bold blue]"))
+                            for i, (_, nome, _) in enumerate(habilidades, start=1):
+                                console.print(f"[bold cyan]{i}. {nome}[/bold cyan]")
+
+                            escolha_habilidade = input("\n🎯 Digite o número da habilidade ou '0' para cancelar: ").strip()
+                            
+                            if escolha_habilidade == "0":
+                                continue
+
+                            if not escolha_habilidade.isdigit() or int(escolha_habilidade) < 1 or int(escolha_habilidade) > len(habilidades):
+                                console.print("[bold red]❌ Escolha inválida![/bold red]")
+                                input()
+                                continue
+
+                            id_habilidade, nome_habilidade, audio_habilidade = habilidades[int(escolha_habilidade) - 1]
+                            print(f"debug {habilidades[int(escolha_habilidade) - 1]}")
+                            input()
+                            # 🔊 Toca o som da habilidade antes de executá-la
+                            if audio_habilidade:
+                                tocar_efeito_sonoro(audio_habilidade)
+                                input()
+                            # 🔹 Executa a habilidade no banco de dados
+                            with obter_cursor() as cursor:
+                                if personagem["tipo"] == "player":
+                                    cursor.execute("SELECT usar_habilidade_player(%s, %s, %s);", (personagem["id"], boss_dict["id"], id_habilidade))
+                                    print(f"debug {habilidades[int(escolha_habilidade) - 1]}")
+                                    input()
+                                else:
+                                    print(f"debug {habilidades[int(escolha_habilidade) - 1]}")
+                                    input()
+                                    cursor.execute("SELECT usar_habilidade_cavaleiro(%s, %s, %s);", (personagem["id"], boss_dict["id"], id_habilidade))
+
+                            console.print(f"[bold magenta]🔥 {personagem['nome']} usou {nome_habilidade}![/bold magenta]")
+
+                            input("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
 
                             if escolha_habilidade == "5":
                                 continue  # 🔄 Volta ao menu principal sem passar o turno

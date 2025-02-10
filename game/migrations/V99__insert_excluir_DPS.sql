@@ -1,13 +1,15 @@
 INSERT INTO public.habilidade
-( classe_habilidade, elemento_habilidade, nome, custo, descricao, frase_uso, nivel_necessario)
+( classe_habilidade, elemento_habilidade, nome, custo, dano, descricao, frase_uso, nivel_necessario, audio)
 VALUES( 
     2,  -- Classe de habilidade (1 pode ser "Ofensiva")
     3,  -- Elemento relacionado (1 pode ser "Cosmos")
     'Meteoro de Pégaso', 
     20,  -- Custo de uso (ex.: 20 de magia)
+    100,
     'Um ataque poderoso com golpes consecutivos imbuídos de cosmos. Cada golpe atinge com a força do espírito de Pégaso.', 
     'Pegasus Ryu Sei Ken!', 
-    5  -- Nível necessário para desbloquear
+    5,  -- Nível necessário para desbloquear
+    'meteoro de pegasus.mp3'
 );
 
 -- Inserindo o livro que desbloqueia a habilidade
@@ -27,6 +29,91 @@ VALUES (
     2,  -- Preço de compra (valor superior ao preço de venda do livro)
     1     -- Nível mínimo necessário para comprar
 );
+
+INSERT INTO public.habilidade
+( classe_habilidade, elemento_habilidade, nome, dano, custo, descricao, frase_uso, nivel_necessario, audio)
+VALUES( 
+    2,  -- Classe de habilidade (1 pode ser "Ofensiva")
+    6,  -- Elemento relacionado (1 pode ser "Cosmos")
+    'Garras de trovão', 
+    5,  -- Custo de uso (ex.: 20 de magia)
+    7,
+    'desfere uma série de golpes cortantes imbuídos de eletricidade, atingindo o inimigo com alta velocidade.', 
+    '⚡ GARRAAS DE TROVÃO!! ⚡', 
+    5,  -- Nível necessário para desbloquear
+    'garras de trovao.mp3'
+);
+
+INSERT INTO public.livro
+( id_habilidade, nome, descricao, preco_venda)
+VALUES( -- Gerando um novo ID para o livro
+    currval('habilidade_id_habilidade_seq'),  -- Associa o livro à habilidade recém-criada
+    'Livro do Garras de trovão', 
+    'Um pergaminho envolto em faíscas, contendo os segredos do golpe Garras de Trovão. Apenas guerreiros do elemento Raio podem aprender essa técnica', 
+    500  -- Preço de venda (em unidades monetárias do jogo)
+);
+
+INSERT INTO public.habilidade
+( classe_habilidade, elemento_habilidade, nome, dano, custo, descricao, frase_uso, nivel_necessario, audio)
+VALUES( 
+    2,  -- Classe de habilidade (2 pode ser "DPS")
+    6,  -- Elemento relacionado (6 pode ser "Raio")
+    'Venha Cobra', 
+    4,  -- Dano do golpe
+    6,  -- Custo de uso (ex.: 6 de magia)
+    'Shaina invoca sua aura em forma de uma serpente elétrica, que avança rapidamente para atacar o inimigo.', 
+    '🐍 VENHA, COBRAAA!🐍', 
+    4,  -- Nível necessário para desbloquear
+    'venha cobra.mp3'
+);
+
+INSERT INTO public.livro
+( id_habilidade, nome, descricao, preco_venda)
+VALUES( 
+    currval('habilidade_id_habilidade_seq'),  -- Associa o livro à habilidade recém-criada
+    'Livro do Venha Cobra', 
+    'Um pergaminho antigo com marcas de serpentes, contendo o segredo do golpe Venha Cobra. Apenas guerreiros do elemento Raio podem aprender essa técnica.', 
+    450  -- Preço de venda (em unidades monetárias do jogo)
+);
+
+
+INSERT INTO public.habilidade
+( classe_habilidade, elemento_habilidade, nome, dano, custo, descricao, frase_uso, nivel_necessario, audio)
+VALUES( 
+    2,  -- Classe de habilidade (2 para "DPS")
+    6,  -- Elemento (6 para "Raio")
+    'Explosão Elétrica', 
+    6,  -- Dano do golpe
+    8,  -- Custo de uso
+    'Canaliza uma onda de choque elétrica ao redor do usuário, atingindo todos os inimigos próximos.', 
+    'QUEIMEM NA FÚRIA DOS RAIOS! EXPLOSÃO ELÉTRICA!', 
+    6,  -- Nível necessário para desbloquear
+    'explosao_eletrica.mp3'
+);
+
+INSERT INTO public.livro
+( id_habilidade, nome, descricao, preco_venda)
+VALUES( 
+    currval('habilidade_id_habilidade_seq'),  -- Associa o livro à habilidade recém-criada
+    'Livro da Explosão Elétrica', 
+    'Um tomo antigo envolto por eletricidade, contendo o segredo do golpe Explosão Elétrica. Apenas guerreiros do elemento Raio podem aprender essa técnica.', 
+    300  -- Preço de venda (em unidades monetárias do jogo)
+);
+
+
+INSERT INTO public.item_boss_dropa
+(id_boss, id_item, quantidade)
+VALUES(8, currval('tipo_item_id_item_seq'::regclass), 2);
+
+INSERT INTO public.item_boss_dropa
+(id_boss, id_item, quantidade)
+VALUES(8, currval('tipo_item_id_item_seq'::regclass) - 1 , 2);
+
+INSERT INTO public.item_boss_dropa
+(id_boss, id_item, quantidade)
+VALUES(8, currval('tipo_item_id_item_seq'::regclass) - 2 , 2);
+
+
 
 
 
@@ -172,3 +259,34 @@ VALUES(currval('tipo_item_id_item_seq'), 'Gerar perna de armadura foda', 1,100);
 -- (id_inventario, id_item, quantidade)
 -- VALUES(1, 8, 100);
 
+INSERT INTO public.item_boss_dropa
+(id_boss, id_item, quantidade)
+VALUES(8, 11 , 4);
+
+INSERT INTO public.habilidade
+( classe_habilidade, elemento_habilidade, nome, dano, custo, descricao, frase_uso, nivel_necessario, audio)
+VALUES( 
+    2,  -- Classe de habilidade (2 para "DPS")
+    6,  -- Elemento (6 para "Raio")
+    'Explosão Elétrica 2', 
+    12,  -- Dano do golpe
+    16,  -- Custo de uso
+    'Canaliza uma onda de choque elétrica ao redor do usuár2io, atingindo todos os inimigos próximos.', 
+    'QUEIMEM NA FÚRIA DOS RAIOS! EXPLOSÃO ELÉTRICA2!', 
+    6,  -- Nível necessário para desbloquear
+    'explosao_eletrica2.mp3'
+);
+
+INSERT INTO public.livro
+( id_habilidade, nome, descricao, preco_venda)
+VALUES( 
+    currval('habilidade_id_habilidade_seq'),  -- Associa o livro à habilidade recém-criada
+    'Livro da Explosão Elétrica 2', 
+    'Um tomo antigo envolto por eletricidade, contendo o segredo do golpe Explosão Elétrica. Apenas guerreiros do elemento Raio podem aprender essa técnica.', 
+    400  -- Preço de venda (em unidades monetárias do jogo)
+);
+
+
+INSERT INTO public.item_boss_dropa
+(id_boss, id_item, quantidade)
+VALUES(8, currval('tipo_item_id_item_seq'::regclass), 3);

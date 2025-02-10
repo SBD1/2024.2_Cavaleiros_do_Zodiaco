@@ -31,7 +31,6 @@ def obter_acoes_disponiveis(jogador_id):
         ("[bold cyan]🎒 Ver Inventário[/bold cyan]", ver_inventario),
         ("[light_pink4]📜 Ver Receitas [/light_pink4]", listar_todas_receitas_materiais),
         ("[bold green]⚒️ Craftar Item[/bold green]", gerar_item),
-        ("[bold yellow]📖 Aprender Habilidade[/bold yellow]", aprender_habilidade),
         ("[bold blue]⚔️ Ver Grupo[/bold blue]", modificar_grupo),
         ("[light_pink4]📜 Ver Missões[/light_pink4]", ver_missoes),
 

@@ -1,11 +1,13 @@
 import os
 import pygame
 
-# Inicializa o mixer do pygame para tocar áudio
+
 pygame.mixer.init()
 
-def tocar_musica(nome_musica, volume):
-    """Inicia a reprodução de uma música localizada no diretório de assets"""
+posicao_pausada = 0
+
+def tocar_musica(nome_musica, volume=0.5):
+    global posicao_pausada
     diretorio_atual = os.path.dirname(os.path.abspath(__file__))
     caminho_musica = os.path.join(diretorio_atual, "..", "assets", nome_musica)
 
@@ -14,8 +16,36 @@ def tocar_musica(nome_musica, volume):
     
     pygame.mixer.music.load(caminho_musica)
     pygame.mixer.music.set_volume(volume)
-    pygame.mixer.music.play(-1)  # -1 faz a música tocar em loop
+    pygame.mixer.music.play(-1)  
+
+def pausar_musica():
+    global posicao_pausada
+    posicao_pausada = pygame.mixer.music.get_pos() / 1000  
+    pygame.mixer.music.pause()
+
+def resumir_musica():
+    global posicao_pausada
+    pygame.mixer.music.unpause()
+
+def tocar_efeito_sonoro(nome_efeito, volume=1.0):
+    global posicao_pausada
+    diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+    caminho_efeito = os.path.join(diretorio_atual, "..", "assets", "habilidades", nome_efeito)
+
+    if not os.path.exists(caminho_efeito):
+        raise FileNotFoundError(f"Arquivo de efeito sonoro não encontrado: {caminho_efeito}")
+
+    pausar_musica()
+
+    efeito = pygame.mixer.Sound(caminho_efeito)
+    efeito.set_volume(volume)
+    efeito.play()
+
+    pygame.time.wait(int(efeito.get_length() * 1000))
+
+
+    resumir_musica()
 
 def parar_musica():
-    """Para a música"""
+
     pygame.mixer.music.stop()

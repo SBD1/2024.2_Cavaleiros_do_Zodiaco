@@ -6,6 +6,7 @@ from .adicionar_cavaleiro_party import adicionar_cavaleiro_party
 from .remover_cavaleiro_party import remover_cavaleiro_party
 from ..database import obter_cursor
 from .trocar_cavaleiro_party import trocar_cavaleiro_party
+from .aprender_habilidade import aprender_habilidade
 
 def modificar_grupo(console: Console, player_id):
     """Permite ao jogador visualizar e modificar o grupo (adicionar/remover cavaleiros)."""
@@ -25,6 +26,7 @@ def modificar_grupo(console: Console, player_id):
                     options.append(("Trocar cavaleiro da party", trocar_cavaleiro_party)) 
                 if len(party_options) >= 1:  # O player não pode ser removido
                     options.append(("Remover cavaleiro da party", remover_cavaleiro_party))
+                options.append(("[bold yellow]📖 Aprender Habilidade[/bold yellow]", lambda c, cons, p: aprender_habilidade(c, cons, p)))
                 options.append(("Sair", None))
 
                 # Exibe o menu interativo

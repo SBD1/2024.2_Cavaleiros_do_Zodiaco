@@ -123,7 +123,7 @@ BEGIN
 
     -- 🔹 2. Se não encontrou um alvo fraco, buscar um Cavaleiro do mesmo Player
     IF alvo.id IS NULL THEN
-        SELECT id_cavaleiro AS id, 'cavaleiro' AS tipo, cavaleiro_nome AS nome, cavaleiro_hp_atual AS hp, cavaleiro_elemento AS elemento
+        SELECT id_cavaleiro AS id, 'cavaleiro' AS tipo, cavaleiro_nome AS nome, cavaleiro_hp_atual AS hp, cavaleiro_elemento_nome AS elemento
         INTO alvo
         FROM party_cavaleiros_view
         WHERE id_player = player_id
@@ -139,7 +139,7 @@ BEGIN
             FROM player_info_view
             WHERE id_player = player_id AND player_hp_atual > 0
             UNION ALL
-            SELECT id_cavaleiro AS id, 'cavaleiro' AS tipo, cavaleiro_nome AS nome, cavaleiro_hp_atual AS hp, cavaleiro_elemento AS elemento
+            SELECT id_cavaleiro AS id, 'cavaleiro' AS tipo, cavaleiro_nome AS nome, cavaleiro_hp_atual AS hp, cavaleiro_elemento_nome AS elemento
             FROM party_cavaleiros_view
             WHERE id_player = player_id AND cavaleiro_hp_atual > 0
         ) AS alvos_possiveis
@@ -712,7 +712,7 @@ BEGIN
                  'cavaleiro' AS tipo,
                  cavaleiro_nome AS nome,
                  COALESCE(cavaleiro_hp_atual, 0) AS hp,
-                 cavaleiro_elemento AS elemento
+                 cavaleiro_elemento_nome AS elemento
           FROM party_cavaleiros_view
           WHERE id_player = p_player
             AND COALESCE(cavaleiro_hp_atual, 0) > 0
