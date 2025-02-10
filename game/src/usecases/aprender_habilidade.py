@@ -55,7 +55,7 @@ def aprender_habilidade(console, player_id):
             return
         
         # Obtém a habilidade escolhida
-        id_item, nome_habilidade, classe_habilidade_nome, elemento_habilidade_nome, custo, dano, nivel_necessario, id_habilidade, classe_habilidade, elemento_habilidade = livros_habilidade[int(escolha) - 1]
+        id_item, nome_habilidade, classe_habilidade_nome, elemento_habilidade_nome, custo, dano, nivel_necessario, id_habilidade, classe_habilidade, elemento_habilidade, quantidade = livros_habilidade[int(escolha) - 1]
 
         # 3️⃣ Obtém Player e Cavaleiros compatíveis
         with obter_cursor() as cursor:

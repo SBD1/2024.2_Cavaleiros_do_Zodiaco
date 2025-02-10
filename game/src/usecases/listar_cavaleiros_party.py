@@ -35,8 +35,17 @@ def listar_cavaleiros_party(console, player_id):
             # Obtém informações do jogador
             cursor.execute("""
                 SELECT player_nome, player_nivel, player_xp_atual, player_hp_max, player_hp_atual, player_magia_max, player_magia_atual,
-                       player_velocidade,  elemento_nome, ataque_fisico_base, ataque_magico_base, ataque_fisico_armaduras, ataque_fisico_armaduras, ataque_magico_armaduras
-                FROM player_info_view WHERE id_player = %s;
+                       player_velocidade,  elemento_nome, ataque_fisico_base, ataque_magico_base, ataque_fisico_armaduras, ataque_fisico_armaduras, ataque_magico_armaduras,
+                      COALESCE(
+                           STRING_AGG(h.nome, ', ' ORDER BY h.nome), 'Nenhuma Habilidade'
+                       ) AS habilidades     
+                                FROM player_info_view p
+                LEFT JOIN habilidade_player hp ON hp.id_player = p.id_player
+                LEFT JOIN habilidade h ON h.id_habilidade = hp.id_habilidade
+                WHERE p.id_player = %s
+                GROUP BY p.player_nome, p.player_nivel, p.player_xp_atual, p.player_hp_max, p.player_hp_atual, 
+                         p.player_magia_max, p.player_magia_atual, p.player_velocidade, p.elemento_nome, 
+                         p.ataque_fisico_base, p.ataque_magico_base, p.ataque_fisico_armaduras, p.ataque_magico_armaduras;
             """, (player_id,))
             player = cursor.fetchone()
 
@@ -46,17 +55,25 @@ def listar_cavaleiros_party(console, player_id):
 
             # Processa informações do jogador
             player_nome, player_nivel, player_xp_atual, player_hp_max, player_hp_atual, player_magia_max, \
-            player_magia_atual, player_velocidade, player_elemento, player_ataque_fisico_base, player_ataque_magico_base, ataque_fisico_armaduras, ataque_fisico_armaduras, ataque_magico_armaduras = player
+            player_magia_atual, player_velocidade, player_elemento, player_ataque_fisico_base,\
+            player_ataque_magico_base, ataque_fisico_armaduras, ataque_fisico_armaduras, ataque_magico_armaduras, player_habilidades = player
 
             player_xp_max = obter_xp_maximo(cursor, player_nivel)
             formatted_player_elemento = formatar_elemento(player_elemento)
 
             # Obtém todas as instâncias de cavaleiros (party e fora party)
             cursor.execute("""
-                SELECT id_cavaleiro, nome_cavaleiro, elemento_nome, nivel, xp_atual, hp_max, magia_max,
-                       hp_atual, magia_atual, velocidade, ataque_fisico, ataque_magico, id_party, classe_nome
-                FROM instancia_cavaleiro_view 
-                WHERE id_player = %s;
+                SELECT ic.id_cavaleiro, ic.nome_cavaleiro, ic.elemento_nome, ic.nivel, ic.xp_atual, ic.hp_max, ic.magia_max,
+                       ic.hp_atual, ic.magia_atual, ic.velocidade, ic.ataque_fisico, ic.ataque_magico, ic.id_party, ic.classe_nome,
+                       COALESCE(
+                           STRING_AGG(h.nome, ', ' ORDER BY h.nome), 'Nenhuma Habilidade'
+                       ) AS habilidades
+                FROM instancia_cavaleiro_view ic
+                LEFT JOIN habilidade_cavaleiro hc ON hc.id_cavaleiro = ic.id_cavaleiro
+                LEFT JOIN habilidade h ON h.id_habilidade = hc.id_habilidade
+                WHERE ic.id_player = %s
+                GROUP BY ic.id_cavaleiro, ic.nome_cavaleiro, ic.elemento_nome, ic.nivel, ic.xp_atual, ic.hp_max, ic.magia_max,
+                         ic.hp_atual, ic.magia_atual, ic.velocidade, ic.ataque_fisico, ic.ataque_magico, ic.id_party, ic.classe_nome;
             """, (player_id,))
             cavaleiros = cursor.fetchall()
 
@@ -76,13 +93,16 @@ def listar_cavaleiros_party(console, player_id):
                 tabela.add_column("Velocidade", style="white", justify="center")
                 tabela.add_column("Ataque Físico", style="orange1", justify="center")
                 tabela.add_column("Ataque Mágico", style="purple", justify="center")
+                tabela.add_column("Habilidades", style="purple", justify="center")
 
             # Adiciona o jogador como o primeiro na tabela da party
             tabela_party.add_row(
                 "—", player_nome, "-", formatted_player_elemento, str(player_nivel),
                 f"{player_xp_max} / {player_xp_atual}", f"{player_hp_max} / {player_hp_atual}",
                 f"{player_magia_max} / {player_magia_atual}", str(player_velocidade),
-                f"{player_ataque_fisico_base + ataque_fisico_armaduras} \n(Base:{player_ataque_fisico_base} Armaduras:{ataque_fisico_armaduras})", f"{player_ataque_magico_base + ataque_magico_armaduras} \n(Base:{player_ataque_magico_base} Armaduras: {ataque_magico_armaduras})"
+                f"{player_ataque_fisico_base + ataque_fisico_armaduras} \n(Base:{player_ataque_fisico_base} Armaduras:{ataque_fisico_armaduras})",
+                f"{player_ataque_magico_base + ataque_magico_armaduras} \n(Base:{player_ataque_magico_base} Armaduras: {ataque_magico_armaduras})",
+                player_habilidades
             )
 
             # Processa os cavaleiros da party
@@ -90,7 +110,7 @@ def listar_cavaleiros_party(console, player_id):
             fora_party_index = 1
             for cav in cavaleiros:
                 id_cavaleiro, nome, elemento, nivel, xp_atual, hp_max, magia_max, hp_atual, magia_atual, \
-                velocidade, ataque_fisico, ataque_magico, id_party, classe = cav
+                velocidade, ataque_fisico, ataque_magico, id_party, classe, habilidades = cav
                 xp_max = obter_xp_maximo(cursor, nivel)
                 formatted_elemento = formatar_elemento(elemento)
                 if id_party:  # Está na party (mas não o jogador)
@@ -98,7 +118,7 @@ def listar_cavaleiros_party(console, player_id):
                     tabela_party.add_row(
                         str(party_index), nome, classe,  formatted_elemento, str(nivel), f"{xp_max} / {xp_atual}",
                         f"{hp_max} / {hp_atual}", f"{magia_max} / {magia_atual}",
-                        str(velocidade), str(ataque_fisico), str(ataque_magico)
+                        str(velocidade), str(ataque_fisico), str(ataque_magico), habilidades
                     )
                     party_options.append((party_index, id_cavaleiro, nome))
                     party_index += 1
@@ -108,7 +128,7 @@ def listar_cavaleiros_party(console, player_id):
                     tabela_fora_party.add_row(
                         str(fora_party_index), nome, classe, formatted_elemento, str(nivel), f"{xp_max} / {xp_atual}",
                         f"{hp_max} / {hp_atual}", f"{magia_max} / {magia_atual}",
-                        str(velocidade), str(ataque_fisico), str(ataque_magico)
+                        str(velocidade), str(ataque_fisico), str(ataque_magico), habilidades
                     )
                     fora_party_options.append((fora_party_index, id_cavaleiro, nome))
                     fora_party_index += 1

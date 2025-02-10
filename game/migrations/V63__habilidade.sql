@@ -65,22 +65,40 @@ END $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION reduzir_item_armazenado()
 RETURNS TRIGGER AS $$
+DECLARE
+    id_livro INT;
+    player_id INT;
 BEGIN
- 
+    -- Obtém o ID do livro relacionado à habilidade aprendida
+    SELECT id_item INTO id_livro 
+    FROM livro 
+    WHERE id_habilidade = NEW.id_habilidade;
+
+    -- Obtém o ID do player (caso seja um cavaleiro, pegamos do cavaleiro correspondente)
+    IF TG_TABLE_NAME = 'habilidade_player' THEN
+        player_id := NEW.id_player;
+    ELSIF TG_TABLE_NAME = 'habilidade_cavaleiro' THEN
+        SELECT id_player INTO player_id
+        FROM instancia_cavaleiro
+        WHERE id_cavaleiro = NEW.id_cavaleiro;
+    END IF;
+
+    -- Atualiza a quantidade do item no inventário do jogador
     UPDATE item_armazenado
     SET quantidade = quantidade - 1
-    WHERE id_player = NEW.id_player
-    AND id_item = (SELECT id_item FROM livro WHERE id_habilidade = NEW.id_habilidade);
+    WHERE id_inventario = player_id
+    AND id_item = id_livro;
 
-   
+    -- Remove o item do inventário se a quantidade for 0
     DELETE FROM item_armazenado
-    WHERE id_player = NEW.id_player
-    AND id_item = (SELECT id_item FROM livro WHERE id_habilidade = NEW.id_habilidade)
+    WHERE id_inventario= player_id
+    AND id_item = id_livro
     AND quantidade <= 0;
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
 
 
 CREATE TRIGGER trigger_reduzir_item_habilidade_player
