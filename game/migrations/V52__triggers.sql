@@ -301,3 +301,23 @@ BEFORE UPDATE ON player
 FOR EACH ROW
 WHEN (NEW.hp_atual <= 0) 
 EXECUTE FUNCTION mover_sala_segura_pos_morte();
+
+
+CREATE OR REPLACE FUNCTION verificar_slots_unicos() 
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM Habilidade_Player
+        WHERE id_player = NEW.id_player 
+        AND slot = NEW.slot
+    ) THEN
+        RAISE EXCEPTION '❌ Esse slot já está ocupado! Escolha outro.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER impedir_slots_repetidos
+BEFORE INSERT OR UPDATE ON Habilidade_Player
+FOR EACH ROW
+EXECUTE FUNCTION verificar_slots_unicos();

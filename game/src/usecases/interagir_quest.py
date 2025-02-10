@@ -28,14 +28,14 @@ def interagir_quest(console,selected_player_id):
             cursor.execute("""
                 SELECT m.id_missao, m.nome
                 FROM Missao m
-                LEFT JOIN Player_missao pm ON m.id_missao = pm.id_missao AND pm.id_player = 1
-                LEFT JOIN Player_missao pm_anterior ON m.id_missao_anterior = pm_anterior.id_missao AND pm_anterior.id_player = 1
+                LEFT JOIN Player_missao pm ON m.id_missao = pm.id_missao AND pm.id_player = %s
+                LEFT JOIN Player_missao pm_anterior ON m.id_missao_anterior = pm_anterior.id_missao AND pm_anterior.id_player = %s
                 WHERE (m.id_missao_anterior IS NULL  -- Missões sem pré-requisito
                     OR pm_anterior.status_missao = 'c')  -- Ou missões cuja anterior foi concluída
-                AND (pm.status_missao IS NULL OR pm.status_missao = 'ni');  -- Apenas missões não iniciadas
+                AND (pm.status_missao IS NULL OR pm.status_missao = 'ni') AND m.nome != '666';  -- Apenas missões não iniciadas
 
 
-            """, (selected_player_id,))
+            """, (selected_player_id,selected_player_id,))
             
             missoes = cursor.fetchall()
 

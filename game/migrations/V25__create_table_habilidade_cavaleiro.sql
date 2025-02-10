@@ -3,7 +3,8 @@ CREATE TABLE Habilidade_Cavaleiro (
     id_cavaleiro INTEGER,
     id_habilidade INTEGER,
     slot INTEGER NOT NULL,
-    PRIMARY KEY (id_cavaleiro, id_habilidade, slot)
+    PRIMARY KEY (id_cavaleiro, id_habilidade, slot),
+    CONSTRAINT unique_habilidade_por_cavaleiro UNIQUE (id_cavaleiro, id_habilidade)
 );
  
 ALTER TABLE Habilidade_Cavaleiro ADD CONSTRAINT FK_Habilidade_Cavaleiro_2
