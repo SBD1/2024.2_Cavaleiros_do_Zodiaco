@@ -411,10 +411,14 @@ SELECT
     ic.ataque_fisico,
     ic.ataque_magico,
     ic.id_party,
-    ic.id_player
+    ic.id_player,
+    cl.nome as classe_nome,
+    c.id_classe as classe_id,
+    e.id_elemento as elemento_id
 FROM instancia_cavaleiro ic
 INNER JOIN cavaleiro c ON ic.id_cavaleiro = c.id_cavaleiro
-INNER JOIN elemento e ON c.id_elemento = e.id_elemento;
+INNER JOIN elemento e ON c.id_elemento = e.id_elemento
+JOIN classe cl on c.id_classe = cl.id_classe;
 
 CREATE VIEW receitas_materiais_view AS
     SELECT r.id_item_gerado, m.nome AS item_gerado, STRING_AGG(mat.nome || ' (' || mr.quantidade || ')', ', ') AS materiais, r.nivel_minimo AS nivel_minimo
@@ -536,15 +540,19 @@ SELECT
     ic.velocidade AS cavaleiro_velocidade,
     ic.ataque_fisico AS cavaleiro_ataque_fisico,
     ic.ataque_magico AS cavaleiro_ataque_magico,
-    e.nome as cavaleiro_elemento,
+    e.nome as cavaleiro_elemento_nome,
     e.fraco_contra as id_fraqueza,
-    e.forte_contra as id_vantagem
+    e.forte_contra as id_vantagem,
+    c.nome as cavaleiro_classe_nome,
+    c.id_classe as cavaleiro_classe_id,
+    e.id_elemento as cavaleiro_elemento_id
 FROM 
     public.instancia_cavaleiro ic
 JOIN 
     public.cavaleiro c ON ic.id_cavaleiro = c.id_cavaleiro
 JOIN party p on p.id_player = ic.id_party
-JOIN elemento e on c.id_elemento = e.id_elemento;
+JOIN elemento e on c.id_elemento = e.id_elemento
+JOIN classe cl on cl.id_classe = c.id_classe;
 
 
 CREATE OR REPLACE VIEW cavaleiro_parte_corpo_info_view AS

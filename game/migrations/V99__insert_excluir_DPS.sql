@@ -1,8 +1,8 @@
 INSERT INTO public.habilidade
 ( classe_habilidade, elemento_habilidade, nome, custo, descricao, frase_uso, nivel_necessario)
 VALUES( 
-    1,  -- Classe de habilidade (1 pode ser "Ofensiva")
-    1,  -- Elemento relacionado (1 pode ser "Cosmos")
+    2,  -- Classe de habilidade (1 pode ser "Ofensiva")
+    3,  -- Elemento relacionado (1 pode ser "Cosmos")
     'Meteoro de Pégaso', 
     20,  -- Custo de uso (ex.: 20 de magia)
     'Um ataque poderoso com golpes consecutivos imbuídos de cosmos. Cada golpe atinge com a força do espírito de Pégaso.', 

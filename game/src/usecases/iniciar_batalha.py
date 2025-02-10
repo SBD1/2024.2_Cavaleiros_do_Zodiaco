@@ -85,6 +85,7 @@ def exibir_tabela_batalha(console, player_info, cavaleiros, boss_info):
     
     tabela_party.add_column("#", style="bold yellow", justify="center")
     tabela_party.add_column("Nome", style="cyan", justify="center", max_width=10)
+    tabela_party.add_column("Classe", style="blue", justify="center")
     tabela_party.add_column("Elemento", style="blue", justify="center")
     tabela_party.add_column("Lvl", style="green", justify="center")
     tabela_party.add_column("HP", style="red", justify="center")
@@ -104,7 +105,7 @@ def exibir_tabela_batalha(console, player_info, cavaleiros, boss_info):
 
     # Adicionar o player à tabela_party
     tabela_party.add_row(
-        "—", player_nome, elemento_player, str(player_nivel),  # Nome, Elemento, Nível
+        "—", player_nome,"-", elemento_player, str(player_nivel),  # Nome, Elemento, Nível
         f"{player_hp_max}/{player_hp_atual}",  # HP Atual / Máximo
         f"{player_magia_max}/{player_magia_atual}",  # Magia Atual / Máximo
         str(player_velocidade),  # Velocidade
@@ -117,12 +118,12 @@ def exibir_tabela_batalha(console, player_info, cavaleiros, boss_info):
             id_cavaleiro, id_player, id_party, cavaleiro_nome, cavaleiro_nivel, 
             tipo_armadura, cavaleiro_xp_atual, cavaleiro_hp_max, cavaleiro_hp_atual, 
             cavaleiro_magia_max, cavaleiro_magia_atual, cavaleiro_velocidade, 
-            cavaleiro_ataque_fisico, cavaleiro_ataque_magico, elemento_cavaleiro, id_fraqueza_cavaleiro, id_vantagem_cavaleiro
+            cavaleiro_ataque_fisico, cavaleiro_ataque_magico, elemento_cavaleiro, id_fraqueza_cavaleiro, id_vantagem_cavaleiro, cavaleiro_classe, cavaleiro_classe_id, cavaleiro_elemento_id
         ) = cavaleiro
 
         # Adicionar o cavaleiro à tabela_party
         tabela_party.add_row(
-            str(i), cavaleiro_nome,  elemento_cavaleiro, str(cavaleiro_nivel),  # Nome, Tipo, Nível
+            str(i), cavaleiro_nome, cavaleiro_classe,  elemento_cavaleiro, str(cavaleiro_nivel),  # Nome, Tipo, Nível
             f"{cavaleiro_hp_max}/{cavaleiro_hp_atual}",  # HP Atual / Máximo
             f"{cavaleiro_magia_max}/{cavaleiro_magia_atual}",  # Magia Atual / Máximo
             str(cavaleiro_velocidade),  # Velocidade
