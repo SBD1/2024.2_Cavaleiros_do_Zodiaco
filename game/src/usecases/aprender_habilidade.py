@@ -63,8 +63,11 @@ def aprender_habilidade(console, player_id):
             cursor.execute("""
                 SELECT id_player, player_nome, elemento_nome
                 FROM player_info_view
-                WHERE id_player = %s AND id_elemento = %s;
-            """, (player_id, elemento_habilidade))
+                WHERE id_player = %s AND id_elemento = %s
+                    AND NOT EXISTS(
+                        SELECT 1 FROM habilidade_player WHERE habilidade_player.id_player = player_info_view.id_player AND habilidade_player.id_habilidade = %s 
+                    );
+            """, (player_id, elemento_habilidade, id_habilidade))
             
             player_compatível = cursor.fetchone()
 
@@ -72,8 +75,13 @@ def aprender_habilidade(console, player_id):
             cursor.execute("""
                 SELECT id_cavaleiro, nome_cavaleiro, classe_nome, elemento_nome
                 FROM instancia_cavaleiro_view ic
-                WHERE ic.id_player = %s AND ic.classe_id = %s AND ic.elemento_id = %s;
-            """, (player_id, classe_habilidade, elemento_habilidade))
+                WHERE ic.id_player = %s 
+                AND ic.classe_id = %s 
+                AND ic.elemento_id = %s
+                AND NOT EXISTS (
+                    SELECT 1 FROM habilidade_cavaleiro WHERE habilidade_cavaleiro.id_cavaleiro = ic.id_cavaleiro AND habilidade_cavaleiro.id_habilidade = %s
+                );
+            """, (player_id, classe_habilidade, elemento_habilidade, id_habilidade))
             
             cavaleiros_compatíveis = cursor.fetchall()
         
