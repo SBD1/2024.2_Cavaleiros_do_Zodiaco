@@ -283,9 +283,9 @@ BEGIN
 
     UPDATE party
     SET id_sala = (SELECT id_sala FROM public.sala_segura LIMIT 1)  -- Usar parênteses no SELECT
-    WHERE party.id_player = OLD.id_player;
+    WHERE party.id_player = NEW.id_player;
 
-
+    NEW.hp_atual := NEW.hp_max / 2;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

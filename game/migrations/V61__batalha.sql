@@ -113,7 +113,7 @@ DECLARE
     chance_critico INT;
 BEGIN
     -- 🔹 1. Buscar um alvo com fraqueza ao elemento do Boss (Player ou Cavaleiro)
-    SELECT id_player AS id, 'player' AS tipo, player_nome as nome player_hp_atual AS hp, elemento_nome AS elemento
+    SELECT id_player AS id, 'player' AS tipo, player_nome AS nome, player_hp_atual AS hp, elemento_nome AS elemento
     INTO alvo
     FROM player_info_view
     WHERE id_player = player_id
@@ -123,7 +123,7 @@ BEGIN
 
     -- 🔹 2. Se não encontrou um alvo fraco, buscar um Cavaleiro do mesmo Player
     IF alvo.id IS NULL THEN
-        SELECT id_cavaleiro AS id, 'cavaleiro' AS tipo, cavaleiro_hp_atual AS hp, cavaleiro_elemento AS elemento
+        SELECT id_cavaleiro AS id, 'cavaleiro' AS tipo, cavaleiro_nome AS nome, cavaleiro_hp_atual AS hp, cavaleiro_elemento AS elemento
         INTO alvo
         FROM party_cavaleiros_view
         WHERE id_player = player_id
@@ -134,12 +134,12 @@ BEGIN
 
     -- 🔹 3. Se ainda não encontrou, escolher aleatoriamente entre Player e Cavaleiro
     IF alvo.id IS NULL THEN
-        SELECT id, tipo, hp, elemento INTO alvo FROM (
-            SELECT id_player AS id, 'player' AS tipo, player_hp_atual AS hp, elemento_nome AS elemento
+        SELECT id, tipo, nome, hp, elemento INTO alvo FROM (
+            SELECT id_player AS id, 'player' AS tipo, player_nome AS nome, player_hp_atual AS hp, elemento_nome AS elemento
             FROM player_info_view
             WHERE id_player = player_id AND player_hp_atual > 0
             UNION ALL
-            SELECT id_cavaleiro AS id, 'cavaleiro' AS tipo, cavaleiro_hp_atual AS hp, cavaleiro_elemento AS elemento
+            SELECT id_cavaleiro AS id, 'cavaleiro' AS tipo, cavaleiro_nome AS nome, cavaleiro_hp_atual AS hp, cavaleiro_elemento AS elemento
             FROM party_cavaleiros_view
             WHERE id_player = player_id AND cavaleiro_hp_atual > 0
         ) AS alvos_possiveis
@@ -173,7 +173,10 @@ BEGIN
 
     critico := (random() * 100) < parte_alvo.chance_critico;
     IF critico THEN dano := dano * 1.5; END IF;
-
+    
+    -- 🔹 8. Log do ataque
+    RAISE NOTICE 'Boss atacou % na % causando % de dano!', alvo.nome, parte_alvo.parte_corpo_nome, dano;
+    
     -- 🔹 7. Aplicar dano ao alvo correto
     IF alvo.tipo = 'player' THEN
         UPDATE player SET hp_atual = hp_atual - dano WHERE id_player = alvo.id;
@@ -181,10 +184,11 @@ BEGIN
         UPDATE instancia_cavaleiro SET hp_atual = hp_atual - dano WHERE id_cavaleiro = alvo.id;
     END IF;
 
-    -- 🔹 8. Log do ataque
-    RAISE NOTICE 'Boss atacou % na % causando % de dano!', alvo.nome, parte_alvo.parte_corpo, dano;
+  
+    
 
 END $$ LANGUAGE plpgsql;
+
 
 
 
