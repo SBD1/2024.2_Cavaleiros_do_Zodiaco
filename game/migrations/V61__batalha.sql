@@ -175,7 +175,7 @@ BEGIN
     IF critico THEN dano := dano * 1.5; END IF;
 
     -- 🔹 8. Log do ataque
-    RAISE NOTICE 'Boss atacou % na % causando % de dano!', alvo.nome, parte_alvo.parte_corpo_nome, dano;
+    RAISE NOTICE 'Boss atacou % em % causando % de dano!', alvo.nome, parte_alvo.parte_corpo_nome, dano;
     
     -- 🔹 7. Aplicar dano ao alvo correto
     IF alvo.tipo = 'player' THEN
@@ -203,9 +203,10 @@ DECLARE
     vantagem BOOLEAN;
     fraqueza BOOLEAN;
     chance_critico INT;
+    p_nome TEXT;
 BEGIN
     -- 🔹 1. Buscar a parte do corpo do Boss que o Player escolheu atacar
-    SELECT parte_corpo, boss_defesa_fisica AS defesa_fisica, boss_defesa_magica AS defesa_magica, boss_chance_acerto_critico AS chance_critico
+    SELECT parte_corpo, boss_defesa_fisica AS defesa_fisica, boss_defesa_magica AS defesa_magica, boss_chance_acerto_critico AS chance_critico, boss_parte_corpo as nome_parte_corpo
     INTO parte_alvo
     FROM boss_parte_corpo_info_view
     WHERE id_boss = boss_id
@@ -219,7 +220,7 @@ BEGIN
     END IF;
 
     -- 🔹 3. Definir dano base como ataque físico do Player
-    SELECT ataque_fisico_total INTO dano_base FROM player_info_view WHERE id_player = player_id;
+    SELECT ataque_fisico_total, player_nome INTO dano_base, p_nome FROM player_info_view WHERE id_player = player_id;
 
     -- 🔹 4. Aplicar modificadores de dano baseados na defesa do Boss
     dano := dano_base - parte_alvo.defesa_fisica;
@@ -243,7 +244,7 @@ BEGIN
     END IF;
 
     -- 🔹 8. Exibir mensagem do ataque
-    RAISE NOTICE 'Player atacou o Boss na % causando % de dano!', parte_alvo.parte_corpo, dano;
+    RAISE NOTICE '% atacou o Boss na % causando % de dano!', p_nome, parte_alvo.parte_corpo, dano;
 
     -- 🔹 9. Aplicar dano ao Boss
     UPDATE boss

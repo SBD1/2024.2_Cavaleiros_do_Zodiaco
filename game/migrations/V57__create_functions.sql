@@ -117,31 +117,38 @@ BEGIN
 END;
 $$;
 
-
-CREATE OR REPLACE FUNCTION player_tem_boss(id_player_input INT)
-RETURNS INT AS $$
-DECLARE
-    v_id_sala INT;
-    v_id_boss INT;
+CREATE OR REPLACE FUNCTION verificar_boss_sala(player_id_input INT)
+RETURNS TABLE (
+    id_boss INT,
+    nome_boss TEXT,
+    hp_atual INT,
+    id_missao INT,
+    status_missao TEXT,
+    id_missao_anterior INT,
+    nome_missao_anterior TEXT
+) AS $$
 BEGIN
-    -- Obtém a sala atual do jogador
-    v_id_sala := get_id_sala_atual(id_player_input);
+    RETURN QUERY
+    SELECT 
+        b.id_boss, 
+        b.nome::TEXT,  
+        b.hp_atual, 
+        m.id_missao, 
+        pm.status_missao::TEXT,  
+        m.id_missao_anterior,
+        ma.nome::TEXT  
+    FROM boss b
+    LEFT JOIN missao m ON b.id_item_missao = m.item_necessario
+    LEFT JOIN player_missao pm ON m.id_missao = pm.id_missao AND pm.id_player = player_id_input
+    LEFT JOIN player_missao pm_requisito 
+        ON m.id_missao_anterior = pm_requisito.id_missao 
+        AND pm_requisito.id_player = player_id_input
+        AND pm_requisito.status_missao = 'c'
+    LEFT JOIN missao ma ON m.id_missao_anterior = ma.id_missao 
+    WHERE b.id_sala = get_id_sala_atual(player_id_input);
+END $$ LANGUAGE plpgsql;
 
-    -- Se o jogador não estiver em uma sala, retorna NULL
-    IF v_id_sala IS NULL THEN
-        RETURN NULL;
-    END IF;
 
-    -- Verifica se há um boss na sala
-    SELECT id_boss
-    INTO v_id_boss
-    FROM boss
-    WHERE id_sala = v_id_sala;
-
-    -- Retorna o id_boss se houver, caso contrário, NULL
-    RETURN v_id_boss;
-END;
-$$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION verificar_desbloqueio_ferreiro(p_id_player INTEGER)

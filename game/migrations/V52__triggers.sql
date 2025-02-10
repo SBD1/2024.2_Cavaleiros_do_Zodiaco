@@ -278,7 +278,7 @@ BEGIN
     SET dinheiro = dinheiro / 2
     WHERE inventario.id_player = OLD.id_player;
 
-    RAISE NOTICE '% foi derrotado, Saori Kido o resgata mas com um custo...', OLD.id_player;
+    RAISE NOTICE '% foi derrotado, Saori Kido o resgata mas com um custo...', OLD.nome;
 
 
     UPDATE party
