@@ -9,7 +9,7 @@ VALUES(
     'Um ataque poderoso com golpes consecutivos imbuídos de cosmos. Cada golpe atinge com a força do espírito de Pégaso.', 
     'Pegasus Ryu Sei Ken!', 
     5,  -- Nível necessário para desbloquear
-    'meteoro de pegasus.mp3'
+    'meteoro_de_pegaso.mp3'
 );
 
 -- Inserindo o livro que desbloqueia a habilidade
