@@ -794,3 +794,48 @@ BEGIN
     END IF;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+
+CREATE OR REPLACE FUNCTION reviver_todos_boss()
+RETURNS VOID AS $$
+DECLARE
+    num_updated INTEGER;
+BEGIN
+    UPDATE boss
+       SET hp_atual = hp_max;
+    
+    GET DIAGNOSTICS num_updated = ROW_COUNT;
+    
+    RAISE NOTICE 'Todos os bosses foram ressuscitados (% registros atualizados).', num_updated;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION reviver_todas_instancia_inimigo()
+RETURNS VOID AS $$
+DECLARE
+    num_updated INTEGER;
+BEGIN
+    UPDATE instancia_inimigo AS ii
+       SET hp_atual = i.hp_max
+      FROM inimigo AS i
+     WHERE i.id_inimigo = ii.id_inimigo;
+
+    GET DIAGNOSTICS num_updated = ROW_COUNT;
+    
+    RAISE NOTICE 'Todas as instâncias de inimigo foram revividas (% registros atualizados).', num_updated;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT cron.schedule(
+    'reviver_bosses_job',  
+    '*/5 * * * *',        
+    $$ SELECT reviver_todos_boss(); $$ ); 
+
+SELECT cron.schedule(
+    'reviver_instancias_inimigo_job',
+    '*/5 * * * *',
+    $$ SELECT reviver_todas_instancia_inimigo(); $$
+);
+
+
