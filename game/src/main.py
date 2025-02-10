@@ -13,6 +13,7 @@ from src.usecases.iniciar_jogo import iniciar_jogo
 from src.usecases.criar_jogador import criar_jogador
 from src.usecases.verificar_inimigos import verificar_inimigos
 from src.usecases.verificar_boss import verificar_boss
+from src.usecases.executar666 import executar666
 from .util import limpar_terminal
 from src.usecases.tocar_tema_encerramento import tocar_tema_encerramento
 from .usecases.tocar_musica import tocar_musica, parar_musica
@@ -72,6 +73,8 @@ def mostrar_menu_acoes(console):
                 console.print(Panel("[bold red]👋 Saindo do Menu de Ações...[/bold red]", expand=False))
                 input("\n[💾 Pressione ENTER para continuar...]")
                 break
+            elif escolha == 666:
+                executar666(console, jogador_selecionado_id)
             else:
                 console.print("[bold red]⚠ Opção inválida! Tente novamente.[/bold red]")
                 time.sleep(1)
