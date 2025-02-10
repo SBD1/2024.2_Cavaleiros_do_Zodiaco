@@ -156,7 +156,7 @@ BEGIN
         ORDER BY random()
         LIMIT 1;
     ELSE
-        SELECT cavaleiro_parte_corpo, cavaleiro_defesa_fisica AS defesa_fisica, cavaleiro_defesa_magica AS defesa_magica, cavaleiro_chance_acerto_critico AS chance_critico
+        SELECT cavaleiro_parte_corpo as parte_corpo_nome, cavaleiro_defesa_fisica AS defesa_fisica, cavaleiro_defesa_magica AS defesa_magica, cavaleiro_chance_acerto_critico AS chance_critico
         INTO parte_alvo
         FROM cavaleiro_parte_corpo_info_view
         WHERE id_cavaleiro = alvo.id
@@ -259,7 +259,80 @@ BEGIN
 END $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION cavaleiro_ataque_fisico(cavaleiro_id INT, boss_id INT, parte_alvo_escolhida enum_parte_corpo)
+RETURNS VOID AS $$
+DECLARE
+    parte_alvo RECORD;
+    dano_base INT;
+    dano INT;
+    critico BOOLEAN;
+    vantagem BOOLEAN;
+    fraqueza BOOLEAN;
+    chance_critico INT;
+    c_nome TEXT;
+    nome_boss TEXT;  -- 🔹 Adicionamos uma variável para armazenar o nome do Boss
+BEGIN
+    -- 🔹 1. Buscar o nome do Boss
+    SELECT boss_nome INTO nome_boss FROM boss_info_view b WHERE id_boss = boss_id;
 
+    -- 🔹 2. Buscar a parte do corpo do Boss que o Cavaleiro escolheu atacar
+    SELECT parte_corpo, boss_defesa_fisica AS defesa_fisica, boss_defesa_magica AS defesa_magica, boss_chance_acerto_critico AS chance_critico, boss_parte_corpo AS nome_parte_corpo
+    INTO parte_alvo
+    FROM boss_parte_corpo_info_view
+    WHERE id_boss = boss_id
+    AND parte_corpo = parte_alvo_escolhida
+    LIMIT 1;
+
+    -- 🔹 3. Verificar se a parte do corpo escolhida é válida
+    IF parte_alvo.parte_corpo IS NULL THEN
+        RAISE NOTICE 'Parte do corpo inválida! O ataque falhou.';
+        RETURN;
+    END IF;
+
+    -- 🔹 4. Definir dano base como ataque físico do Cavaleiro
+    SELECT cavaleiro_ataque_fisico, cavaleiro_nome 
+    INTO dano_base, c_nome
+    FROM party_cavaleiros_view 
+    WHERE id_cavaleiro = cavaleiro_id;
+
+    -- 🔹 5. Aplicar modificadores de dano baseados na defesa do Boss
+    dano := dano_base - parte_alvo.defesa_fisica;
+    IF dano < 0 THEN dano := 1; END IF;
+
+    -- 🔹 6. Calcular chance de acerto crítico
+    critico := (random() * 100) < parte_alvo.chance_critico;
+    IF critico THEN dano := dano * 1.5; END IF;
+
+    -- 🔹 7. Verificar vantagem e fraqueza elementais
+    vantagem := (SELECT id_vantagem FROM party_cavaleiros_view WHERE id_cavaleiro = cavaleiro_id) = 
+                (SELECT id_fraqueza FROM boss_info_view WHERE id_boss = boss_id);
+    
+    fraqueza := (SELECT id_fraqueza FROM party_cavaleiros_view WHERE id_cavaleiro = cavaleiro_id) = 
+                (SELECT id_vantagem FROM boss_info_view WHERE id_boss = boss_id);
+
+    -- 🔹 8. Aplicar multiplicadores de dano
+    IF vantagem THEN
+        dano := dano * 1.25;  -- Aumenta 25% se o Cavaleiro tiver vantagem elemental
+    END IF;
+
+    IF fraqueza THEN
+        dano := dano * 0.75;  -- Reduz 25% se o Cavaleiro tiver fraqueza elemental
+    END IF;
+
+    -- 🔹 9. Exibir mensagem do ataque incluindo o nome do Boss
+    RAISE NOTICE '% atacou % na % causando % de dano!', c_nome, nome_boss, parte_alvo.nome_parte_corpo, dano;
+
+    -- 🔹 10. Aplicar dano ao Boss
+    UPDATE boss
+    SET hp_atual = hp_atual - dano
+    WHERE id_boss = boss_id;
+
+    -- 🔹 11. Verificar se o Boss morreu
+    IF (SELECT hp_atual FROM boss WHERE id_boss = boss_id) <= 0 THEN
+        RAISE NOTICE '% foi derrotado!', nome_boss;
+    END IF;
+
+END $$ LANGUAGE plpgsql;
 
 
 

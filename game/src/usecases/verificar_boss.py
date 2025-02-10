@@ -10,7 +10,6 @@ def verificar_boss(console, player_id):
         boss = cursor.fetchone()
 
         if boss:
-            print(boss)
             id_boss, nome_boss, hp_atual, id_missao, status_missao, id_missao_anterior, nome_missao_anterior, status_missao_anterior = boss
 
             if hp_atual <= 0:
@@ -36,5 +35,4 @@ def verificar_boss(console, player_id):
 
             return id_boss  # Retorna o ID do Boss que pode ser enfrentado
         
-        console.print("[bold green]✅ Nenhum Boss nesta sala. Você está seguro... por enquanto.[/bold green]")
         return None

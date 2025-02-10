@@ -307,7 +307,7 @@ def executar_turnos(console, player, cavaleiros, boss):
                                     "3": "b",  # Braços
                                     "4": "p"   # Pernas
                                 }
-
+                                
                                 if escolha_ataque == "5":  # 🔙 Voltar ao menu principal
                                     break  # Sai do loop e retorna ao menu principal
 
@@ -357,12 +357,19 @@ def executar_turnos(console, player, cavaleiros, boss):
 
                                         else: 
                                             console.print(f"[bold green]⚔️ {mensagem} [/bold green]")
+                                            console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]") 
+                                            input()
+                                        
+                                    break
+                                
 
-                                    console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]") 
-                                    return  # 🔹 Sai do loop e avança o turno
+                                else:
+                                    console.print("[bold red]❌ Parte inválida! Tente novamente.[/bold red]")
 
-                                console.print("[bold red]❌ Parte inválida! Tente novamente.[/bold red]")
+                                console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]") 
                                 input()
+                                break
+
 
                         elif escolha == "2":  # 🔹 Se escolher habilidade, pode voltar
                             console.print("[bold blue]⚠️ Habilidades ainda não implementadas.[/bold blue]")
@@ -387,9 +394,15 @@ def executar_turnos(console, player, cavaleiros, boss):
                             console.print("[bold red]❌ Escolha inválida! Tente novamente.[/bold red]")
                             input()
 
+                                
+                        break
+
                 # Se for o Boss, ataca um alvo aleatório (Player ou Cavaleiro)
                 elif personagem["tipo"] == "boss":
-                    console.print(f"[bold cyan]🔄 Turno de {personagem['nome']} ({personagem['tipo']})![/bold cyan]")
+                    limpar_terminal(console)
+                    exibir_tabela_batalha(console, player, cavaleiros, boss)
+
+                    console.print(f"\n[bold cyan]🔄 Turno de {personagem['nome']} ({personagem['tipo']})![/bold cyan]")
                     try:
                        
                         cursor.execute("SELECT boss_ataque_fisico(%s, %s)", (int(personagem["id"]), player[0]))
@@ -428,8 +441,7 @@ def executar_turnos(console, player, cavaleiros, boss):
             # Atualiza os HPs após o ataque
             atualizar_hp(fila, console)
 
-        console.print("[bold yellow]⏩ Pressione ENTER para continuar para o próximo turno...[/bold yellow]")
-        input()
+        
 
 def exibir_partes_corpo_boss(console, boss_id):
     limpar_terminal(console)
