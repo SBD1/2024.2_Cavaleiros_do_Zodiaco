@@ -235,7 +235,7 @@ def criar_fila_turnos(player, cavaleiros, boss):
 def executar_turnos(console, player, cavaleiros, boss):
     """Executa a batalha turn-based entre Player, Cavaleiros e Boss."""
     boss_dict = {
-        "id": boss[0], "nome": boss[1], "hp": boss[5], "fala_derrotar_player": boss[13], "fala_derrotado": boss[14], "fala_condicao": boss[15]
+        "id": boss[0], "nome": boss[1], "xp_dropado": boss[3], "hp": boss[5], "dinheiro_dropado": boss[11],  "fala_derrotar_player": boss[13], "fala_derrotado": boss[14], "fala_condicao": boss[15]
     }
     fila = criar_fila_turnos(player, cavaleiros, boss)
     
@@ -246,7 +246,6 @@ def executar_turnos(console, player, cavaleiros, boss):
             cursor.execute("SELECT hp_atual FROM boss WHERE id_boss = %s", (boss_dict["id"],))
             boss_hp = cursor.fetchone()
             if boss_hp and boss_hp[0] <= 0:
-                console.print(Panel("[bold green]🎉 Vitória! O Boss foi derrotado![/bold green]", title="⚔️ Batalha Encerrada"))
                 break
 
         # Verifica no SQL se todos os jogadores e cavaleiros foram derrotados
@@ -349,10 +348,31 @@ def executar_turnos(console, player, cavaleiros, boss):
                                                                 SET status_missao = 'c'
                                                                 WHERE id_missao = %s and id_player = %s;
                                                             """, (id_missao, player[0]))
-                                                        console.print(f"[bold cyan]🏆 Missão concluída! Voce desbloqueou {cavaleiro_desbloqueado}[/bold cyan]")
-
+                                                        console.print(f"[bold cyan]🏆 Missão concluída! Voce desbloqueou {cavaleiro_desbloqueado}[/bold cyan]"
+)
                                                     # Exibe mensagem de vitória
-                                                    console.print(Panel("[bold green]🎉 Vitória! O Boss foi derrotado![/bold green]", title="⚔️ Batalha Encerrada"))
+                                                    # Exibir mensagem de vitória com as recompensas
+                                                    
+                                                    cursor.execute("""
+                                                        UPDATE inventario
+                                                        SET dinheiro = dinheiro + %s
+                                                        WHERE id_player = %s;
+                                                    """, (boss_dict['dinheiro_dropado'], player[0]))
+
+                                                    cursor.execute("""
+                                                        UPDATE player
+                                                        SET xp_atual = xp_atual + %s
+                                                        WHERE id_player = %s;
+                                                    """, (boss_dict['xp_dropado'], player[0]))
+
+                                                    console.print(Panel(
+                                                        f"\n[bold green]🎉 Vitória! O Boss foi derrotado![/bold green]\n\n"
+                                                        f"[bold cyan]🏆 Recompensas:[/bold cyan]\n"
+                                                        f"💰 Dinheiro ganho: [bold yellow]{boss_dict['dinheiro_dropado']}[/bold yellow]\n"
+                                                        f"✨ XP ganho: [bold blue]{boss_dict['xp_dropado']}[/bold blue]\n",
+                                                        title="⚔️ Batalha Encerrada"
+                                                    ))
+                                                    
                                                     return  # 🔹 Sai da batalha imediatamente
 
                                         else: 

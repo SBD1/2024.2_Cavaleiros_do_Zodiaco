@@ -97,26 +97,31 @@ EXECUTE FUNCTION verificar_dinheiro();
 CREATE OR REPLACE FUNCTION subir_de_nivel()
 RETURNS TRIGGER AS $$
 DECLARE
-    nivel_atual INTEGER;
-    xp_atual INTEGER;
+    xp_prox_nivel INTEGER;
 BEGIN
-    nivel_atual := OLD.nivel;
-    xp_atual := OLD.xp_atual;
+    LOOP
+        SELECT xp_necessaria INTO xp_prox_nivel
+        FROM xp_necessaria 
+        WHERE nivel = NEW.nivel + 1;
 
-    IF xp_atual >= (SELECT xp_necessaria FROM xp_necessaria where nivel = nivel_atual + 1) THEN
-        NEW.xp_atual := xp_atual - xp_necessaria;
-        NEW.nivel := nivel_atual + 1;
-    END IF;
+        IF xp_prox_nivel IS NULL OR NEW.xp_atual < xp_prox_nivel THEN
+            EXIT;
+        END IF;
+
+        NEW.xp_atual := NEW.xp_atual - xp_prox_nivel;
+        NEW.nivel := NEW.nivel + 1;
+    END LOOP;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-
 CREATE TRIGGER trigger_subir_de_nivel_player
-BEFORE UPDATE OF xp_atual ON Player
+BEFORE UPDATE OF xp_atual ON player
 FOR EACH ROW
 WHEN (OLD.xp_atual <> NEW.xp_atual) 
 EXECUTE FUNCTION subir_de_nivel();
+
 
 CREATE TRIGGER trigger_subir_de_nivel_instancia_cavaleiro
 BEFORE UPDATE OF xp_atual ON instancia_cavaleiro
