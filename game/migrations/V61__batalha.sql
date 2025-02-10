@@ -173,7 +173,7 @@ BEGIN
 
     critico := (random() * 100) < parte_alvo.chance_critico;
     IF critico THEN dano := dano * 1.5; END IF;
-    
+
     -- 🔹 8. Log do ataque
     RAISE NOTICE 'Boss atacou % na % causando % de dano!', alvo.nome, parte_alvo.parte_corpo_nome, dano;
     
@@ -193,9 +193,70 @@ END $$ LANGUAGE plpgsql;
 
 
 
-UPDATE public.player
-SET hp_max = 3000, hp_atual = 3000
-WHERE id_player=1;
+CREATE OR REPLACE FUNCTION player_ataque_fisico(player_id INT, boss_id INT, parte_alvo_escolhida enum_parte_corpo)
+RETURNS VOID AS $$
+DECLARE
+    parte_alvo RECORD;
+    dano_base INT;
+    dano INT;
+    critico BOOLEAN;
+    vantagem BOOLEAN;
+    fraqueza BOOLEAN;
+    chance_critico INT;
+BEGIN
+    -- 🔹 1. Buscar a parte do corpo do Boss que o Player escolheu atacar
+    SELECT parte_corpo, boss_defesa_fisica AS defesa_fisica, boss_defesa_magica AS defesa_magica, boss_chance_acerto_critico AS chance_critico
+    INTO parte_alvo
+    FROM boss_parte_corpo_info_view
+    WHERE id_boss = boss_id
+    AND parte_corpo = parte_alvo_escolhida
+    LIMIT 1;
+
+    -- 🔹 2. Verificar se a parte do corpo escolhida é válida
+    IF parte_alvo.parte_corpo IS NULL THEN
+        RAISE NOTICE 'Parte do corpo inválida! O ataque falhou.';
+        RETURN;
+    END IF;
+
+    -- 🔹 3. Definir dano base como ataque físico do Player
+    SELECT ataque_fisico_total INTO dano_base FROM player_info_view WHERE id_player = player_id;
+
+    -- 🔹 4. Aplicar modificadores de dano baseados na defesa do Boss
+    dano := dano_base - parte_alvo.defesa_fisica;
+    IF dano < 0 THEN dano := 1; END IF;  -- Evita dano negativo
+
+    -- 🔹 5. Calcular chance de acerto crítico
+    critico := (random() * 100) < parte_alvo.chance_critico;
+    IF critico THEN dano := dano * 1.5; END IF;
+
+    -- 🔹 6. Verificar vantagem e fraqueza elementais
+    vantagem := (SELECT id_elemento FROM player_info_view WHERE id_player = player_id) = (SELECT id_fraqueza FROM boss_info_view WHERE id_boss = boss_id);
+    fraqueza := (SELECT id_elemento FROM player_info_view WHERE id_player = player_id) = (SELECT id_vantagem FROM boss_info_view WHERE id_boss = boss_id);
+
+    -- 🔹 7. Aplicar multiplicadores de dano
+    IF vantagem THEN
+        dano := dano * 1.25;  -- Aumenta 25% se o Player tiver vantagem elemental
+    END IF;
+
+    IF fraqueza THEN
+        dano := dano * 0.75;  -- Reduz 25% se o Player tiver fraqueza elemental
+    END IF;
+
+    -- 🔹 8. Exibir mensagem do ataque
+    RAISE NOTICE 'Player atacou o Boss na % causando % de dano!', parte_alvo.parte_corpo, dano;
+
+    -- 🔹 9. Aplicar dano ao Boss
+    UPDATE boss
+    SET hp_atual = hp_atual - dano
+    WHERE id_boss = boss_id;
+
+    -- 🔹 10. Verificar se o Boss morreu
+    IF (SELECT hp_atual FROM boss WHERE id_boss = boss_id) <= 0 THEN
+        RAISE NOTICE 'O Boss foi derrotado!';
+    END IF;
+
+END $$ LANGUAGE plpgsql;
+
 
 
 
