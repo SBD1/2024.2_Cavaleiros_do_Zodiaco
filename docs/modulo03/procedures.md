@@ -100,4 +100,4 @@ Substitui um cavaleiro da party do jogador por um novo.
 
 | Versão | Data | Modificação | Autor |
 | --- | --- | --- | --- |
-| 0.1 | 10/02/2025 | Criação do Documento | Vinícius Rufino |
+| 0.1 | 0/02/2025 | Criação do Documento | Vinícius Rufino |
