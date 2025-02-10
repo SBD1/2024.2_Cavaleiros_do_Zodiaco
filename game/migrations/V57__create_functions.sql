@@ -125,7 +125,8 @@ RETURNS TABLE (
     id_missao INT,
     status_missao TEXT,
     id_missao_anterior INT,
-    nome_missao_anterior TEXT
+    nome_missao_anterior TEXT,
+    status_missao_anterior TEXT
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -136,14 +137,14 @@ BEGIN
         m.id_missao, 
         pm.status_missao::TEXT,  
         m.id_missao_anterior,
-        ma.nome::TEXT  
+        ma.nome::TEXT,
+        pm_requisito.status_missao::TEXT
     FROM boss b
     LEFT JOIN missao m ON b.id_item_missao = m.item_necessario
     LEFT JOIN player_missao pm ON m.id_missao = pm.id_missao AND pm.id_player = player_id_input
     LEFT JOIN player_missao pm_requisito 
         ON m.id_missao_anterior = pm_requisito.id_missao 
         AND pm_requisito.id_player = player_id_input
-        AND pm_requisito.status_missao = 'c'
     LEFT JOIN missao ma ON m.id_missao_anterior = ma.id_missao 
     WHERE b.id_sala = get_id_sala_atual(player_id_input);
 END $$ LANGUAGE plpgsql;

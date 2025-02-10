@@ -10,7 +10,8 @@ def verificar_boss(console, player_id):
         boss = cursor.fetchone()
 
         if boss:
-            id_boss, nome_boss, hp_atual, id_missao, status_missao, id_missao_anterior, nome_missao_anterior = boss
+            print(boss)
+            id_boss, nome_boss, hp_atual, id_missao, status_missao, id_missao_anterior, nome_missao_anterior, status_missao_anterior = boss
 
             if hp_atual <= 0:
                 console.print(Panel(
@@ -19,7 +20,7 @@ def verificar_boss(console, player_id):
                 ))
                 return None
 
-            if id_missao_anterior and nome_missao_anterior and status_missao == 'ni':
+            if id_missao_anterior and nome_missao_anterior and status_missao_anterior != 'c':
                 console.print(Panel(
                     f"[bold yellow]⚠️ Você precisa completar a missão [cyan]{nome_missao_anterior}[/cyan] antes de enfrentar [red]{nome_boss}[/red]![/bold yellow]", 
                     expand=False
