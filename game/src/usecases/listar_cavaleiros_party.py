@@ -8,7 +8,7 @@ elementos_config = {
     "Fogo": {"emoji": "🔥", "cor": "bold red"},
     "Água": {"emoji": "💧", "cor": "bold blue"},
     "Terra": {"emoji": "🌿", "cor": "bold green"},
-    "Vento": {"emoji": "🌪️", "cor": "bold cyan"},
+    "Vento": {"emoji": "🌀", "cor": "bold white"},
     "Trovão": {"emoji": "⚡", "cor": "bold yellow"},
     "Luz": {"emoji": "✨", "cor": "bold white"},
     "Trevas": {"emoji": "🌑", "cor": "bold magenta"},
@@ -34,8 +34,8 @@ def listar_cavaleiros_party(console, player_id):
         with obter_cursor() as cursor:
             # Obtém informações do jogador
             cursor.execute("""
-                SELECT nome, nivel, xp_atual, hp_max, hp_atual, magia_max, magia_atual,
-                       velocidade, ataque_fisico, ataque_magico, elemento_nome
+                SELECT player_nome, player_nivel, player_xp_atual, player_hp_max, player_hp_atual, player_magia_max, player_magia_atual,
+                       player_velocidade,  elemento_nome, ataque_fisico_base, ataque_magico_base, ataque_fisico_armaduras, ataque_fisico_armaduras, ataque_magico_armaduras
                 FROM player_info_view WHERE id_player = %s;
             """, (player_id,))
             player = cursor.fetchone()
@@ -46,7 +46,7 @@ def listar_cavaleiros_party(console, player_id):
 
             # Processa informações do jogador
             player_nome, player_nivel, player_xp_atual, player_hp_max, player_hp_atual, player_magia_max, \
-            player_magia_atual, player_velocidade, player_ataque_fisico, player_ataque_magico, player_elemento = player
+            player_magia_atual, player_velocidade, player_elemento, player_ataque_fisico_base, player_ataque_magico_base, ataque_fisico_armaduras, ataque_fisico_armaduras, ataque_magico_armaduras = player
 
             player_xp_max = obter_xp_maximo(cursor, player_nivel)
             formatted_player_elemento = formatar_elemento(player_elemento)
@@ -66,22 +66,22 @@ def listar_cavaleiros_party(console, player_id):
 
             for tabela in [tabela_party, tabela_fora_party]:
                 tabela.add_column("#", style="bold yellow", justify="center")
-                tabela.add_column("Nome", style="cyan", justify="center", no_wrap=True)
-                tabela.add_column("Elemento", style="blue", justify="center", no_wrap=True)
-                tabela.add_column("Nível", style="green", justify="center", no_wrap=True)
-                tabela.add_column("XP", style="yellow", justify="center", no_wrap=True)
-                tabela.add_column("HP", style="red", justify="center", no_wrap=True)
-                tabela.add_column("Cosmo", style="magenta", justify="center", no_wrap=True)
-                tabela.add_column("Velocidade", style="white", justify="center", no_wrap=True)
-                tabela.add_column("Ataque Físico", style="orange1", justify="center", no_wrap=True)
-                tabela.add_column("Ataque Mágico", style="purple", justify="center", no_wrap=True)
+                tabela.add_column("Nome", style="cyan", justify="center")
+                tabela.add_column("Elemento", style="blue", justify="center")
+                tabela.add_column("Nível", style="green", justify="center")
+                tabela.add_column("XP", style="yellow", justify="center")
+                tabela.add_column("HP", style="red", justify="center")
+                tabela.add_column("Cosmo", style="magenta", justify="center")
+                tabela.add_column("Velocidade", style="white", justify="center")
+                tabela.add_column("Ataque Físico", style="orange1", justify="center")
+                tabela.add_column("Ataque Mágico", style="purple", justify="center")
 
             # Adiciona o jogador como o primeiro na tabela da party
             tabela_party.add_row(
                 "—", player_nome, formatted_player_elemento, str(player_nivel),
                 f"{player_xp_max} / {player_xp_atual}", f"{player_hp_max} / {player_hp_atual}",
                 f"{player_magia_max} / {player_magia_atual}", str(player_velocidade),
-                str(player_ataque_fisico), str(player_ataque_magico)
+                f"{player_ataque_fisico_base + ataque_fisico_armaduras} \n(Base:{player_ataque_fisico_base} Armaduras:{ataque_fisico_armaduras})", f"{player_ataque_magico_base + ataque_magico_armaduras} \n(Base:{player_ataque_magico_base} Armaduras: {ataque_magico_armaduras})"
             )
 
             # Processa os cavaleiros da party

@@ -1,3 +1,205 @@
+CREATE OR REPLACE FUNCTION calcular_dano(
+    atacante_ataque INT,
+    defensor_defesa INT,
+    critico_chance FLOAT,
+    atacante_elemento INT,
+    defensor_elemento INT
+) RETURNS INT AS $$
+DECLARE
+    dano INT;
+    critico BOOLEAN;
+    vantagem BOOLEAN;
+    fraqueza BOOLEAN;
+BEGIN
+    -- Verifica se foi crítico
+    critico := (random() <= critico_chance);
+
+    -- Verifica vantagem de elemento
+    SELECT COUNT(*)
+    INTO vantagem
+    FROM elemento e
+    WHERE e.id_elemento = atacante_elemento
+      AND e.forte_contra = defensor_elemento;
+
+   -- Verifica fraqueza de elemento
+    SELECT COUNT(*)
+    INTO vantagem
+    FROM elemento e
+    WHERE e.id_elemento = atacante_elemento
+      AND e.fraco_contra = defensor_elemento;
+
+    -- Calcula o dano base
+    dano := atacante_ataque - defensor_defesa;
+
+    -- Aplica multiplicador para dano crítico
+    IF critico THEN
+        dano := dano * 1.5; -- Multiplica por 1.5 se for crítico
+    END IF;
+
+    -- Aplica multiplicador para vantagem de elementos
+    IF vantagem THEN
+        dano := dano * 1.25; -- Multiplica por 1.25 para vantagem de elementos
+    END IF;
+
+    IF fraqueza THEN
+        dano := dano * 0.75; -- Multiplica por 0.75 para desvantagem 
+    END IF;
+
+    -- Garante que o dano não seja negativo
+    RETURN GREATEST(dano, 0);
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE VIEW info_batalha AS
+-- Informações do Player
+SELECT
+    p.id_player AS id,
+    'player' AS tipo_personagem,
+    p.player_velocidade AS velocidade,
+    p.player_hp_atual AS hp_atual,
+    p.player_hp_max AS hp_max,
+    p.player_magia_atual AS magia_atual,
+    p.player_magia_max AS magia_max,
+    p.ataque_fisico_total AS ataque_fisico, -- Usa o total já calculado
+    p.ataque_magico_total AS ataque_magico  -- Usa o total já calculado
+FROM
+    player_info_view p
+
+UNION ALL
+
+-- Informações dos Cavaleiros na Party
+SELECT
+    pcv.id_cavaleiro AS id,
+    'cavaleiro' AS tipo_personagem,
+    pcv.cavaleiro_velocidade AS velocidade,
+    pcv.cavaleiro_hp_atual AS hp_atual,
+    pcv.cavaleiro_hp_max AS hp_max,
+    pcv.cavaleiro_magia_atual AS magia_atual,
+    pcv.cavaleiro_magia_max AS magia_max,
+    pcv.cavaleiro_ataque_fisico AS ataque_fisico,
+    pcv.cavaleiro_ataque_magico AS ataque_magico
+FROM
+    party_cavaleiros_view pcv
+
+UNION ALL
+
+-- Informações do Boss
+SELECT
+    b.id_boss AS id,
+    'boss' AS tipo_personagem,
+    b.boss_velocidade AS velocidade,
+    b.boss_hp_atual AS hp_atual,
+    b.boss_hp_max AS hp_max,
+    b.boss_magia_atual AS magia_atual,
+    b.boss_magia_max AS magia_max,
+    b.boss_ataque_fisico AS ataque_fisico,
+    b.boss_ataque_magico AS ataque_magico
+FROM
+    boss_info_view b;
+
+
+CREATE OR REPLACE FUNCTION boss_ataque_fisico(boss_id INT, player_id INT)
+RETURNS VOID AS $$
+DECLARE
+    alvo RECORD;
+    parte_alvo RECORD;
+    dano_base INT;
+    dano INT;
+    critico BOOLEAN;
+    vantagem BOOLEAN;
+    fraqueza BOOLEAN;
+    chance_critico INT;
+BEGIN
+    -- 🔹 1. Buscar um alvo com fraqueza ao elemento do Boss (Player ou Cavaleiro)
+    SELECT id_player AS id, 'player' AS tipo, player_nome as nome player_hp_atual AS hp, elemento_nome AS elemento
+    INTO alvo
+    FROM player_info_view
+    WHERE id_player = player_id
+    AND id_fraqueza = (SELECT id_vantagem FROM boss_info_view WHERE id_boss = boss_id)
+    AND player_hp_atual > 0
+    LIMIT 1;
+
+    -- 🔹 2. Se não encontrou um alvo fraco, buscar um Cavaleiro do mesmo Player
+    IF alvo.id IS NULL THEN
+        SELECT id_cavaleiro AS id, 'cavaleiro' AS tipo, cavaleiro_hp_atual AS hp, cavaleiro_elemento AS elemento
+        INTO alvo
+        FROM party_cavaleiros_view
+        WHERE id_player = player_id
+        AND id_fraqueza = (SELECT id_vantagem FROM boss_info_view WHERE id_boss = boss_id)
+        AND cavaleiro_hp_atual > 0
+        LIMIT 1;
+    END IF;
+
+    -- 🔹 3. Se ainda não encontrou, escolher aleatoriamente entre Player e Cavaleiro
+    IF alvo.id IS NULL THEN
+        SELECT id, tipo, hp, elemento INTO alvo FROM (
+            SELECT id_player AS id, 'player' AS tipo, player_hp_atual AS hp, elemento_nome AS elemento
+            FROM player_info_view
+            WHERE id_player = player_id AND player_hp_atual > 0
+            UNION ALL
+            SELECT id_cavaleiro AS id, 'cavaleiro' AS tipo, cavaleiro_hp_atual AS hp, cavaleiro_elemento AS elemento
+            FROM party_cavaleiros_view
+            WHERE id_player = player_id AND cavaleiro_hp_atual > 0
+        ) AS alvos_possiveis
+        ORDER BY random()
+        LIMIT 1;
+    END IF;
+
+    -- 🔹 4. Escolher uma parte do corpo do alvo
+    IF alvo.tipo = 'player' THEN
+        SELECT parte_corpo_nome, parte_corpo_defesa_fisica_total AS defesa_fisica, parte_corpo_defesa_magica_total AS defesa_magica, parte_corpo_chance_acerto_critico AS chance_critico
+        INTO parte_alvo
+        FROM player_parte_corpo_info_view
+        WHERE id_player = alvo.id
+        ORDER BY random()
+        LIMIT 1;
+    ELSE
+        SELECT cavaleiro_parte_corpo, cavaleiro_defesa_fisica AS defesa_fisica, cavaleiro_defesa_magica AS defesa_magica, cavaleiro_chance_acerto_critico AS chance_critico
+        INTO parte_alvo
+        FROM cavaleiro_parte_corpo_info_view
+        WHERE id_cavaleiro = alvo.id
+        ORDER BY random()
+        LIMIT 1;
+    END IF;
+
+    -- 🔹 5. Definir dano base como ataque físico do Boss
+    SELECT boss_ataque_fisico INTO dano_base FROM boss_info_view WHERE id_boss = boss_id;
+
+    -- 🔹 6. Aplicar modificadores de dano
+    dano := dano_base - parte_alvo.defesa_fisica;
+    IF dano < 0 THEN dano := 1; END IF;
+
+    critico := (random() * 100) < parte_alvo.chance_critico;
+    IF critico THEN dano := dano * 1.5; END IF;
+
+    -- 🔹 7. Aplicar dano ao alvo correto
+    IF alvo.tipo = 'player' THEN
+        UPDATE player SET hp_atual = hp_atual - dano WHERE id_player = alvo.id;
+    ELSE
+        UPDATE instancia_cavaleiro SET hp_atual = hp_atual - dano WHERE id_cavaleiro = alvo.id;
+    END IF;
+
+    -- 🔹 8. Log do ataque
+    RAISE NOTICE 'Boss atacou % na % causando % de dano!', alvo.nome, parte_alvo.parte_corpo, dano;
+
+END $$ LANGUAGE plpgsql;
+
+
+
+
+UPDATE public.player
+SET hp_max = 3000, hp_atual = 3000
+WHERE id_player=1;
+
+
+
+
+
+
+
+
 -- -- CREATE OR REPLACE FUNCTION player_ataca_inimigo(
 -- --     p_id_player INT,
 -- --     p_id_instancia_inimigo INT,
@@ -63,7 +265,7 @@
 -- --     v_hp_atual_antes INT;
 -- --     v_hp_atual_depois INT;
 -- --     v_dano INT;
--- --     v_parte_corpo_extenso TEXT;
+-- --     v_parte_corpo_extenso TEXT;public.player
 -- -- BEGIN
 -- --     SELECT c.nome INTO v_nome_cavaleiro FROM instancia_cavaleiro ic 
 -- --     INNER JOIN cavaleiro c ON ic.id_cavaleiro = c.id_cavaleiro

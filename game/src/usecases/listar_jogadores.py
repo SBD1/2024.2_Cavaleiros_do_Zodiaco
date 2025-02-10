@@ -33,7 +33,7 @@ def listar_jogadores():
                     "Fogo": {"emoji": "🔥", "cor": "bold red"},
                     "Água": {"emoji": "💧", "cor": "bold blue"},
                     "Terra": {"emoji": "🌿", "cor": "bold green"},
-                    "Vento": {"emoji": "🌪️", "cor": "bold cyan"},
+                    "Vento": {"emoji": "🌀", "cor": "white"},
                     "Trovão": {"emoji": "⚡", "cor": "bold yellow"},
                     "Luz": {"emoji": "✨", "cor": "bold white"},
                     "Trevas": {"emoji": "🌑", "cor": "bold magenta"},

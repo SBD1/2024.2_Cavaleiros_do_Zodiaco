@@ -119,22 +119,30 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION player_tem_boss(id_player_input INT)
-RETURNS BOOLEAN AS $$
+RETURNS INT AS $$
 DECLARE
     v_id_sala INT;
-    v_tem_boss BOOLEAN;
+    v_id_boss INT;
 BEGIN
+    -- Obtém a sala atual do jogador
     v_id_sala := get_id_sala_atual(id_player_input);
 
+    -- Se o jogador não estiver em uma sala, retorna NULL
     IF v_id_sala IS NULL THEN
-        RETURN FALSE;
+        RETURN NULL;
     END IF;
 
-    v_tem_boss := sala_tem_boss(v_id_sala, id_player_input);
+    -- Verifica se há um boss na sala
+    SELECT id_boss
+    INTO v_id_boss
+    FROM boss
+    WHERE id_sala = v_id_sala;
 
-    RETURN v_tem_boss;
+    -- Retorna o id_boss se houver, caso contrário, NULL
+    RETURN v_id_boss;
 END;
 $$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION verificar_desbloqueio_ferreiro(p_id_player INTEGER)
 RETURNS BOOLEAN AS $$

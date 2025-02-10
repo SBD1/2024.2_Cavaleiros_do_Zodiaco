@@ -18,7 +18,8 @@ CREATE TABLE Boss (
     fala_inicio VARCHAR,
     fala_derrotar_player VARCHAR,
     fala_derrotado VARCHAR,
-    fala_condicao VARCHAR
+    fala_condicao VARCHAR,
+    id_elemento INTEGER
 );
  
 ALTER TABLE Boss ADD CONSTRAINT FK_Boss_1
@@ -32,3 +33,7 @@ ALTER TABLE Boss ADD CONSTRAINT FK_Boss_2
 ALTER TABLE Boss ADD CONSTRAINT FK_Boss_3
     FOREIGN KEY (id_item_missao)
     REFERENCES Item_Missao (id_item);
+
+ALTER TABLE Boss ADD CONSTRAINT FK_Boss_4
+    FOREIGN KEY (id_elemento)
+    REFERENCES Elemento (id_elemento);

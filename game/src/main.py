@@ -16,7 +16,7 @@ from src.usecases.verificar_boss import verificar_boss
 from .util import limpar_terminal
 from src.usecases.tocar_tema_encerramento import tocar_tema_encerramento
 from .usecases.tocar_musica import tocar_musica, parar_musica
-
+from src.usecases.iniciar_batalha import iniciar_batalha
 
 
 jogador_selecionado_id = None
@@ -40,12 +40,17 @@ def mostrar_menu_acoes(console):
     while True:
         try:
             limpar_terminal(console)
+            boss = verificar_boss(console, jogador_selecionado_id)
 
-            if verificar_inimigos(console,jogador_selecionado_id):
-                # batalhar(console,jogador_selecionado_id)
+            if verificar_inimigos(console, jogador_selecionado_id):
                 limpar_terminal(console)
-            elif verificar_boss(console,jogador_selecionado_id):
-                limpar_terminal(console)
+            elif boss:
+                try:
+                    iniciar_batalha(console, jogador_selecionado_id, boss)
+                    input()  # Pausa para ver a batalha
+                    limpar_terminal(console)
+                except Exception as e:
+                    console.print(f"[bold red]Erro ao iniciar a batalha: {e}[/bold red]")
             
 
 
