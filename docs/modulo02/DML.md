@@ -6,7 +6,6 @@ A Linguagem de Manipulação de Dados (DML) é utilizada para inserir, atualizar
 
 <details>
     <sumary>Migrações</sumary>
-    Clique para ver as Migrações em SQL
 
     ```sql
     INSERT INTO public.custos_ferreiro (tipo_acao, raridade, durabilidade_min, durabilidade_max, custo_alma) VALUES 
