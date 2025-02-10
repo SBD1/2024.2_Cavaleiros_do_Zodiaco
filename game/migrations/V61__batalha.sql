@@ -679,3 +679,118 @@ END $$ LANGUAGE plpgsql;
 
 
 -- -- select * from info_batalha where player_id = 1
+
+CREATE OR REPLACE FUNCTION inimigo_ataque_fisico(
+    p_id_instancia INT,
+    p_player INT
+)
+RETURNS VOID AS 
+$$
+DECLARE
+    alvo RECORD;
+    parte_alvo RECORD;
+    dano_base INT;
+    dano INT;
+    critico BOOLEAN;
+    current_hp INT;
+    enemy_id INT;  
+BEGIN
+    
+    SELECT id, tipo, nome, hp, elemento
+      INTO alvo
+      FROM (
+          SELECT id_player AS id,
+                 'player' AS tipo,
+                 player_nome AS nome,
+                 COALESCE(player_hp_atual, 0) AS hp,
+                 elemento_nome AS elemento
+          FROM player_info_view
+          WHERE id_player = p_player
+            AND COALESCE(player_hp_atual, 0) > 0
+          UNION ALL
+          SELECT id_cavaleiro AS id,
+                 'cavaleiro' AS tipo,
+                 cavaleiro_nome AS nome,
+                 COALESCE(cavaleiro_hp_atual, 0) AS hp,
+                 cavaleiro_elemento AS elemento
+          FROM party_cavaleiros_view
+          WHERE id_player = p_player
+            AND COALESCE(cavaleiro_hp_atual, 0) > 0
+      ) AS alvos_disponiveis
+    ORDER BY random()
+    LIMIT 1;
+
+    IF alvo.id IS NULL THEN
+        RAISE NOTICE 'Não há alvos disponíveis para o ataque.';
+        RETURN;
+    END IF;
+
+    IF alvo.tipo = 'player' THEN
+        SELECT parte_corpo_nome,
+               COALESCE(parte_corpo_defesa_fisica_total, 0) AS defesa_fisica,
+               COALESCE(parte_corpo_chance_acerto_critico, 0) AS chance_critico
+          INTO parte_alvo
+          FROM player_parte_corpo_info_view
+         WHERE id_player = alvo.id
+         ORDER BY random()
+         LIMIT 1;
+    ELSE
+        SELECT cavaleiro_parte_corpo AS parte_corpo_nome,
+               COALESCE(cavaleiro_defesa_fisica, 0) AS defesa_fisica,
+               COALESCE(cavaleiro_chance_acerto_critico, 0) AS chance_critico
+          INTO parte_alvo
+          FROM cavaleiro_parte_corpo_info_view
+         WHERE id_cavaleiro = alvo.id
+         ORDER BY random()
+         LIMIT 1;
+    END IF;
+
+    SELECT id_inimigo
+      INTO enemy_id
+      FROM instancia_inimigo
+     WHERE id_instancia = p_id_instancia;
+
+    SELECT COALESCE(ataque_fisico, 0)
+      INTO dano_base
+      FROM instancia_inimigo ii 
+     WHERE id_inimigo = enemy_id;
+
+    -- 5. Calcular o dano subtraindo a defesa física da parte atingida
+    dano := dano_base - parte_alvo.defesa_fisica;
+    IF dano < 0 THEN
+        dano := 1;
+    END IF;
+
+    -- 6. Verificar se o ataque acerta de forma crítica
+    critico := (random() * 100) < parte_alvo.chance_critico;
+    IF critico THEN
+        dano := dano * 1.5;
+    END IF;
+
+    RAISE NOTICE 'Inimigo (instância % ) atacou % na parte % de % causando % de dano!',
+                 p_id_instancia, alvo.nome, parte_alvo.parte_corpo_nome, alvo.tipo, dano;
+
+    -- 7. Depurar: mostrar o hp_atual do alvo antes do update
+    IF alvo.tipo = 'player' THEN
+        SELECT COALESCE(hp_atual, 0)
+          INTO current_hp
+          FROM player
+         WHERE id_player = alvo.id;
+        RAISE NOTICE 'DEBUG: Player % - hp_atual antes do update: %, dano a ser aplicado: %', 
+                     alvo.nome, current_hp, dano;
+        UPDATE player
+           SET hp_atual = current_hp - dano
+         WHERE id_player = alvo.id;
+    ELSE
+        SELECT COALESCE(hp_atual, 0)
+          INTO current_hp
+          FROM instancia_cavaleiro
+         WHERE id_cavaleiro = alvo.id;
+        RAISE NOTICE 'DEBUG: Cavaleiro % - hp_atual antes do update: %, dano a ser aplicado: %', 
+                     alvo.nome, current_hp, dano;
+        UPDATE instancia_cavaleiro
+           SET hp_atual = current_hp - dano
+         WHERE id_cavaleiro = alvo.id;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
