@@ -460,4 +460,4 @@ A Linguagem de Definição de Dados (DDL) é responsável pela estrutura do banc
 |  1.1 | 22/01/2025 | Atualização do DDL | Lucas Ramon |
 |  2.0 | 02/02/2025 | Atualização do Documento | Vinícius Rufino |
 |  2.1 | 03/02/2025 | Atualização do DDL | Vinícius Rufino |
-|  2.2 | 03/02/2025 | Atualização do DDL e Adição da Toggle List | Vinícius Rufino |
+|  2.2 | 10/02/2025 | Atualização do DDL e Adição da Toggle List | Vinícius Rufino |
