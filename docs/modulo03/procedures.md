@@ -474,8 +474,164 @@ Esta procedure permite que o jogador compre uma armadura, verificando se ele tem
     ```
 </details>
 
+### Equipar Armadura
+
+Esta procedure permite que um jogador equipe uma armadura específica que esteja em seu inventário.
+
+<details>
+    <sumary>Migrações</sumary>
+
+    ```sql
+    CREATE OR REPLACE PROCEDURE equipar_armadura(
+        p_id_player INTEGER,
+        p_id_instancia INTEGER
+    )
+    LANGUAGE plpgsql
+    AS $$
+    DECLARE
+        v_id_armadura INTEGER;
+        v_id_parte_corpo_armadura enum_parte_corpo;
+        v_armadura_atual INTEGER;
+        v_instancia_atual INTEGER;
+    BEGIN
+        -- Verificar se a armadura existe no inventário do jogador
+        SELECT id_armadura, id_parte_corpo_armadura
+        INTO v_id_armadura, v_id_parte_corpo_armadura
+        FROM Armadura_Instancia
+        WHERE id_instancia = p_id_instancia
+        AND id_inventario = p_id_player;
+
+        IF NOT FOUND THEN
+            RAISE EXCEPTION 'A armadura não está no inventário do jogador ou não existe.';
+        END IF;
+
+        -- Verificar se o jogador já possui uma armadura equipada na mesma parte do corpo
+        SELECT armadura_equipada, instancia_armadura_equipada
+        INTO v_armadura_atual, v_instancia_atual
+        FROM Parte_Corpo_Player
+        WHERE id_player = p_id_player
+        AND parte_corpo = v_id_parte_corpo_armadura;
+
+        IF FOUND THEN
+            -- Se uma armadura já estiver equipada, ela é devolvida ao inventário
+            UPDATE Armadura_Instancia
+            SET id_inventario = p_id_player
+            WHERE id_armadura = v_armadura_atual
+            AND id_instancia = v_instancia_atual;
+        END IF;
+
+        -- Atualizar a nova armadura como equipada
+        UPDATE Parte_Corpo_Player
+        SET armadura_equipada = v_id_armadura,
+            instancia_armadura_equipada = p_id_instancia
+        WHERE id_player = p_id_player
+        AND parte_corpo = v_id_parte_corpo_armadura;
+
+        -- Remover a armadura equipada do inventário
+        UPDATE Armadura_Instancia
+        SET id_inventario = NULL
+        WHERE id_instancia = p_id_instancia;
+
+        RAISE NOTICE 'A armadura foi equipada com sucesso!';
+    END;
+    $$;
+    ```
+</details>
+
+### Restaurar_durabilidade
+
+Restaura a durabilidade de uma armadura específica no inventário de um jogador.
+
+<details>
+    <sumary>Migrações</sumary>
+
+    ```sql
+   CREATE OR REPLACE PROCEDURE restaurar_durabilidade(
+        p_id_player INT,
+        p_id_instancia INT
+    )
+    LANGUAGE plpgsql
+    AS $$
+    DECLARE
+        v_raridade VARCHAR(20);
+        v_durabilidade_atual INT;
+        v_custo_alma INT;
+        v_almas_disponiveis INT;
+        v_id_custo_ferreiro INT;
+        v_material_id INT;
+        v_quantidade_necessaria INT;
+        v_quantidade_disponivel INT;
+        v_id_inventario INT;
+        v_nome_material TEXT;
+    BEGIN
+        -- Buscar o ID do inventário do jogador
+        SELECT id_player INTO v_id_inventario
+        FROM inventario
+        WHERE id_player = p_id_player;
+
+        -- Se o inventário não existir, retorna erro
+        IF v_id_inventario IS NULL THEN
+            RAISE EXCEPTION 'Inventário não encontrado para o jogador!';
+        END IF;
+
+        -- Buscar informações da armadura
+        SELECT raridade_armadura, durabilidade_atual 
+        INTO v_raridade, v_durabilidade_atual
+        FROM armadura_instancia 
+        WHERE id_instancia = p_id_instancia;
+
+        -- Se a armadura não existir, retorna erro
+        IF v_raridade IS NULL OR v_durabilidade_atual IS NULL THEN
+            RAISE EXCEPTION 'A armadura selecionada não existe!';
+        END IF;
+
+        -- Se a durabilidade já estiver em 100%, não faz nada
+        IF v_durabilidade_atual = 100 THEN
+            RAISE EXCEPTION 'A durabilidade já está em 100%%. Nenhuma restauração foi feita.';
+            RETURN;
+        END IF;
+
+        -- Buscar o custo de alma da restauração com base na durabilidade atual
+        SELECT id, custo_alma INTO v_id_custo_ferreiro, v_custo_alma
+        FROM custos_ferreiro
+        WHERE tipo_acao = 'restaurar'
+        AND raridade = v_raridade
+        AND v_durabilidade_atual BETWEEN durabilidade_min AND durabilidade_max;
+
+        -- Se não encontrou um custo, retorna erro
+        IF v_id_custo_ferreiro IS NULL THEN
+            RAISE EXCEPTION 'Erro ao calcular o custo de restauração!';
+        END IF;
+
+        -- Buscar quantas Almas de Armadura o jogador tem
+        SELECT alma_armadura INTO v_almas_disponiveis
+        FROM inventario
+        WHERE id_player = p_id_player;
+
+        -- Se o jogador não tem almas ou não tem o suficiente, retorna erro
+        IF v_almas_disponiveis IS NULL OR v_almas_disponiveis < v_custo_alma THEN
+            RAISE EXCEPTION 'Você não tem Almas de Armadura suficientes para restaurar a durabilidade!';
+        END IF;
+
+        -- Deduzir as Almas de Armadura do jogador
+        UPDATE inventario
+        SET alma_armadura = alma_armadura - v_custo_alma
+        WHERE id_player = p_id_player;
+
+        -- Restaurar a durabilidade da armadura
+        UPDATE armadura_instancia
+        SET durabilidade_atual = 100
+        WHERE id_instancia = p_id_instancia;
+
+        RAISE NOTICE 'Durabilidade restaurada para 100%%! Foram usadas % Almas.', v_custo_alma;
+    END;
+    $$;
+    ```
+</details>
+
 ### Versionamento
 
 | Versão | Data | Modificação | Autor |
 | --- | --- | --- | --- |
 | 0.1 | 10/02/2025 | Criação do Documento | Vinícius Rufino |
+| 1.0 | 10/02/2025 | Atualização dos Procedures | Vinícius Rufino |
