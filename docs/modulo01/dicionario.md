@@ -4,166 +4,166 @@
 ## Tabelas e Relações
 
 ### Tabela: **Armadura**
-![Tabela Armadura](./assets/images/Armadura.png)
+![Tabela Armadura](../assets/images/Armadura.png)
 
 ### Tabela: **Armadura equipada**
-![Tabela Armadura equipada ](docs\assets\images\Armaduraequipada.png)
+![Tabela Armadura equipada ](..\assets\images\Armaduraequipada.png)
 
 ### Tabela: **Audios**
 
-![Tabela Audios](docs\assets\images\audios.png)
+![Tabela Audios](../assets/images/audios.png)
 
 ## Tabela: **Boss**
-![Tabela Boss](docs\assets\images\Boss.png)
+![Tabela Boss](..\assets\images\Boss.png)
 
 ### Tabela: **Cavaleiro**
-![Tabela CAvaleiro ](docs\assets\images\cavaleiro.png)
+![Tabela CAvaleiro ](..\assets\images\cavaleiro.png)
 
 ### Tabela: **Classe**
-![Tabela Calsse ](docs\assets\images\classe.png)
+![Tabela Calsse ](..\assets\images\classe.png)
 
 ### Tabela: **Consumível**
-![Tabela Classe ](docs\assets\images\consumível.png)
+![Tabela Classe ](..\assets\images\consumível.png)
 
 
 ### Tabela: **Custos ferreiro**
-![Tabela ](docs\assets\images\custosferreiro.png)
+![Tabela ](..\assets\images\custosferreiro.png)
 
 ### Tabela: **Elemento**
-![Tabela Elemento](docs\assets\images\elemento.png)
+![Tabela Elemento](..\assets\images\elemento.png)
 
 ### Tabela: **Ferreiro**
-![Tabela Ferreiro](docs\assets\images\ferreiro.png)
+![Tabela Ferreiro](..\assets\images\ferreiro.png)
 
 
 ### Tabela: **Flyway_Schema_History**
-![Tabela Flyway_Schema_History  ](docs\assets\images\flyway.png)
+![Tabela Flyway_Schema_History  ](..\assets\images\flyway.png)
 
 
 ### Tabela: **Grupo inimigo**
-![Tabela Grupo inimigo ](docs\assets\images\grupoinimigo.png)
+![Tabela Grupo inimigo ](..\assets\images\grupoinimigo.png)
 
 ### Tabela: **Habilidade**
-![Tabela Habilidade ](docs\assets\images\habilidade.png)
+![Tabela Habilidade ](..\assets\images\habilidade.png)
 
 ### Tabela: **Habilidade Boss**
-![Tabela Habilidade Boss ](docs\assets\images\habilidadeboss.png)
+![Tabela Habilidade Boss ](..\assets\images\habilidadeboss.png)
 
 ### Tabela: **Habilidade Cavaleiro**
-![Tabela HAbilidade cavaleiro ](docs\assets\images\habilidadecaveleiro.png)
+![Tabela HAbilidade cavaleiro ](..\assets\images\habilidadecaveleiro.png)
 
 ### Tabela: **Habilidade inimigo**
-![Tabela HAbilidade inimigo ](docs\assets\images\habilidadeinimigo.png)
+![Tabela HAbilidade inimigo ](..\assets\images\habilidadeinimigo.png)
 
 ### Tabela: **Habilidade Player**
-![Tabela Player](docs\assets\images\habplayer.png)
+![Tabela Player](..\assets\images\habplayer.png)
 
 ### Tabela: **inimigo**
-![Tabela Inimigo](docs\assets\images\inimigo.png)
+![Tabela Inimigo](..\assets\images\inimigo.png)
 
 ### Tabela: **Instância Cavaleiro**
-![Tabela Instância cavaleiro ](docs\assets\images\instcavaleiro.png)
+![Tabela Instância cavaleiro ](..\assets\images\instcavaleiro.png)
 
 ### Tabela: **Instância inimigo**
-![Tabela Instancia inimigo ](docs\assets\images\instinimigo.png)
+![Tabela Instancia inimigo ](..\assets\images\instinimigo.png)
 
 ### Tabela: **Inventário**
-![Tabela Inventário ](docs\assets\images\inventário.png)
+![Tabela Inventário ](..\assets\images\inventário.png)
 
 ### Tabela: **Item a venda**
-![Tabela Item a venda ](docs\assets\images\itemavenda.png)
+![Tabela Item a venda ](..\assets\images\itemavenda.png)
 ### Tabela: **Habilidade Cavaleiro**
-![Tabela Habilidade Cavaleiro](docs\assets\images\habcavaleiro.png)
+![Tabela Habilidade Cavaleiro](..\assets\images\habcavaleiro.png)
 
 ### Tabela: **Item Armazenado**
-![Tabela Item Armazenado](docs\assets\images\itemaramaze.png)
+![Tabela Item Armazenado](..\assets\images\itemaramaze.png)
 
 ### Tabela: **Item grupo inimigo dropa**
-![Tabela Item grupo inimigo dropa](docs\assets\images\itemdropa.png)
+![Tabela Item grupo inimigo dropa](..\assets\images\itemdropa.png)
 ### Tabela: **Item missão**
-![Tabela Item missão ](docs\assets\images\itemmissao.png)
+![Tabela Item missão ](..\assets\images\itemmissao.png)
 
 ### Tabela: **Livro**
-![Tabela Livro ](docs\assets\images\livro.png)
+![Tabela Livro ](..\assets\images\livro.png)
 
 ### Tabela: **Material**
-![Tabela Material ](docs\assets\images\material.png)
+![Tabela Material ](..\assets\images\material.png)
 
 ### Tabela: **Material Necessário Ferreiro**
-![Tabela Material Necessário Ferreiro ](docs\assets\images\materialnferreiro.png)
+![Tabela Material Necessário Ferreiro ](..\assets\images\materialnferreiro.png)
 
 ### Tabela: **Material receita**
-![Tabela MAterial Receita](docs\assets\images\materialreceita.png)
+![Tabela MAterial Receita](..\assets\images\materialreceita.png)
 
 ### Tabela: **Mercador**
-![Tabela Mercador](docs\assets\images\mercador.png)
+![Tabela Mercador](..\assets\images\mercador.png)
 
 ### Tabela: **Npc**
-![Tabela Npc ](docs\assets\images\npcmercador.png)
+![Tabela Npc ](..\assets\images\npcmercador.png)
 
 ### Tabela: **Missão**
-![Tabela Missão ](docs\assets\images\missão.png)
+![Tabela Missão ](..\assets\images\missão.png)
 
 ### Tabela: **Parte Corpo**
-![Tabela Parte corpo](docs\assets\images\PC.png)
+![Tabela Parte corpo](..\assets\images\PC.png)
 ### Tabela: **Parte Corpo Boss**
-![Tabela Parte corpo Boss](docs\assets\images\PCBoss.png)
+![Tabela Parte corpo Boss](..\assets\images\PCBoss.png)
 
 ### Tabela: **Parte Corpo Cavaleiro**
-![Tabela Parte corpo cavaleiro](docs\assets\images\PCCavaleiro.png)
+![Tabela Parte corpo cavaleiro](..\assets\images\PCCavaleiro.png)
 
 ### Tabela: **Parte corpo inimigo**
-![Tabela Parte corpo inimigo](docs\assets\images\PCINIMIGO.png)
+![Tabela Parte corpo inimigo](..\assets\images\PCINIMIGO.png)
 
 ### Tabela: **Parte corpo player**
-![Tabela Parte corpo Player](docs\assets\images\PCPlayer.png)
+![Tabela Parte corpo Player](..\assets\images\PCPlayer.png)
 
 ### Tabela: **Party**
-![Tabela Party](docs\assets\images\party.png)
+![Tabela Party](..\assets\images\party.png)
 
 ### Tabela: **Player**
-![Tabela player ](docs\assets\images\player.png)
+![Tabela player ](..\assets\images\player.png)
 
 ### Tabela: **Player Missão**
-![Tabela Player Missão ](docs\assets\images\playerMissão.png)
+![Tabela Player Missão ](..\assets\images\playerMissão.png)
 
 
 ### Tabela: **Quest**
-![Tabela quest ](docs\assets\images\Quest.png)
+![Tabela quest ](..\assets\images\Quest.png)
 
 ### Tabela: **Receita**
-![Tabela Receita ](docs\assets\images\receita.png)
+![Tabela Receita ](..\assets\images\receita.png)
 
 ### Tabela: **Saga**
-![Tabela Saga](docs\assets\images\saga.png)
+![Tabela Saga](..\assets\images\saga.png)
 
 
 ### Tabela: **Sala**
-![Tabela Sala ](docs\assets\images\sala.png)
+![Tabela Sala ](..\assets\images\sala.png)
 
 
 ### Tabela: **Sala segura**
-![Tabela Sala Segura ](docs\assets\images\salaSegura.png)
+![Tabela Sala Segura ](..\assets\images\salaSegura.png)
 
 
 ### Tabela: **Tipo item**
-![Tabela Tipo item ](docs\assets\images\tipoitem.png)
+![Tabela Tipo item ](..\assets\images\tipoitem.png)
 
 
 ### Tabela: **Tipo npc**
-![Tabela Tipo npc ](docs\assets\images\tiponpc.png)
+![Tabela Tipo npc ](..\assets\images\tiponpc.png)
 
 
 ### Tabela: **Tipo Personagem**
-![Tabela Tipo personagem ](docs\assets\images\tipopersonagem.png)
+![Tabela Tipo personagem ](..\assets\images\tipopersonagem.png)
 
 
 ### Tabela: **xp ncessária**
-![Tabela xp necessária ](docs\assets\images\xpnecessária.png)
+![Tabela xp necessária ](..\assets\images\xpnecessária.png)
 
 
 ### Tabela: **receita**
-![Tabela Receita  ](docs\assets\images\receita.png)
+![Tabela Receita  ](..\assets\images\receita.png)
 
 
 
