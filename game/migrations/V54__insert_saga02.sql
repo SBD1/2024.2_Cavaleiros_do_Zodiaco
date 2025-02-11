@@ -80,9 +80,9 @@ VALUES ( currval('saga_id_saga_seq'::regclass), 'Templo Sagrado', NULL, 6, NULL,
 INSERT INTO public.item_missao (nome, descricao) 
 VALUES ('Veneno de Cobra', 'Um frasco contendo o veneno letal de Shaina, a Amazona de Prata. Um item raro e perigoso.');
 
-INSERT INTO public.item_boss_dropa
-(id_boss, id_item, quantidade)
-VALUES(6, 6, 1);
+-- INSERT INTO public.item_boss_dropa
+-- (id_boss, id_item, quantidade)
+-- VALUES(6, 6, 1);
 
 INSERT INTO public.missao (id_missao_anterior, item_necessario, nome, dialogo_inicial, dialogo_durante, dialogo_completa) 
 VALUES (1, currval('tipo_item_id_item_seq'::regclass), 'Derrote Shaina', 'Shaina, a Amazona de Prata, tem causado problemas em nosso território. Ela é perigosa e deve ser detido.', 'Sua missão é enfrentar e derrotar Shaina. Lembre-se, ela é rápido e usa seu veneno para enfraquecer seus inimigos.', 'Parabéns! Você derrotou Shaina e adquiriu seu mortal Veneno de Cobra. Sua bravura será lembrada.');
