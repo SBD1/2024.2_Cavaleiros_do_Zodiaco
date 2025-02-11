@@ -136,8 +136,9 @@ DECLARE
     missao_id INTEGER;
 BEGIN
     -- Verificar o tipo do item usando a tabela Tipo_item
-    SELECT tipo_item INTO tipo_do_item 
-    FROM tipo_item
+    SELECT nc.tipo_nao_craftavel INTO tipo_do_item 
+    FROM tipo_item ti
+    JOIN nao_craftavel nc on  ti.id_item = nc.id_nao_craftavel
     WHERE id_item = NEW.id_item;
 
     -- Verificar se o tipo do item é "i" (item missao)

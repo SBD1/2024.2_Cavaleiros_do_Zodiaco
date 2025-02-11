@@ -927,3 +927,91 @@ BEGIN
     RETURN v_mensagem;
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION usar_habilidade_cavaleiro(
+    p_id_cavaleiro INTEGER,
+    p_id_boss INTEGER,
+    p_id_habilidade INTEGER
+) RETURNS TEXT AS $$
+DECLARE
+    v_custo_cosmo INTEGER;
+    v_dano INTEGER;
+    v_elemento INTEGER;
+    v_hp_atual INTEGER;
+    v_defesa_fisica_min INTEGER;
+    v_defesa_magica_min INTEGER;
+    v_cosmo_atual INTEGER;
+    v_elemento_boss INTEGER;
+    v_mensagem TEXT;
+    v_multiplicador FLOAT := 1.0;
+BEGIN
+    -- 📌 Buscar detalhes da habilidade
+    SELECT custo, dano, elemento_habilidade
+    INTO v_custo_cosmo, v_dano, v_elemento
+    FROM habilidade
+    WHERE id_habilidade = p_id_habilidade;
+
+    -- 📌 Buscar o cosmo atual do cavaleiro usando a view party_cavaleiros_view
+    SELECT cavaleiro_magia_atual INTO v_cosmo_atual
+    FROM party_cavaleiros_view
+    WHERE id_cavaleiro = p_id_cavaleiro;
+
+    -- ❌ Se não tiver cosmo suficiente, retorna erro
+    IF v_cosmo_atual < v_custo_cosmo THEN
+        RETURN '❌ Cosmo insuficiente para usar essa habilidade!';
+    END IF;
+
+    -- 📌 Buscar o elemento do boss e o HP atual
+    SELECT id_elemento, hp_atual
+    INTO v_elemento_boss, v_hp_atual
+    FROM boss
+    WHERE id_boss = p_id_boss;
+
+    -- 📌 Buscar a menor defesa entre todas as partes do corpo do boss
+    SELECT MIN(boss_defesa_fisica), MIN(boss_defesa_magica)
+    INTO v_defesa_fisica_min, v_defesa_magica_min
+    FROM boss_parte_corpo_info_view
+    WHERE id_boss = p_id_boss;
+
+    -- 📌 Ajustar dano baseado em fraqueza e vantagem elementar
+    IF EXISTS (SELECT 1 FROM elemento WHERE id_elemento = v_elemento AND forte_contra = v_elemento_boss) THEN
+        v_multiplicador := 1.5;  -- 🔥 Bônus por vantagem elemental
+    ELSIF EXISTS (SELECT 1 FROM elemento WHERE id_elemento = v_elemento AND fraco_contra = v_elemento_boss) THEN
+        v_multiplicador := 0.75; -- ❄️ Redução por fraqueza
+    END IF;
+
+    -- 📌 Calcular dano final utilizando a menor defesa
+    IF EXISTS (SELECT 1 FROM habilidade WHERE id_habilidade = p_id_habilidade AND classe_habilidade = 2) THEN
+        v_dano := (v_dano - v_defesa_magica_min) * v_multiplicador;
+    ELSE
+        v_dano := (v_dano - v_defesa_fisica_min) * v_multiplicador;
+    END IF;
+
+    -- 🔥 Garante que o dano mínimo seja pelo menos 1
+    IF v_dano < 1 THEN
+        v_dano := 1;
+    END IF;
+
+    -- 📌 Atualiza o HP do boss após o dano
+    UPDATE boss
+    SET hp_atual = GREATEST(0, hp_atual - v_dano)
+    WHERE id_boss = p_id_boss;
+
+    -- 📌 Reduz o cosmo do cavaleiro
+    UPDATE instancia_cavaleiro
+    SET magia_atual = magia_atual - v_custo_cosmo
+    WHERE id_cavaleiro = p_id_cavaleiro;
+
+    -- 📌 Cria a mensagem de retorno usando a view para obter o nome do cavaleiro
+    v_mensagem := FORMAT(
+        '🔥 %s usou %s causando %s de dano! HP do Boss agora: %s',
+        (SELECT cavaleiro_nome FROM party_cavaleiros_view WHERE id_cavaleiro = p_id_cavaleiro),
+        (SELECT nome FROM habilidade WHERE id_habilidade = p_id_habilidade),
+        v_dano, 
+        (SELECT hp_atual FROM boss WHERE id_boss = p_id_boss)
+    );
+
+    RETURN v_mensagem;
+END;
+$$ LANGUAGE plpgsql;

@@ -14,7 +14,7 @@ def listar_sagas_disponiveis(console, player_id):
         with obter_cursor() as cursor:
             # Consulta para buscar sagas disponíveis
             try:
-                cursor.execute("SELECT * FROM listar_sagas(%s);", (player_id,))
+                cursor.execute("SELECT * FROM listar_sagas(%s) where id_saga != 3;", (player_id,))
                 sagas = cursor.fetchall()
 
 
