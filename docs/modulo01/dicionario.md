@@ -4,7 +4,7 @@
 ## Tabelas e Relações
 
 ### Tabela: **Armadura**
-![Tabela Armadura](docs\assets\images\Armadura.png)
+![Tabela Armadura](./assets/images/Armadura.png)
 
 ### Tabela: **Armadura equipada**
 ![Tabela Armadura equipada ](docs\assets\images\Armaduraequipada.png)
