@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - gitpages
 permissions:
   contents: write
 jobs:
