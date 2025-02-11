@@ -1,7 +1,6 @@
 CREATE TABLE Saga (
     id_saga SERIAL PRIMARY KEY,
     id_missao_requisito INTEGER,
-    id_missao_proxima_saga INTEGER,
     nome VARCHAR UNIQUE NOT NULL,
     descricao VARCHAR,
     nivel_recomendado INTEGER NOT NULL
@@ -11,7 +10,6 @@ CREATE TABLE Casa (
     id_casa SERIAL PRIMARY KEY,
     id_saga INTEGER NOT NULL,
     id_missao_requisito INTEGER,
-    id_missao_proxima_casa INTEGER,
     nome VARCHAR NOT NULL,
     descricao VARCHAR,
     nivel_recomendado INTEGER NOT NULL
@@ -39,9 +37,6 @@ ALTER TABLE Saga ADD CONSTRAINT FK_Saga_2
     FOREIGN KEY (id_missao_requisito)
     REFERENCES Missao (id_missao);
  
-ALTER TABLE Saga ADD CONSTRAINT FK_Saga_3
-    FOREIGN KEY (id_missao_proxima_saga)
-    REFERENCES Missao (id_missao);
 
 ALTER TABLE Casa ADD CONSTRAINT FK_Casa_2
     FOREIGN KEY (id_saga)
@@ -51,9 +46,6 @@ ALTER TABLE Casa ADD CONSTRAINT FK_Casa_3
     FOREIGN KEY (id_missao_requisito)
     REFERENCES Missao (id_missao);
  
-ALTER TABLE Casa ADD CONSTRAINT FK_Casa_4
-    FOREIGN KEY (id_missao_proxima_casa)
-    REFERENCES Missao (id_missao);
 
 ALTER TABLE Sala ADD CONSTRAINT FK_Sala_2
     FOREIGN KEY (id_casa)

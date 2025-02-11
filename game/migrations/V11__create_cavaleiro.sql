@@ -6,14 +6,16 @@ CREATE TABLE Cavaleiro (
     nivel INTEGER NOT NULL,
     hp_max INTEGER NOT NULL,
     magia_max INTEGER NOT NULL,
-    velocidade_base INTEGER NOT NULL,
-    ataque_fisico_base INTEGER NOT NULL,
-    ataque_magico_base INTEGER NOT NULL
+    velocidade INTEGER NOT NULL,
+    ataque_fisico INTEGER NOT NULL,
+    ataque_magico INTEGER NOT NULL
 );
  
 
 
-
+ALTER TABLE Cavaleiro ADD CONSTRAINT FK_Cavaleiro_1
+    FOREIGN KEY (id_cavaleiro)
+    REFERENCES Tipo_Personagem (id_personagem);
 
 ALTER TABLE Cavaleiro ADD CONSTRAINT FK_Cavaleiro_2
     FOREIGN KEY (id_classe)

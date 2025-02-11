@@ -8,8 +8,8 @@ RETURNS TABLE (
     magia_max INTEGER,
     hp_atual INTEGER,
     magia_atual INTEGER,
-    ataque_fisico_base INTEGER,
-    ataque_magico_base INTEGER,
+    ataque_fisico INTEGER,
+    ataque_magico INTEGER,
     dinheiro INTEGER
 ) AS $$
 BEGIN
@@ -23,8 +23,8 @@ BEGIN
         p.magia_max, 
         p.hp_atual, 
         p.magia_atual, 
-        p.ataque_fisico_base, 
-        p.ataque_magico_base,
+        p.ataque_fisico, 
+        p.ataque_magico,
         i.dinheiro
     FROM player p
     INNER JOIN elemento e ON e.id_elemento = p.id_elemento

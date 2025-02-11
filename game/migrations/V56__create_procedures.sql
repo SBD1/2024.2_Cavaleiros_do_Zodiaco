@@ -109,10 +109,13 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
     total_cavaleiros INT;
-    id_sala_var INT; -- Nome atualizado para evitar ambiguidades
+    id_sala_var INT;
 BEGIN
     -- Obtém o ID da sala (party) do jogador
-    SELECT id_sala INTO id_sala_var FROM party WHERE id_player = p_id_player LIMIT 1;
+    SELECT id_sala INTO id_sala_var
+    FROM party
+    WHERE id_player = p_id_player
+    LIMIT 1;
 
     -- Se a party não existir, sair com erro
     IF id_sala_var IS NULL THEN
@@ -120,37 +123,38 @@ BEGIN
     END IF;
 
     -- Conta quantos cavaleiros já estão na party
-    SELECT COUNT(*) INTO total_cavaleiros 
-    FROM instancia_cavaleiro ic
-    WHERE ic.id_party = id_sala_var; -- Agora está claro que estamos referenciando a variável correta
+    SELECT COUNT(*) INTO total_cavaleiros
+    FROM instancia_cavaleiro
+    WHERE id_party = id_sala_var;
 
-    -- Se a party já tiver 3 cavaleiros, verifica se o cavaleiro escolhido pertence à party
+    -- Se a party já tiver 3 cavaleiros
     IF total_cavaleiros >= 3 THEN
-        IF NOT EXISTS (SELECT 1 FROM instancia_cavaleiro WHERE id_party = id_sala_var AND id_cavaleiro = p_id_cavaleiro_removido) THEN
+        -- Verifica se o cavaleiro escolhido para remoção está na party
+        IF NOT EXISTS (
+            SELECT 1
+            FROM instancia_cavaleiro
+            WHERE id_party = id_sala_var AND id_cavaleiro = p_id_cavaleiro_removido
+        ) THEN
             RAISE EXCEPTION 'O cavaleiro escolhido para remoção não está na party.';
         END IF;
 
-        -- Em vez de deletar, apenas remove o cavaleiro da party (seta NULL)
-        UPDATE instancia_cavaleiro 
-        SET id_party = NULL 
+        -- Remove o cavaleiro da party
+        UPDATE instancia_cavaleiro
+        SET id_party = NULL
         WHERE id_party = id_sala_var AND id_cavaleiro = p_id_cavaleiro_removido;
 
-        RAISE NOTICE 'Cavaleiro % foi removido da party e está disponível novamente.', p_id_cavaleiro_removido;
+        RAISE NOTICE 'Cavaleiro % foi removido da party.', p_id_cavaleiro_removido;
     END IF;
 
-    -- Adiciona o novo cavaleiro na party
-    INSERT INTO instancia_cavaleiro (id_player,id_cavaleiro, id_party, nivel, xp_atual, hp_max, magia_max, hp_atual, magia_atual, velocidade, ataque_fisico, ataque_magico)
-    SELECT 
-        p_id_player,
-        p_id_cavaleiro_novo, 
-        id_sala_var,  -- Corrigido para `id_sala_var`
-        nivel, 0, hp_max, magia_max, hp_max, magia_max, velocidade_base, ataque_fisico_base, ataque_magico_base
-    FROM cavaleiro
+    -- Adiciona o novo cavaleiro à party
+    UPDATE instancia_cavaleiro
+    SET id_party = id_sala_var
     WHERE id_cavaleiro = p_id_cavaleiro_novo;
 
     RAISE NOTICE 'Cavaleiro % foi adicionado à party.', p_id_cavaleiro_novo;
 END;
 $$;
+
 
 CREATE OR REPLACE PROCEDURE criar_item(
     IN p_id_player INT,
@@ -319,75 +323,120 @@ BEGIN
     RAISE NOTICE 'Item vendido com sucesso!';
 END $$;
 
-CREATE OR REPLACE PROCEDURE comprar_armadura(
-    p_id_player INTEGER,
-    p_id_item INTEGER
+CREATE OR REPLACE PROCEDURE fabricar_armadura(
+    IN p_id_player INT,
+    IN p_id_item_gerado INT
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    v_preco_compra INTEGER;
-    v_nivel_minimo INTEGER;
-    v_jogador_nivel INTEGER;
-    v_dinheiro_disponivel INTEGER;
-    v_raridade TEXT; -- Declarado como TEXT
-    v_defesa_magica INTEGER;
-    v_defesa_fisica INTEGER;
-    v_ataque_magico INTEGER;
-    v_ataque_fisico INTEGER;
-    v_durabilidade_max INTEGER;
+    material RECORD; 
+    insuficiente BOOLEAN := FALSE;
+    alma_necessaria INT;
+    alma_disponivel INT;
+    raridade_armadura TEXT;
+    defesa_magica INT;
+    defesa_fisica INT;
+    ataque_magico INT;
+    ataque_fisico INT;
+    durabilidade_max INT;
+    id_parte_corpo enum_parte_corpo;
 BEGIN
-    -- Buscar informações da armadura à venda
-    SELECT iv.preco_compra, iv.nivel_minimo, a.raridade_armadura::TEXT, -- Conversão explícita para TEXT
-           a.defesa_magica, a.defesa_fisica, a.ataque_magico, a.ataque_fisico, a.durabilidade_max
-    INTO v_preco_compra, v_nivel_minimo, v_raridade, 
-         v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max
-    FROM item_a_venda iv
-    JOIN tipo_item ti ON ti.id_item = iv.id_item
-    JOIN armadura a ON a.id_armadura = ti.id_item
-    WHERE iv.id_item = p_id_item;
+    -- Obter a quantidade de Alma de Armadura necessária e os atributos da armadura
+    SELECT 
+        r.alma_armadura, 
+        ar.raridade_armadura, 
+        ar.defesa_magica, 
+        ar.defesa_fisica, 
+        ar.ataque_magico, 
+        ar.ataque_fisico, 
+        ar.durabilidade_max, 
+        ar.id_parte_corpo
+    INTO 
+        alma_necessaria, 
+        raridade_armadura, 
+        defesa_magica, 
+        defesa_fisica, 
+        ataque_magico, 
+        ataque_fisico, 
+        durabilidade_max, 
+        id_parte_corpo
+    FROM receitas_armadura_view r
+    JOIN armadura ar ON r.id_item_gerado = ar.id_armadura
+    WHERE r.id_item_gerado = p_id_item_gerado;
 
-    IF NOT FOUND THEN
-        RAISE EXCEPTION 'Armadura não encontrada para compra.';
-    END IF;
-
-    -- Verificar o nível do jogador
-    SELECT nivel, i.dinheiro
-    INTO v_jogador_nivel, v_dinheiro_disponivel
-    FROM player p 
-    JOIN inventario i 
-    ON p.id_player = i.id_player
-    WHERE p.id_player = p_id_player;
-
-    IF v_jogador_nivel < v_nivel_minimo THEN
-        RAISE EXCEPTION 'Você precisa ser nível % para comprar esta armadura.', v_nivel_minimo;
-    END IF;
-
-    -- Verificar se o jogador tem dinheiro suficiente
-    IF v_dinheiro_disponivel < v_preco_compra THEN
-        RAISE EXCEPTION 'Dinheiro insuficiente para comprar esta armadura.';
-    END IF;
-
-    -- Subtrair o valor da compra do dinheiro do jogador
-    UPDATE inventario
-    SET dinheiro = dinheiro - v_preco_compra
+    -- Verificar se há Alma de Armadura suficiente no inventário
+    SELECT alma_armadura
+    INTO alma_disponivel
+    FROM inventario
     WHERE id_player = p_id_player;
 
-    -- Gerar a instância da armadura
-    INSERT INTO armadura_instancia (
-        id_armadura, id_parte_corpo_armadura, id_inventario, raridade_armadura,
-        defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_atual, preco_venda
-    )
-    SELECT 
-        a.id_armadura, a.id_parte_corpo, p_id_player, v_raridade,
-        v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max, v_preco_compra
-    FROM armadura a
-    WHERE a.id_armadura = p_id_item;
+    IF alma_disponivel < alma_necessaria THEN
+        RAISE EXCEPTION 'Você não tem Alma de Armadura suficiente para fabricar esta armadura.';
+    END IF;
 
-    -- Mensagem de sucesso
-    RAISE NOTICE 'Armadura comprada e adicionada ao inventário com sucesso!';
+    -- Verificar se o jogador possui os materiais necessários
+    FOR material IN 
+        SELECT mr.id_material, mr.quantidade
+        FROM material_receita mr
+        WHERE mr.id_receita = p_id_item_gerado
+    LOOP
+        IF (SELECT quantidade 
+            FROM item_armazenado 
+            WHERE id_inventario = p_id_player 
+              AND id_item = material.id_material) < material.quantidade THEN
+            insuficiente := TRUE;
+        END IF;
+    END LOOP;
+
+    IF insuficiente THEN
+        RAISE EXCEPTION 'Você não tem materiais suficientes para fabricar esta armadura.';
+    END IF;
+
+    -- Consumir a Alma de Armadura
+    UPDATE inventario
+    SET alma_armadura = alma_armadura - alma_necessaria
+    WHERE id_player = p_id_player;
+
+    -- Consumir os materiais necessários
+    UPDATE item_armazenado ia
+    SET quantidade = ia.quantidade - mr.quantidade
+    FROM material_receita mr
+    WHERE ia.id_inventario = p_id_player
+      AND ia.id_item = mr.id_material
+      AND mr.id_receita = p_id_item_gerado;
+
+    -- Criar a instância da armadura
+    INSERT INTO armadura_instancia (
+        id_armadura, 
+        id_parte_corpo_armadura, 
+        id_inventario, 
+        raridade_armadura, 
+        defesa_magica, 
+        defesa_fisica, 
+        ataque_magico, 
+        ataque_fisico, 
+        durabilidade_atual
+    )
+    VALUES (
+        p_id_item_gerado,         -- ID da armadura gerada
+        id_parte_corpo,           -- Parte do corpo da armadura
+        p_id_player,              -- ID do inventário do jogador (correspondente ao ID do jogador)
+        raridade_armadura,        -- Raridade da armadura
+        defesa_magica,            -- Defesa mágica
+        defesa_fisica,            -- Defesa física
+        ataque_magico,            -- Ataque mágico
+        ataque_fisico,            -- Ataque físico
+        durabilidade_max          -- Durabilidade máxima
+    );
+
+    RAISE NOTICE 'Armadura fabricada com sucesso e adicionada ao inventário!';
 END;
 $$;
+
+
+
+
 
 CREATE OR REPLACE PROCEDURE equipar_armadura(
     p_id_player INTEGER,
@@ -397,7 +446,7 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
     v_id_armadura INTEGER;
-    v_id_parte_corpo_armadura enum_parte_corpo; -- Altere para o tipo ENUM correspondente ao id_parte_corpo_armadura
+    v_id_parte_corpo_armadura enum_parte_corpo;
     v_armadura_atual INTEGER;
     v_instancia_atual INTEGER;
 BEGIN
@@ -413,35 +462,35 @@ BEGIN
     END IF;
 
     -- Verificar se o jogador já possui uma armadura equipada na mesma parte do corpo
-    SELECT armadura_equipada, instancia_armadura_equipada
+    SELECT id_armadura, id_armadura_instanciada
     INTO v_armadura_atual, v_instancia_atual
-    FROM Parte_Corpo_Player
+    FROM Armadura_Equipada
     WHERE id_player = p_id_player
-      AND parte_corpo = v_id_parte_corpo_armadura;
+      AND id_parte_corpo_armadura = v_id_parte_corpo_armadura;
 
+    -- Se o jogador já tem uma armadura equipada, removê-la e devolvê-la ao inventário
     IF FOUND THEN
-        -- Se uma armadura já estiver equipada, ela é devolvida ao inventário
+        -- Atualiza a armadura antiga para voltar ao inventário do jogador
         UPDATE Armadura_Instancia
         SET id_inventario = p_id_player
-        WHERE id_armadura = v_armadura_atual
-          AND id_instancia = v_instancia_atual;
+        WHERE id_instancia = v_instancia_atual
+          AND id_armadura = v_armadura_atual;
+
+        -- Remove a armadura equipada
+        DELETE FROM Armadura_Equipada
+        WHERE id_player = p_id_player
+          AND id_parte_corpo_armadura = v_id_parte_corpo_armadura;
     END IF;
 
-    -- Atualizar a nova armadura como equipada
-    UPDATE Parte_Corpo_Player
-    SET armadura_equipada = v_id_armadura,
-        instancia_armadura_equipada = p_id_instancia
-    WHERE id_player = p_id_player
-      AND parte_corpo = v_id_parte_corpo_armadura;
+    -- Equipar a nova armadura
+    INSERT INTO Armadura_Equipada (id_player, id_armadura, id_armadura_instanciada, id_parte_corpo_armadura)
+    VALUES (p_id_player, v_id_armadura, p_id_instancia, v_id_parte_corpo_armadura);
 
-    -- Remover a armadura equipada do inventário
-    UPDATE Armadura_Instancia
-    SET id_inventario = NULL
-    WHERE id_instancia = p_id_instancia;
 
     RAISE NOTICE 'A armadura foi equipada com sucesso!';
 END;
 $$;
+
 
 CREATE OR REPLACE PROCEDURE restaurar_durabilidade(
     p_id_player INT,
@@ -488,7 +537,7 @@ BEGIN
         RETURN;
     END IF;
 
-    -- Buscar o custo de alma da restauração com base na durabilidade atual
+    -- Buscar o custo de alma da restauração com  na durabilidade atual
     SELECT id, custo_alma INTO v_id_custo_ferreiro, v_custo_alma
     FROM custos_ferreiro
     WHERE tipo_acao = 'restaurar'
@@ -574,6 +623,7 @@ DECLARE
     v_quantidade_necessaria INT;
     v_quantidade_disponivel INT;
     v_material_nome TEXT;
+    v_nome_armadura TEXT;
 BEGIN
     -- Buscar o ID do inventário do jogador
     SELECT id_player INTO v_id_inventario
@@ -584,6 +634,12 @@ BEGIN
     IF v_id_inventario IS NULL THEN
         RAISE EXCEPTION 'Inventário não encontrado para o jogador!';
     END IF;
+
+    -- Pega o nome da armadura
+    SELECT  a.nome into v_nome_armadura
+    FROM armadura_instancia ai
+    JOIN armadura a on a.id_armadura = ai.id_armadura
+    WHERE id_instancia = p_id_instancia;
 
     -- Buscar a raridade atual da armadura
     SELECT raridade_armadura INTO v_raridade_atual
@@ -616,7 +672,7 @@ BEGIN
 
     -- Se o jogador não tem almas ou não tem o suficiente, retorna erro
     IF v_almas_disponiveis IS NULL OR v_almas_disponiveis < v_custo_alma THEN
-        RAISE EXCEPTION 'Você não tem Almas de Armadura suficientes para melhorar esta armadura! Custo: %, Disponível: %', v_custo_alma, COALESCE(v_almas_disponiveis, 0);
+        RAISE EXCEPTION 'Você não tem Almas de Armadura suficientes para melhorar a Armadura % ! Custo: %, Disponível: %', v_nome_armadura, v_custo_alma, COALESCE(v_almas_disponiveis, 0);
     END IF;
 
     -- Verificar materiais necessários na tabela material_necessario_ferreiro
@@ -634,7 +690,7 @@ BEGIN
 
         -- Se não houver quantidade suficiente do material, retorna erro
         IF v_quantidade_disponivel IS NULL OR v_quantidade_disponivel < v_quantidade_necessaria THEN
-            RAISE EXCEPTION 'Você não possui materiais suficientes para melhorar a armadura! Material: %, Necessário: %, Disponível: %', v_material_nome, v_quantidade_necessaria, COALESCE(v_quantidade_disponivel, 0);
+            RAISE EXCEPTION 'Você não possui materiais suficientes para melhorar a Armadura %! Material: %, Necessário: %, Disponível: %', v_nome_armadura, v_material_nome, v_quantidade_necessaria, COALESCE(v_quantidade_disponivel, 0);
         END IF;
     END LOOP;
 
@@ -737,5 +793,61 @@ BEGIN
         -- Caso o cavaleiro não pertença ao jogador, lança um erro
         RAISE EXCEPTION 'Cavaleiro não pertence ao jogador ou já está na party.';
     END IF;
+END;
+$$;
+
+CREATE PROCEDURE remover_cavaleiro_party(
+    IN p_id_cavaleiro INT,
+    IN p_id_player INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Verifica se o cavaleiro pertence ao jogador e está na party
+    IF EXISTS (
+        SELECT 1
+        FROM instancia_cavaleiro
+        WHERE id_cavaleiro = p_id_cavaleiro
+          AND id_player = p_id_player
+          AND id_party = p_id_player
+    ) THEN
+        -- Atualiza o id_party do cavaleiro para NULL, removendo da party
+        UPDATE instancia_cavaleiro
+        SET id_party = NULL
+        WHERE id_cavaleiro = p_id_cavaleiro
+          AND id_player = p_id_player;
+
+        -- Mensagem de confirmação no log do servidor
+        RAISE NOTICE 'Cavaleiro ID % foi removido da party do jogador %', p_id_cavaleiro, p_id_player;
+
+    ELSE
+        -- Caso o cavaleiro não pertença ao jogador ou não esteja na party, lança um erro
+        RAISE EXCEPTION 'Cavaleiro não pertence ao jogador ou não está na party.';
+    END IF;
+END;
+$$;
+
+
+CREATE OR REPLACE PROCEDURE adicionar_drop_boss(
+    p_id_boss INT, 
+    p_id_player INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    r_item RECORD;
+BEGIN
+    -- Percorre todos os itens que o boss dropa
+    FOR r_item IN
+        SELECT id_item, quantidade
+        FROM item_boss_dropa
+        WHERE id_boss = p_id_boss
+    LOOP
+        -- Insere ou atualiza os itens no inventário do jogador
+        INSERT INTO item_armazenado (id_inventario, id_item, quantidade)
+        VALUES (p_id_player, r_item.id_item, r_item.quantidade)
+        ON CONFLICT (id_inventario, id_item)
+        DO UPDATE SET quantidade = item_armazenado.quantidade + EXCLUDED.quantidade;
+    END LOOP;
 END;
 $$;

@@ -3,6 +3,16 @@ CREATE TABLE Tipo_Item (
     tipo_item enum_tipo_item NOT NULL
 );
 
+CREATE TABLE Craftavel (
+    id_craftavel INTEGER PRIMARY KEY,
+    tipo_craftavel enum_craftavel NOT NULL
+);
+
+CREATE TABLE Nao_Craftavel (
+    id_nao_craftavel INTEGER PRIMARY KEY,
+    tipo_nao_craftavel enum_nao_craftavel NOT NULL
+);
+
 CREATE TABLE Armadura (
     id_armadura INTEGER,
     id_parte_corpo enum_parte_corpo,
@@ -14,7 +24,6 @@ CREATE TABLE Armadura (
     ataque_magico INTEGER,
     ataque_fisico INTEGER,
     durabilidade_max INTEGER,
-    preco_venda INTEGER,
     PRIMARY KEY (id_armadura, id_parte_corpo)
 );
  
@@ -52,7 +61,7 @@ CREATE TABLE Livro (
 
 ALTER TABLE Armadura ADD CONSTRAINT FK_Armadura_2
     FOREIGN KEY (id_armadura)
-    REFERENCES Tipo_Item (id_item);
+    REFERENCES Craftavel (id_craftavel);
  
 ALTER TABLE Armadura ADD CONSTRAINT FK_Armadura_3
     FOREIGN KEY (id_parte_corpo)
@@ -60,15 +69,15 @@ ALTER TABLE Armadura ADD CONSTRAINT FK_Armadura_3
 
 ALTER TABLE Material ADD CONSTRAINT FK_Material_2
     FOREIGN KEY (id_material)
-    REFERENCES Tipo_Item (id_item);
+    REFERENCES Craftavel (id_craftavel);
 
 ALTER TABLE Item_Missao ADD CONSTRAINT FK_Item_Missao_2
     FOREIGN KEY (id_item)
-    REFERENCES Tipo_Item (id_item);
+    REFERENCES Nao_Craftavel (id_nao_craftavel);
 
 ALTER TABLE Livro ADD CONSTRAINT FK_Livro_2
     FOREIGN KEY (id_item)
-    REFERENCES Tipo_Item (id_item);
+    REFERENCES Nao_Craftavel (id_nao_craftavel);
  
 ALTER TABLE Livro ADD CONSTRAINT FK_Livro_3
     FOREIGN KEY (id_habilidade)
@@ -76,4 +85,4 @@ ALTER TABLE Livro ADD CONSTRAINT FK_Livro_3
 
 ALTER TABLE Consumivel ADD CONSTRAINT FK_Consumivel_2
     FOREIGN KEY (id_item)
-    REFERENCES Tipo_Item (id_item);
+    REFERENCES Nao_Craftavel (id_nao_craftavel);

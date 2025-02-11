@@ -1,7 +1,7 @@
 CREATE TABLE Inventario (
     id_player INTEGER PRIMARY KEY,
     dinheiro INTEGER NOT NULL,
-    alma_armadura INTEGER
+    alma_armadura INTEGER NOT NULL
 );
  
 ALTER TABLE Inventario ADD CONSTRAINT FK_Inventario_1

@@ -94,7 +94,7 @@ BEGIN
     RETURN (
         SELECT STRING_AGG(
             FORMAT(
-                'Nome: %s %sNível: %s%sXP Acumulado: %s%sHP Máximo: %s%sMagia Máxima: %s%sHP Atual: %s%sMagia Atual: %s%sVelocidade: %s%sAtaque Físico Base: %s%sAtaque Mágico Base: %s%sElemento: %s',
+                'Nome: %s %sNível: %s%sXP Acumulado: %s%sHP Máximo: %s%sMagia Máxima: %s%sHP Atual: %s%sMagia Atual: %s%sVelocidade: %s%sAtaque Físico : %s%sAtaque Mágico : %s%sElemento: %s',
                 p.nome, E'\n',
                 p.nivel, E'\n',
                 p.atual, E'\n',
@@ -103,8 +103,8 @@ BEGIN
                 p.hp_atual, E'\n',
                 p.magia_atual, E'\n',
                 p.velocidade, E'\n',
-                p.ataque_fisico_base, E'\n',
-                p.ataque_magico_base, E'\n',
+                p.ataque_fisico, E'\n',
+                p.ataque_magico, E'\n',
                 e.nome
             ),
             E'\n'  -- Delimitador entre os registros (caso haja mais de um)

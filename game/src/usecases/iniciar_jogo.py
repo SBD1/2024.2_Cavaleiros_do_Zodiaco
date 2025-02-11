@@ -1,6 +1,6 @@
 from .exibir_introducao import exibir_introducao
 from .setar_sala_incial import setar_sala_inicial
-from .tocar_musica import tocar_musica
+from .tocar_musica_abertura import tocar_musica_abertura
 from rich.panel import Panel
 from rich.console import Console
 
@@ -34,6 +34,6 @@ def iniciar_jogo(console: Console, selected_player_id):
         "[bold green]🎵 Tocando: 'Faça elevar o Cosmo em seu coração' 🎶[/bold green]",
         border_style="green"
     ))
-    tocar_musica("Tema de Abertura",0)
+    tocar_musica_abertura("Tema de Abertura",0)
 
     input("\n[🔙 Pressione ENTER para voltar ao menu]")

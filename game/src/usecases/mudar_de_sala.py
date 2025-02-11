@@ -7,7 +7,7 @@ from ..database import obter_conexao
 from .obter_nome_sala import obter_nome_sala
 
 def mudar_de_sala(console, selected_player_id):
-    """🚪 Permite ao jogador mudar de sala com base na direção (Norte, Sul, Leste, Oeste)."""
+    """🚪 Permite ao jogador mudar de sala com  na direção (Norte, Sul, Leste, Oeste)."""
 
     if selected_player_id is None:
         console.print(Panel.fit(

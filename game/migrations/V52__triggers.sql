@@ -63,8 +63,8 @@ CREATE OR REPLACE FUNCTION after_player_insert_function()
 RETURNS TRIGGER AS $$
 BEGIN
 
-    INSERT INTO inventario (id_player, dinheiro)
-    VALUES (NEW.id_player, 200);
+    INSERT INTO inventario (id_player, dinheiro, alma_armadura)
+    VALUES (NEW.id_player, 200, 200);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -91,116 +91,37 @@ FOR EACH ROW
 EXECUTE FUNCTION verificar_dinheiro();
 
 
--- inserir em tipo_item item_missao
-
-CREATE OR REPLACE FUNCTION before_insert_item_missao()
-RETURNS TRIGGER AS $$
-DECLARE
-    new_id_item INTEGER;
-BEGIN
-    INSERT INTO tipo_item (tipo_item)
-    VALUES ('i')
-    RETURNING id_item INTO new_id_item;
-
-    NEW.id_item := new_id_item;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER  before_insert_item_missao_trigger
-BEFORE INSERT ON item_missao
-FOR EACH ROW
-EXECUTE FUNCTION  before_insert_item_missao();
-
--- Trigger para inserir em "livro"
-CREATE OR REPLACE FUNCTION before_insert_livro()
-RETURNS TRIGGER AS $$
-DECLARE
-    new_id_item INTEGER;
-BEGIN
-    INSERT INTO tipo_item (tipo_item)
-    VALUES ('l') -- 'l' para livro
-    RETURNING id_item INTO new_id_item;
-
-    NEW.id_item := new_id_item;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER before_insert_livro_trigger
-BEFORE INSERT ON livro
-FOR EACH ROW
-EXECUTE FUNCTION before_insert_livro();
 
 
--- Trigger para inserir em "material"
-CREATE OR REPLACE FUNCTION before_insert_material()
-RETURNS TRIGGER AS $$
-DECLARE
-    new_id_material INTEGER;
-BEGIN
-    INSERT INTO tipo_item (tipo_item)
-    VALUES ('m') -- 'm' para material
-    RETURNING id_item INTO new_id_material;
-
-    NEW.id_material := new_id_material;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER before_insert_material_trigger
-BEFORE INSERT ON material
-FOR EACH ROW
-EXECUTE FUNCTION before_insert_material();
-
-
--- Trigger para inserir em "armadura"
-CREATE OR REPLACE FUNCTION before_insert_armadura()
-RETURNS TRIGGER AS $$
-DECLARE
-    new_id_armadura INTEGER;
-BEGIN
-    INSERT INTO tipo_item (tipo_item)
-    VALUES ('a') -- 'a' para armadura
-    RETURNING id_item INTO new_id_armadura;
-
-    NEW.id_armadura := new_id_armadura;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER before_insert_armadura_trigger
-BEFORE INSERT ON armadura
-FOR EACH ROW
-EXECUTE FUNCTION before_insert_armadura();
 
 CREATE OR REPLACE FUNCTION subir_de_nivel()
 RETURNS TRIGGER AS $$
 DECLARE
-    nivel_atual INTEGER;
-    xp_atual INTEGER;
+    xp_prox_nivel INTEGER;
 BEGIN
-    nivel_atual := OLD.nivel;
-    xp_atual := OLD.xp_atual;
+    LOOP
+        SELECT xp_necessaria INTO xp_prox_nivel
+        FROM xp_necessaria 
+        WHERE nivel = NEW.nivel + 1;
 
-    IF xp_atual >= (SELECT xp_necessaria FROM xp_necessaria where nivel = nivel_atual + 1) THEN
-        NEW.xp_atual := xp_atual - xp_necessaria;
-        NEW.nivel := nivel_atual + 1;
-    END IF;
+        IF xp_prox_nivel IS NULL OR NEW.xp_atual < xp_prox_nivel THEN
+            EXIT;
+        END IF;
+
+        NEW.xp_atual := NEW.xp_atual - xp_prox_nivel;
+        NEW.nivel := NEW.nivel + 1;
+    END LOOP;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-
 CREATE TRIGGER trigger_subir_de_nivel_player
-BEFORE UPDATE OF xp_atual ON Player
+BEFORE UPDATE OF xp_atual ON player
 FOR EACH ROW
 WHEN (OLD.xp_atual <> NEW.xp_atual) 
 EXECUTE FUNCTION subir_de_nivel();
+
 
 CREATE TRIGGER trigger_subir_de_nivel_instancia_cavaleiro
 BEFORE UPDATE OF xp_atual ON instancia_cavaleiro
@@ -215,8 +136,9 @@ DECLARE
     missao_id INTEGER;
 BEGIN
     -- Verificar o tipo do item usando a tabela Tipo_item
-    SELECT tipo_item INTO tipo_do_item 
-    FROM tipo_item
+    SELECT nc.tipo_nao_craftavel INTO tipo_do_item 
+    FROM tipo_item ti
+    JOIN nao_craftavel nc on  ti.id_item = nc.id_nao_craftavel
     WHERE id_item = NEW.id_item;
 
     -- Verificar se o tipo do item é "i" (item missao)
@@ -321,7 +243,7 @@ BEGIN
 
     -- Obtém as informações do cavaleiro
     SELECT c.id_classe, c.id_elemento, c.nome, c.nivel, c.hp_max, c.magia_max, 
-           c.velocidade_base, c.ataque_fisico_base, c.ataque_magico_base
+           c.velocidade, c.ataque_fisico, c.ataque_magico
     INTO p_id_classe, p_id_elemento, p_nome, p_nivel, p_hp_max, p_magia_max, 
          p_velocidade, p_ataque_fisico, p_ataque_magico
     FROM cavaleiro c
@@ -334,11 +256,11 @@ BEGIN
     ) THEN
         -- Insere o cavaleiro na instância do jogador
         INSERT INTO instancia_cavaleiro (
-            id_cavaleiro, id_player, id_party, nivel, tipo_armadura, xp_atual, 
+            id_cavaleiro, id_player, nivel, tipo_armadura, xp_atual, 
             hp_max, magia_max, hp_atual, magia_atual, velocidade, 
             ataque_fisico, ataque_magico
         ) VALUES (
-            p_id_cavaleiro, p_id_player, p_id_party, p_nivel, 0, 0, 
+            p_id_cavaleiro, p_id_player, p_nivel, 0, 0, 
             p_hp_max, p_magia_max, p_hp_max, p_magia_max, p_velocidade, 
             p_ataque_fisico, p_ataque_magico
         );
@@ -362,14 +284,14 @@ BEGIN
     SET dinheiro = dinheiro / 2
     WHERE inventario.id_player = OLD.id_player;
 
-    RAISE NOTICE '% foi derrotado, Saori Kido o resgata mas com um custo...', OLD.id_player;
+    RAISE NOTICE '% foi derrotado, Saori Kido o resgata mas com um custo...', OLD.nome;
 
 
     UPDATE party
     SET id_sala = (SELECT id_sala FROM public.sala_segura LIMIT 1)  -- Usar parênteses no SELECT
-    WHERE party.id_player = OLD.id_player;
+    WHERE party.id_player = NEW.id_player;
 
-
+    NEW.hp_atual := NEW.hp_max / 2;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -380,3 +302,46 @@ BEFORE UPDATE ON player
 FOR EACH ROW
 WHEN (NEW.hp_atual <= 0) 
 EXECUTE FUNCTION mover_sala_segura_pos_morte();
+
+
+CREATE OR REPLACE FUNCTION verificar_slots_unicos() 
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM Habilidade_Player
+        WHERE id_player = NEW.id_player 
+        AND slot = NEW.slot
+    ) THEN
+        RAISE EXCEPTION '❌ Esse slot já está ocupado! Escolha outro.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER impedir_slots_repetidos
+BEFORE INSERT OR UPDATE ON Habilidade_Player
+FOR EACH ROW
+EXECUTE FUNCTION verificar_slots_unicos();
+
+CREATE OR REPLACE FUNCTION remover_cavaleiro_da_party()
+RETURNS TRIGGER AS $$
+BEGIN
+    
+    IF NEW.hp_atual <= 0 AND OLD.hp_atual > 0 AND OLD.id_party IS NOT NULL THEN
+        
+        UPDATE instancia_cavaleiro 
+        SET id_party = NULL
+        WHERE id_cavaleiro = NEW.id_cavaleiro AND id_player = NEW.id_player;
+
+        
+        RAISE NOTICE 'O cavaleiro % foi removido da party do player % porque seu HP chegou a 0.', NEW.id_cavaleiro, NEW.id_player;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_remover_cavaleiro_party
+BEFORE UPDATE OF hp_atual
+ON public.instancia_cavaleiro
+FOR EACH ROW
+EXECUTE FUNCTION remover_cavaleiro_da_party();

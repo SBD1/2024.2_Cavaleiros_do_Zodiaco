@@ -1,6 +1,10 @@
+CREATE TABLE Tipo_npc (
+    id_npc SERIAL PRIMARY KEY,
+    tipo_npc enum_tipo_npc NOT NULL
+);
 
-CREATE TABLE Npc_Ferreiro (
-    id_npc_ferreiro SERIAL PRIMARY KEY,
+CREATE TABLE Ferreiro (
+    id_npc SERIAL PRIMARY KEY,
     id_sala INTEGER NOT NULL,
     id_missao_desbloqueia INTEGER NOT NULL,
     nome VARCHAR NOT NULL,
@@ -9,7 +13,10 @@ CREATE TABLE Npc_Ferreiro (
     dialogo_reparar VARCHAR,
     dialogo_upgrade VARCHAR,
     dialogo_desmanchar VARCHAR,
-    dialogo_sair VARCHAR
+    dialogo_sair VARCHAR,
+    CONSTRAINT FK_Ferreiro_1 FOREIGN KEY (id_npc) REFERENCES Tipo_npc (id_npc),
+    CONSTRAINT FK_Ferreiro_2 FOREIGN KEY (id_sala) REFERENCES Sala (id_sala),
+    CONSTRAINT FK_Ferreiro_3 FOREIGN KEY (id_missao_desbloqueia) REFERENCES Missao (id_missao)
 );
 
 
@@ -62,41 +69,28 @@ ALTER TABLE material_necessario_ferreiro ADD CONSTRAINT FK_material_necessario_f
     FOREIGN KEY (id_custo_ferreiro)
     REFERENCES Custos_ferreiro (id);
 
-CREATE TABLE Npc_Quest (
-    id_npc_quest SERIAL PRIMARY KEY,
+CREATE TABLE Quest (
+    id_npc SERIAL PRIMARY KEY,
     id_sala INTEGER NOT NULL,
     nome VARCHAR NOT NULL,
     descricao VARCHAR,
     dialogo_inicial VARCHAR,
-    dialogo_recusa VARCHAR
+    dialogo_recusa VARCHAR,
+    dialogo_sair VARCHAR,
+    CONSTRAINT FK_Tipo_npc_Quest_1 FOREIGN KEY (id_npc) REFERENCES Tipo_npc (id_npc),
+    CONSTRAINT FK_Tipo_npc_Quest_2 FOREIGN KEY (id_sala) REFERENCES Sala (id_sala)
 );
  
 
-CREATE TABLE Npc_Mercador (
-    id_npc_mercador SERIAL PRIMARY KEY,
+CREATE TABLE Mercador (
+    id_npc SERIAL PRIMARY KEY,
     id_sala INTEGER NOT NULL,
     nome VARCHAR NOT NULL,
     descricao VARCHAR,
     dialogo_inicial VARCHAR,
     dialogo_vender VARCHAR,
     dialogo_comprar VARCHAR,
-    dialogo_sair VARCHAR
+    dialogo_sair VARCHAR,
+    CONSTRAINT FK_Mercador_1 FOREIGN KEY (id_npc) REFERENCES Tipo_npc (id_npc),
+    CONSTRAINT FK_Mercador_2 FOREIGN KEY (id_sala) REFERENCES Sala (id_sala)
 );
- 
-
-
-ALTER TABLE Npc_Ferreiro ADD CONSTRAINT FK_Npc_Ferreiro_2
-    FOREIGN KEY (id_sala)
-    REFERENCES Sala (id_sala);
- 
-ALTER TABLE Npc_Ferreiro ADD CONSTRAINT FK_Npc_Ferreiro_3
-    FOREIGN KEY (id_missao_desbloqueia)
-    REFERENCES Missao (id_missao);
-
-ALTER TABLE Npc_Quest ADD CONSTRAINT FK_Npc_Quest_2
-    FOREIGN KEY (id_sala)
-    REFERENCES Sala (id_sala);
-
-ALTER TABLE Npc_Mercador ADD CONSTRAINT FK_Npc_Mercador_2
-    FOREIGN KEY (id_sala)
-    REFERENCES Sala (id_sala);

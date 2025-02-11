@@ -1,51 +1,51 @@
-import pygame
 import os
-import keyboard  # Biblioteca para capturar teclas pressionadas
-import time  
+import pygame
 
-from ..database import obter_cursor  # Importa a conexão com o banco de dados
 
-def tocar_musica(nome_audio,tempo_minimo):
-    """🎵 Toca uma música com base no nome fornecido."""
-    try:
-        # Obtém o nome do arquivo de áudio no banco de dados
-        with obter_cursor() as cursor:
-            cursor.execute("SELECT nome_arquivo FROM audios WHERE nome = %s;", (nome_audio,))
-            resultado = cursor.fetchone()
+pygame.mixer.init()
 
-        # Se não encontrar o áudio no banco, exibe um erro
-        if not resultado:
-            raise FileNotFoundError(f"🎵 '{nome_audio}' não encontrado no banco de dados!")
+posicao_pausada = 0
 
-        nome_arquivo = resultado[0]  # Obtém o nome do arquivo da consulta SQL
+def tocar_musica(nome_musica, volume=0.5):
+    global posicao_pausada
+    diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+    caminho_musica = os.path.join(diretorio_atual, "..", "assets", nome_musica)
 
-        # Inicializa o mixer do pygame
-        pygame.mixer.init()
+    if not os.path.exists(caminho_musica):
+        raise FileNotFoundError(f"Arquivo de música não encontrado: {caminho_musica}")
+    
+    pygame.mixer.music.load(caminho_musica)
+    pygame.mixer.music.set_volume(volume)
+    pygame.mixer.music.play(-1)  
 
-        # Obtém o caminho absoluto do diretório atual
-        diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+def pausar_musica():
+    global posicao_pausada
+    posicao_pausada = pygame.mixer.music.get_pos() / 1000  
+    pygame.mixer.music.pause()
 
-        # Constrói o caminho absoluto para o arquivo de música na pasta 'assets'
-        caminho_musica = os.path.join(diretorio_atual, '..', 'assets', nome_arquivo)
+def resumir_musica():
+    global posicao_pausada
+    pygame.mixer.music.unpause()
 
-        # Verifica se o arquivo de música existe
-        if not os.path.exists(caminho_musica):
-            raise FileNotFoundError(f"Arquivo de música '{nome_arquivo}' não encontrado! Verifique a pasta 'assets'.")
+def tocar_efeito_sonoro(nome_efeito, volume=1.0):
+    global posicao_pausada
+    diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+    caminho_efeito = os.path.join(diretorio_atual, "..", "assets", "habilidades", nome_efeito)
 
-        # Carrega o arquivo de música
-        pygame.mixer.music.load(caminho_musica)
+    if not os.path.exists(caminho_efeito):
+        raise FileNotFoundError(f"Arquivo de efeito sonoro não encontrado: {caminho_efeito}")
 
-        # Reproduz a música
-        pygame.mixer.music.play()
-        time.sleep(tempo_minimo)
-        print(f"🎵 Música '{nome_audio}' tocando... Pressione qualquer tecla para parar a música.")
+    pausar_musica()
 
-        # Aguarda qualquer tecla ser pressionada para interromper a música
-        keyboard.read_event()  
-        
-        print("⏹️ Música interrompida.")
-        pygame.mixer.music.stop()  # Para a música sem encerrar o programa
+    efeito = pygame.mixer.Sound(caminho_efeito)
+    efeito.set_volume(volume)
+    efeito.play()
 
-    except Exception as e:
-        print(f"❌ Ocorreu um erro durante a reprodução da música: {str(e)}")
+    pygame.time.wait(int(efeito.get_length() * 1000))
 
+
+    resumir_musica()
+
+def parar_musica():
+
+    pygame.mixer.music.stop()

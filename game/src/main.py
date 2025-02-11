@@ -13,9 +13,11 @@ from src.usecases.iniciar_jogo import iniciar_jogo
 from src.usecases.criar_jogador import criar_jogador
 from src.usecases.verificar_inimigos import verificar_inimigos
 from src.usecases.verificar_boss import verificar_boss
+from src.usecases.executar666 import executar666
 from .util import limpar_terminal
 from src.usecases.tocar_tema_encerramento import tocar_tema_encerramento
-
+from .usecases.tocar_musica import tocar_musica, parar_musica
+from src.usecases.iniciar_batalha import iniciar_batalha
 
 
 jogador_selecionado_id = None
@@ -26,6 +28,8 @@ def executar_com_interface(console, func, *args, **kwargs):
     func(console, *args, **kwargs)
     console.print("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
     input()
+    parar_musica()
+    
 
 
 def mostrar_menu_acoes(console):
@@ -35,39 +39,50 @@ def mostrar_menu_acoes(console):
     
 
     while True:
-        limpar_terminal(console)
-
-        if verificar_inimigos(console,jogador_selecionado_id):
-            batalhar(console,jogador_selecionado_id)
+        try:
             limpar_terminal(console)
-        elif verificar_boss(console,jogador_selecionado_id):
+            boss = verificar_boss(console, jogador_selecionado_id)
+
+            if verificar_inimigos(console, jogador_selecionado_id):
+                limpar_terminal(console)
+            elif boss:
+                try:
+                    iniciar_batalha(console, jogador_selecionado_id, boss)
+                    input()  # Pausa para ver a batalha
+                    limpar_terminal(console)
+                except Exception as e:
+                    console.print(f"[bold red]Erro ao iniciar a batalha: {e}[/bold red]")
+            
+
+
+            ver_localizacao_atual(console, jogador_selecionado_id)
+
+            opcoes = obter_acoes_disponiveis(jogador_selecionado_id)
+            
+            console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", expand=False))
+
+            for opcao in opcoes:
+                console.print(f"{opcoes.index(opcao) + 1}. {opcao[0]}")
+
+
+            escolha = int(input("\n🎯 Escolha uma ação: ").strip())
+
+            if 1 <= int(escolha) < len(opcoes):
+                executar_com_interface(console, opcoes[escolha - 1][1], jogador_selecionado_id)
+            elif escolha == len(opcoes):
+                console.print(Panel("[bold red]👋 Saindo do Menu de Ações...[/bold red]", expand=False))
+                input("\n[💾 Pressione ENTER para continuar...]")
+                break
+            elif escolha == 666:
+                executar666(console, jogador_selecionado_id)
+            else:
+                console.print("[bold red]⚠ Opção inválida! Tente novamente.[/bold red]")
+                time.sleep(1)
+
+        except ValueError:
             limpar_terminal(console)
-        
-
-
-        ver_localizacao_atual(console, jogador_selecionado_id)
-
-        opcoes = obter_acoes_disponiveis(jogador_selecionado_id)
-        
-        console.print(Panel("[bold cyan]⚔ Menu de Ações ⚔[/bold cyan]", expand=False))
-
-        for opcao in opcoes:
-            console.print(f"{opcoes.index(opcao) + 1}. {opcao[0]}")
-
-
-        escolha = int(input("\n🎯 Escolha uma ação: ").strip())
-
-        if 1 <= int(escolha) < len(opcoes):
-            executar_com_interface(console, opcoes[escolha - 1][1], jogador_selecionado_id)
-        elif escolha == len(opcoes):
-            console.print(Panel("[bold red]👋 Saindo do Menu de Ações...[/bold red]", expand=False))
-            input("\n[💾 Pressione ENTER para continuar...]")
-            break
-        else:
-            console.print("[bold red]⚠ Opção inválida! Tente novamente.[/bold red]")
+            console.print("[bold red]⚠ Entrada inválida! Digite um número válido.[/bold red]")
             time.sleep(1)
-
-
 def run():
     """Menu principal do jogo."""
     global jogador_selecionado_id

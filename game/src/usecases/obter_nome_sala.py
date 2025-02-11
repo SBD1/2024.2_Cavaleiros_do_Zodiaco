@@ -5,7 +5,7 @@ from ..database import obter_cursor
 console = Console()
 
 def obter_nome_sala(id_sala):
-    """🏰 Retorna o nome da sala com base no ID informado."""
+    """🏰 Retorna o nome da sala com  no ID informado."""
     try:
         with obter_cursor() as cursor:
             cursor.execute("SELECT get_nome_sala(%s);", (id_sala,))

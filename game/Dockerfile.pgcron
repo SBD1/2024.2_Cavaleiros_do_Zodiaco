@@ -1,0 +1,16 @@
+# Dockerfile.pgcron
+FROM postgres:13.2-alpine
+
+RUN apk update && apk add --no-cache \
+    gcc \
+    make \
+    postgresql-dev \
+    git \
+    libc-dev \
+    linux-headers
+
+RUN git clone https://github.com/citusdata/pg_cron.git /tmp/pg_cron \
+    && cd /tmp/pg_cron && make && make install \
+    && rm -rf /tmp/pg_cron
+
+CMD ["postgres", "-c", "shared_preload_libraries=pg_cron", "-c", "cron.database_name=cdz"]

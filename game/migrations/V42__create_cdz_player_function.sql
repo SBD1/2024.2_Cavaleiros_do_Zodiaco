@@ -13,10 +13,6 @@ BEGIN
         RAISE EXCEPTION 'Jogador com nome existente' USING ERRCODE = 'P0001';
     END IF;
 
-    -- Obter o mínimo e o máximo ID do elemento
-    SELECT MIN(id_elemento), MAX(id_elemento) 
-    INTO id_elemento_min, id_elemento_max 
-    FROM Elemento;
 
     -- Inserir o registro com valores parcialmente aleatórios e outros fixos
     INSERT INTO player (
@@ -29,21 +25,21 @@ BEGIN
         hp_atual,
         magia_atual,
         velocidade,
-        ataque_fisico_base,
-        ataque_magico_base     
+        ataque_fisico,
+        ataque_magico     
     )
     VALUES (
-        floor(random() * (id_elemento_max - id_elemento_min + 1) + id_elemento_min), -- ID do elemento aleatório dentro do intervalo válido
+        6, -- ID do elemento aleatório dentro do intervalo válido
         p_nome_cdz, -- Nome fornecido por parâmetro
         1, -- Nível fixo
         0, -- XP acumulado fixo
-        100, -- HP Máximo fixo
-        50, -- Magia Máxima fixa
-        100, -- HP Atual fixo
-        100, -- Magia Atual fixa
-        50, -- Velocidade aleatória (0 a 60)
-        20, -- Ataque físico base aleatório (0 a 60)
-        10 -- Ataque mágico base aleatório (0 a 60)
+        1000, -- HP Máximo fixo
+        500, -- Magia Máxima fixa
+        1000, -- HP Atual fixo
+        50, -- Magia Atual fixa
+        70, -- Velocidade aleatória (0 a 60)
+        100, -- Ataque físico  aleatório (0 a 60)
+        100 -- Ataque mágico  aleatório (0 a 60)
     );
 
 END;

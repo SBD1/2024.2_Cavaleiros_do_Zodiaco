@@ -117,24 +117,40 @@ BEGIN
 END;
 $$;
 
-
-CREATE OR REPLACE FUNCTION player_tem_boss(id_player_input INT)
-RETURNS BOOLEAN AS $$
-DECLARE
-    v_id_sala INT;
-    v_tem_boss BOOLEAN;
+CREATE OR REPLACE FUNCTION verificar_boss_sala(player_id_input INT)
+RETURNS TABLE (
+    id_boss INT,
+    nome_boss TEXT,
+    hp_atual INT,
+    id_missao INT,
+    status_missao TEXT,
+    id_missao_anterior INT,
+    nome_missao_anterior TEXT,
+    status_missao_anterior TEXT
+) AS $$
 BEGIN
-    v_id_sala := get_id_sala_atual(id_player_input);
+    RETURN QUERY
+    SELECT 
+        b.id_boss, 
+        b.nome::TEXT,  
+        b.hp_atual, 
+        m.id_missao, 
+        pm.status_missao::TEXT,  
+        m.id_missao_anterior,
+        ma.nome::TEXT,
+        pm_requisito.status_missao::TEXT
+    FROM boss b
+    LEFT JOIN missao m ON b.id_item_missao = m.item_necessario
+    LEFT JOIN player_missao pm ON m.id_missao = pm.id_missao AND pm.id_player = player_id_input
+    LEFT JOIN player_missao pm_requisito 
+        ON m.id_missao_anterior = pm_requisito.id_missao 
+        AND pm_requisito.id_player = player_id_input
+    LEFT JOIN missao ma ON m.id_missao_anterior = ma.id_missao 
+    WHERE b.id_sala = get_id_sala_atual(player_id_input);
+END $$ LANGUAGE plpgsql;
 
-    IF v_id_sala IS NULL THEN
-        RETURN FALSE;
-    END IF;
 
-    v_tem_boss := sala_tem_boss(v_id_sala, id_player_input);
 
-    RETURN v_tem_boss;
-END;
-$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION verificar_desbloqueio_ferreiro(p_id_player INTEGER)
 RETURNS BOOLEAN AS $$
@@ -147,11 +163,11 @@ BEGIN
         ELSE FALSE
     END
     INTO desbloqueado
-    FROM npc_ferreiro nf
+    FROM ferreiro nf
     LEFT JOIN player_missao pm
         ON pm.id_missao = nf.id_missao_desbloqueia
         AND pm.id_player = p_id_player
-    WHERE nf.id_npc_ferreiro = 1; -- Garantir que é o NPC Ferreiro com ID 1
+    WHERE nf.id_npc = 1; -- Garantir que é o NPC Ferreiro com ID 1
 
     -- Retornar o resultado
     RETURN COALESCE(desbloqueado, FALSE);

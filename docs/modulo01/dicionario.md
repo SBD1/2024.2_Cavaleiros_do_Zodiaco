@@ -1,6 +1,11 @@
 # Dicionário de Dados
- Aqui, colocamos as tabelas do dicionário de dados usando o excel.
 
+## Introdução
+Segundo Elmasri e Navathe1, a modelagem conceitual é uma etapa essencial no desenvolvimento de uma aplicação de banco de dados bem-sucedida. Essa fase abrange o design de estruturas e restrições do banco de dados, além da criação de programas que realizam consultas e atualizações. A modelagem conceitual não apenas facilita a compreensão e o planejamento do banco de dados, mas também garante que as operações sejam eficientes e seguras.
+
+
+## Objetivo
+Este documento tem como objetivo detalhar as tabelas, colunas e relacionamentos do banco de dados no contexto do modelo de dados físico. Ele descreve cada entidade do sistema, suas restrições e as relações entre elas, conforme definido no processo de modelagem conceitual. A representação gráfica deste modelo pode ser visualizada no artefato de Diagrama Entidade-Relacionamento (DER), que serve como base para a implementação deste dicionário de dados.
 ## Tabelas e Relações
 
 ### Tabela: **Armadura**
