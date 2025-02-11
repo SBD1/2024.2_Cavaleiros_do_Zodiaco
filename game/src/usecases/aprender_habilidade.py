@@ -148,8 +148,29 @@ def aprender_habilidade(cursor, console, player_id):
         console.print("\n[bold green]➡️ Digite o número do slot da habilidade a ser substituída:[/bold green]")
         escolha_slot = input().strip()
 
-        cursor.execute("DELETE FROM habilidade_player WHERE id_player = %s AND slot = %s;", (id_personagem, escolha_slot))
-        cursor.execute("INSERT INTO habilidade_player (id_player, id_habilidade, slot) VALUES (%s, %s, %s);", (id_personagem, id_habilidade, escolha_slot))
+        if not escolha_slot.isdigit() or int(escolha_slot) not in [h[0] for h in habilidades_existentes]:
+            console.print("[bold red]❌ Escolha inválida![/bold red]")
+            input()
+            return
 
-    console.print(f"[bold magenta]🔥 {nome_habilidade} aprendida![/bold magenta]")
+        # 📌 Diferencia se o personagem é um Player ou um Cavaleiro
+        if tipo_personagem == "player":
+            cursor.execute("DELETE FROM habilidade_player WHERE id_player = %s AND slot = %s;", (id_personagem, escolha_slot))
+            cursor.execute("INSERT INTO habilidade_player (id_player, id_habilidade, slot) VALUES (%s, %s, %s);", (id_personagem, id_habilidade, escolha_slot))
+        else:
+            cursor.execute("DELETE FROM habilidade_cavaleiro WHERE id_cavaleiro = %s AND slot = %s;", (id_personagem, escolha_slot))
+            cursor.execute("INSERT INTO habilidade_cavaleiro (id_cavaleiro, id_habilidade, slot) VALUES (%s, %s, %s);", (id_personagem, id_habilidade, escolha_slot))
+
+        console.print(f"[bold magenta]🔥 {nome_habilidade} aprendida e substituiu a habilidade antiga![/bold magenta]")
+
+    else:
+        # 📌 Aprender uma nova habilidade caso ainda tenha espaço
+        if tipo_personagem == "player":
+            cursor.execute("INSERT INTO habilidade_player (id_player, id_habilidade, slot) VALUES (%s, %s, %s);", (id_personagem, id_habilidade, len(habilidades_existentes) + 1))
+        else:
+            cursor.execute("INSERT INTO habilidade_cavaleiro (id_cavaleiro, id_habilidade, slot) VALUES (%s, %s, %s);", (id_personagem, id_habilidade, len(habilidades_existentes) + 1))
+
+        console.print(f"[bold magenta]🔥 {nome_habilidade} aprendida com sucesso![/bold magenta]")
+
     input("\n[bold green]✅ Pressione ENTER para continuar...[/bold green]")
+

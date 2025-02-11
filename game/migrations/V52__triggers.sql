@@ -136,8 +136,9 @@ DECLARE
     missao_id INTEGER;
 BEGIN
     -- Verificar o tipo do item usando a tabela Tipo_item
-    SELECT tipo_item INTO tipo_do_item 
-    FROM tipo_item
+    SELECT nc.tipo_nao_craftavel INTO tipo_do_item 
+    FROM tipo_item ti
+    JOIN nao_craftavel nc on  ti.id_item = nc.id_nao_craftavel
     WHERE id_item = NEW.id_item;
 
     -- Verificar se o tipo do item é "i" (item missao)
@@ -321,3 +322,26 @@ CREATE TRIGGER impedir_slots_repetidos
 BEFORE INSERT OR UPDATE ON Habilidade_Player
 FOR EACH ROW
 EXECUTE FUNCTION verificar_slots_unicos();
+
+CREATE OR REPLACE FUNCTION remover_cavaleiro_da_party()
+RETURNS TRIGGER AS $$
+BEGIN
+    
+    IF NEW.hp_atual <= 0 AND OLD.hp_atual > 0 AND OLD.id_party IS NOT NULL THEN
+        
+        UPDATE instancia_cavaleiro 
+        SET id_party = NULL
+        WHERE id_cavaleiro = NEW.id_cavaleiro AND id_player = NEW.id_player;
+
+        
+        RAISE NOTICE 'O cavaleiro % foi removido da party do player % porque seu HP chegou a 0.', NEW.id_cavaleiro, NEW.id_player;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_remover_cavaleiro_party
+BEFORE UPDATE OF hp_atual
+ON public.instancia_cavaleiro
+FOR EACH ROW
+EXECUTE FUNCTION remover_cavaleiro_da_party();

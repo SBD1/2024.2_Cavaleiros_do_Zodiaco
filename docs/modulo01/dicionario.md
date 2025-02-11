@@ -1,11 +1,14 @@
 # Dicionário de Dados
+
 ## Introdução
 Segundo Elmasri e Navathe1, a modelagem conceitual é uma etapa essencial no desenvolvimento de uma aplicação de banco de dados bem-sucedida. Essa fase abrange o design de estruturas e restrições do banco de dados, além da criação de programas que realizam consultas e atualizações. A modelagem conceitual não apenas facilita a compreensão e o planejamento do banco de dados, mas também garante que as operações sejam eficientes e seguras.
+
 
 ## Objetivo
 Este documento tem como objetivo detalhar as tabelas, colunas e relacionamentos do banco de dados no contexto do modelo de dados físico. Ele descreve cada entidade do sistema, suas restrições e as relações entre elas, conforme definido no processo de modelagem conceitual. A representação gráfica deste modelo pode ser visualizada no artefato de Diagrama Entidade-Relacionamento (DER), que serve como base para a implementação deste dicionário de dados.
 ## Tabelas e Relações
 
+<<<<<<< HEAD
 # Dicionário de Dados
  Aqui, colocamos as tabelas do dicionário de dados usando o excel.
 
@@ -86,6 +89,83 @@ Este documento tem como objetivo detalhar as tabelas, colunas e relacionamentos 
 ### Tabela: **Item Armazenado**
 ![Tabela Item Armazenado](..\assets\images\itemaramaze.png)
 
+=======
+### Tabela: **Armadura**
+![Tabela Armadura](../assets/images/Armadura.png)
+
+### Tabela: **Armadura equipada**
+![Tabela Armadura equipada ](..\assets\images\Armaduraequipada.png)
+
+### Tabela: **Audios**
+
+![Tabela Audios](../assets/images/audios.png)
+
+## Tabela: **Boss**
+![Tabela Boss](..\assets\images\Boss.png)
+
+### Tabela: **Cavaleiro**
+![Tabela CAvaleiro ](..\assets\images\cavaleiro.png)
+
+### Tabela: **Classe**
+![Tabela Calsse ](..\assets\images\classe.png)
+
+### Tabela: **Consumível**
+![Tabela Classe ](..\assets\images\consumível.png)
+
+
+### Tabela: **Custos ferreiro**
+![Tabela ](..\assets\images\custosferreiro.png)
+
+### Tabela: **Elemento**
+![Tabela Elemento](..\assets\images\elemento.png)
+
+### Tabela: **Ferreiro**
+![Tabela Ferreiro](..\assets\images\ferreiro.png)
+
+
+### Tabela: **Flyway_Schema_History**
+![Tabela Flyway_Schema_History  ](..\assets\images\flyway.png)
+
+
+### Tabela: **Grupo inimigo**
+![Tabela Grupo inimigo ](..\assets\images\grupoinimigo.png)
+
+### Tabela: **Habilidade**
+![Tabela Habilidade ](..\assets\images\habilidade.png)
+
+### Tabela: **Habilidade Boss**
+![Tabela Habilidade Boss ](..\assets\images\habilidadeboss.png)
+
+### Tabela: **Habilidade Cavaleiro**
+![Tabela HAbilidade cavaleiro ](..\assets\images\habilidadecaveleiro.png)
+
+### Tabela: **Habilidade inimigo**
+![Tabela HAbilidade inimigo ](..\assets\images\habilidadeinimigo.png)
+
+### Tabela: **Habilidade Player**
+![Tabela Player](..\assets\images\habplayer.png)
+
+### Tabela: **inimigo**
+![Tabela Inimigo](..\assets\images\inimigo.png)
+
+### Tabela: **Instância Cavaleiro**
+![Tabela Instância cavaleiro ](..\assets\images\instcavaleiro.png)
+
+### Tabela: **Instância inimigo**
+![Tabela Instancia inimigo ](..\assets\images\instinimigo.png)
+
+### Tabela: **Inventário**
+![Tabela Inventário ](..\assets\images\inventário.png)
+
+### Tabela: **Item a venda**
+![Tabela Item a venda ](..\assets\images\itemavenda.png)
+### Tabela: **Habilidade Cavaleiro**
+![Tabela Habilidade Cavaleiro](..\assets\images\habcavaleiro.png)
+
+### Tabela: **Item Armazenado**
+![Tabela Item Armazenado](..\assets\images\itemaramaze.png)
+
+>>>>>>> c5859874e169af2482b0cf2caa5dbbbda1d83ec6
 ### Tabela: **Item grupo inimigo dropa**
 ![Tabela Item grupo inimigo dropa](..\assets\images\itemdropa.png)
 ### Tabela: **Item missão**

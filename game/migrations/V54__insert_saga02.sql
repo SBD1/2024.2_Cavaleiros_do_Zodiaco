@@ -13,16 +13,12 @@ VALUES (2, 'Entrada Campo de Treinamento', 5, NULL, NULL, NULL);
 INSERT INTO Grupo_inimigo(id_sala)
 VALUES(4);
 
-SELECT public.criar_instancia_inimigo(3,1);
-
 INSERT INTO Sala (id_casa, nome, id_sala_norte, id_sala_sul, id_sala_leste, id_sala_oeste) -- id 5
 VALUES (2, 'Campo de Treinamento', 6, 4, 7, 8);
 
 INSERT INTO Grupo_inimigo(id_sala)
 VALUES(5);
 
-SELECT public.criar_instancia_inimigo(4,2);
-SELECT public.criar_instancia_inimigo(5,2);
 
 INSERT INTO Sala  (id_casa, nome, id_sala_norte, id_sala_sul, id_sala_leste, id_sala_oeste) -- id 6
 VALUES ( currval('casa_id_casa_seq'::regclass), 'Floresta da Perseverança', 12, 5, NULL, NULL);
@@ -53,7 +49,11 @@ INSERT INTO public.missao (id_missao_anterior, item_necessario, id_cavaleiro_des
 VALUES (NULL, 5, currval('tipo_personagem_id_personagem_seq'), 'Derrote Cassios', 'Cassios, o imponente guerreiro treinado por Shaina, ameaça o equilíbrio do Santuário com sua força bruta.', 'Sua missão é enfrentar Cassios em combate. Cuidado, ele é forte e implacável. Apenas os mais habilidosos sobreviverão.', 'Você derrotou Cassios em um combate épico e adquiriu sua orelha como prova de sua vitória.');
 
 INSERT INTO public.boss (id_sala, id_item_missao, nome, nivel, xp_acumulado, hp_max, hp_atual, magia_max, magia_atual, velocidade, ataque_fisico, ataque_magico, dinheiro, fala_inicio, fala_derrotar_player, fala_derrotado, fala_condicao, id_elemento) 
-VALUES (11, 5, 'Cassios', 2, 300, 200, 200, 50, 50, 60, 150, 30, 50, 'Você ousa desafiar Cassios, o campeão da força bruta? Prepare-se para ser esmagado!', 'Você é fraco demais para me enfrentar. Nem deveria ter tentado.', 'Impossível! Como um guerreiro tão insignificante conseguiu superar minha força bruta?', 'Se tem coragem para me enfrentar, venha com tudo ou será destruído!', 4);
+VALUES (11, 5, 'Cassios', 2, 300, 200, 200, 50, 50, 60, 20, 10, 50, 'Você ousa desafiar Cassios, o campeão da força bruta? Prepare-se para ser esmagado!', 'Você é fraco demais para me enfrentar. Nem deveria ter tentado.', 'Impossível! Como um guerreiro tão insignificante conseguiu superar minha força bruta?', 'Se tem coragem para me enfrentar, venha com tudo ou será destruído!', 4);
+
+INSERT INTO public.item_boss_dropa
+(id_boss, id_item, quantidade)
+VALUES(5, 5, 1);
 
 UPDATE public.parte_corpo_boss
 SET defesa_fisica=10, defesa_magica=10, chance_acerto=100, chance_acerto_critico=70
@@ -80,6 +80,9 @@ VALUES ( currval('saga_id_saga_seq'::regclass), 'Templo Sagrado', NULL, 6, NULL,
 INSERT INTO public.item_missao (nome, descricao) 
 VALUES ('Veneno de Cobra', 'Um frasco contendo o veneno letal de Shaina, a Amazona de Prata. Um item raro e perigoso.');
 
+INSERT INTO public.item_boss_dropa
+(id_boss, id_item, quantidade)
+VALUES(6, 6, 1);
 
 INSERT INTO public.missao (id_missao_anterior, item_necessario, nome, dialogo_inicial, dialogo_durante, dialogo_completa) 
 VALUES (1, currval('tipo_item_id_item_seq'::regclass), 'Derrote Shaina', 'Shaina, a Amazona de Prata, tem causado problemas em nosso território. Ela é perigosa e deve ser detido.', 'Sua missão é enfrentar e derrotar Shaina. Lembre-se, ela é rápido e usa seu veneno para enfraquecer seus inimigos.', 'Parabéns! Você derrotou Shaina e adquiriu seu mortal Veneno de Cobra. Sua bravura será lembrada.');
@@ -95,7 +98,7 @@ INSERT INTO Casa ( id_saga, id_missao_requisito, nome, descricao, nivel_recomend
 VALUES (2, NULL, 'Arena da Guerra Galáctica', 'descricao', 3);
 
 INSERT INTO Sala (id_casa, nome, id_sala_norte, id_sala_sul, id_sala_leste, id_sala_oeste) -- id 13
-VALUES ( currval('saga_id_saga_seq'::regclass), 'Arena de batalha Geki', NULL, NULL, NULL, NULL);
+VALUES ( currval('casa_id_casa_seq'::regclass), 'Arena de batalha Geki', NULL, NULL, NULL, NULL);
 
 -- INSERT INTO Sala ( id_casa, nome, id_sala_norte, id_sala_sul, id_sala_leste, id_sala_oeste) -- id 14
 -- VALUES ( currval('saga_id_saga_seq'::regclass),  'Arena de batalha Jabu', NULL, NULL, NULL, NULL);

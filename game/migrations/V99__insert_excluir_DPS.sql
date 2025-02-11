@@ -9,7 +9,7 @@ VALUES(
     'Um ataque poderoso com golpes consecutivos imbuídos de cosmos. Cada golpe atinge com a força do espírito de Pégaso.', 
     'Pegasus Ryu Sei Ken!', 
     5,  -- Nível necessário para desbloquear
-    'meteoro de pegasus.mp3'
+    'meteoro_de_pegaso.mp3'
 );
 
 -- Inserindo o livro que desbloqueia a habilidade
@@ -103,15 +103,15 @@ VALUES(
 
 INSERT INTO public.item_boss_dropa
 (id_boss, id_item, quantidade)
-VALUES(8, currval('tipo_item_id_item_seq'::regclass), 2);
+VALUES(6, currval('tipo_item_id_item_seq'::regclass), 2);
 
 INSERT INTO public.item_boss_dropa
 (id_boss, id_item, quantidade)
-VALUES(8, currval('tipo_item_id_item_seq'::regclass) - 1 , 2);
+VALUES(6, currval('tipo_item_id_item_seq'::regclass) - 1 , 2);
 
 INSERT INTO public.item_boss_dropa
 (id_boss, id_item, quantidade)
-VALUES(8, currval('tipo_item_id_item_seq'::regclass) - 2 , 2);
+VALUES(6, currval('tipo_item_id_item_seq'::regclass) - 2 , 2);
 
 
 
@@ -126,7 +126,7 @@ VALUES
 
 INSERT INTO item_a_venda
 (id_item, preco_compra, nivel_minimo)
-VALUES (currval('tipo_item_id_item_seq'), 2, 5), (currval('tipo_item_id_item_seq')-1, 2, 1), (currval('tipo_item_id_item_seq')-2, 2, 1);
+VALUES (currval('tipo_item_id_item_seq'), 2, 1), (currval('tipo_item_id_item_seq')-1, 2, 1), (currval('tipo_item_id_item_seq')-2, 2, 1);
 
 
 -- ⚪ Materiais de PRATA
@@ -136,12 +136,20 @@ VALUES
 ('Pedaço de Prata', 20, 'Um pedaço de prata refinado, formado por 10 pepitas de prata.'),
 ('Bloco de Prata', 100, 'Um bloco sólido de prata, formado por 5 pedaços de prata.');
 
+INSERT INTO item_a_venda
+(id_item, preco_compra, nivel_minimo)
+VALUES (currval('tipo_item_id_item_seq'), 2, 1), (currval('tipo_item_id_item_seq')-1, 2, 1), (currval('tipo_item_id_item_seq')-2, 2, 1);
+
 -- 🟡 Materiais de OURO
 INSERT INTO public.material (nome, preco_venda, descricao)
 VALUES 
 ('Pepita de Ouro', 5, 'Uma pequena pepita de ouro usada para restauração e reforço de armaduras.'),
 ('Pedaço de Ouro', 50, 'Um pedaço de ouro refinado, formado por 10 pepitas de ouro.'),
 ('Bloco de Ouro', 250, 'Um bloco sólido de ouro, formado por 5 pedaços de ouro.');
+
+INSERT INTO item_a_venda
+(id_item, preco_compra, nivel_minimo)
+VALUES (currval('tipo_item_id_item_seq')-2, 2, 1), (currval('tipo_item_id_item_seq')-1, 2, 1);
 
 -- Receitas para criar Pedaços e Blocos
 INSERT INTO Receita (id_item_gerado, descricao, nivel_minimo)
@@ -201,7 +209,7 @@ VALUES
 
 INSERT INTO public.item_a_venda
 (id_item, preco_compra, nivel_minimo)
-VALUES(currval('tipo_item_id_item_seq'), 2, 1);
+VALUES(currval('tipo_item_id_item_seq'), 3, 5);
 
 
 
@@ -255,13 +263,10 @@ INSERT INTO Receita
 VALUES(currval('tipo_item_id_item_seq'), 'Gerar perna de armadura foda', 1,100);
 
 
--- INSERT INTO public.item_armazenado
--- (id_inventario, id_item, quantidade)
--- VALUES(1, 8, 100);
 
 INSERT INTO public.item_boss_dropa
 (id_boss, id_item, quantidade)
-VALUES(8, 11 , 4);
+VALUES(6, 11 , 4);
 
 INSERT INTO public.habilidade
 ( classe_habilidade, elemento_habilidade, nome, dano, custo, descricao, frase_uso, nivel_necessario, audio)
@@ -289,4 +294,32 @@ VALUES(
 
 INSERT INTO public.item_boss_dropa
 (id_boss, id_item, quantidade)
-VALUES(8, currval('tipo_item_id_item_seq'::regclass), 3);
+VALUES(6, currval('tipo_item_id_item_seq'::regclass), 3);
+
+INSERT INTO public.habilidade
+( classe_habilidade, elemento_habilidade, nome, dano, custo, descricao, frase_uso, nivel_necessario, audio)
+VALUES( 
+    2,  -- Classe de habilidade (2 para "DPS")
+    6,  -- Elemento (6 para "Raio")
+    'Explosão Elétrica 3', 
+    12,  -- Dano do golpe
+    16,  -- Custo de uso
+    'Canaliza uma onda de choque elétrica ao redor do usuár2io, atingindo todos os inimigos próximos.', 
+    'QUEIMEM NA FÚRIA DOS RAIOS! EXPLOSÃO ELÉTRICA2!', 
+    6,  -- Nível necessário para desbloquear
+    'explosao_eletrica2.mp3'
+);
+
+INSERT INTO public.livro
+( id_habilidade, nome, descricao, preco_venda)
+VALUES( 
+    currval('habilidade_id_habilidade_seq'),  -- Associa o livro à habilidade recém-criada
+    'Livro da Explosão Elétrica 3', 
+    'Um tomo antigo envolto por eletricidade, contendo o segredo do golpe Explosão Elétrica. Apenas guerreiros do elemento Raio podem aprender essa técnica.', 
+    400  -- Preço de venda (em unidades monetárias do jogo)
+);
+
+
+INSERT INTO public.item_boss_dropa
+(id_boss, id_item, quantidade)
+VALUES(6, currval('tipo_item_id_item_seq'::regclass), 3);
