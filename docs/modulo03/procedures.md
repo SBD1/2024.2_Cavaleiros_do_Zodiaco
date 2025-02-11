@@ -348,6 +348,132 @@ Esta procedure permite que o jogador compre um item de um mercador, verificando 
     ```
 </details>
 
+### Vender Item
+
+Esta procedure permite que o jogador venda um item, recebendo dinheiro em troca.
+
+<details>
+    <sumary>Migrações</sumary>
+
+    ```sql
+   CREATE OR REPLACE PROCEDURE vender_item(
+        p_id_player INT,
+        p_id_item INT
+    )
+    LANGUAGE plpgsql
+    AS $$
+    DECLARE
+        v_preco_venda NUMERIC;
+        v_quantidade_atual INT;
+    BEGIN
+        SELECT preco_venda, quantidade
+        INTO v_preco_venda, v_quantidade_atual
+        FROM inventario_view
+        WHERE id_player = p_id_player
+        AND id_item = p_id_item;
+
+        IF NOT FOUND THEN
+            RAISE EXCEPTION 'Você não possui este item no inventário.';
+        END IF;
+
+        IF v_quantidade_atual <= 0 THEN
+            RAISE EXCEPTION 'Quantidade insuficiente para vender.';
+        END IF;
+
+        IF v_quantidade_atual > 1 THEN
+            UPDATE item_armazenado
+            SET quantidade = quantidade - 1
+            WHERE id_inventario = p_id_player
+            AND id_item = p_id_item;
+        ELSE
+            DELETE FROM item_armazenado
+            WHERE id_inventario = p_id_player
+            AND id_item = p_id_item;
+        END IF;
+
+        UPDATE inventario
+        SET dinheiro = dinheiro + v_preco_venda
+        WHERE id_player = p_id_player;
+
+        RAISE NOTICE 'Item vendido com sucesso!';
+    END $$;
+    ```
+</details>
+
+### Comprar Armadura
+
+Esta procedure permite que o jogador compre uma armadura, verificando se ele tem dinheiro suficiente e se atende ao nível mínimo necessário.
+
+<details>
+    <sumary>Migrações</sumary>
+
+    ```sql
+   CREATE OR REPLACE PROCEDURE comprar_armadura(
+        p_id_player INTEGER,
+        p_id_item INTEGER
+    )
+    LANGUAGE plpgsql
+    AS $$
+    DECLARE
+        v_preco_compra INTEGER;
+        v_nivel_minimo INTEGER;
+        v_jogador_nivel INTEGER;
+        v_dinheiro_disponivel INTEGER;
+        v_raridade TEXT;
+        v_defesa_magica INTEGER;
+        v_defesa_fisica INTEGER;
+        v_ataque_magico INTEGER;
+        v_ataque_fisico INTEGER;
+        v_durabilidade_max INTEGER;
+    BEGIN
+        SELECT iv.preco_compra, iv.nivel_minimo, a.raridade_armadura::TEXT,
+            a.defesa_magica, a.defesa_fisica, a.ataque_magico, a.ataque_fisico, a.durabilidade_max
+        INTO v_preco_compra, v_nivel_minimo, v_raridade, 
+            v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max
+        FROM item_a_venda iv
+        JOIN tipo_item ti ON ti.id_item = iv.id_item
+        JOIN armadura a ON a.id_armadura = ti.id_item
+        WHERE iv.id_item = p_id_item;
+
+        IF NOT FOUND THEN
+            RAISE EXCEPTION 'Armadura não encontrada para compra.';
+        END IF;
+
+        SELECT nivel, i.dinheiro
+        INTO v_jogador_nivel, v_dinheiro_disponivel
+        FROM player p 
+        JOIN inventario i 
+        ON p.id_player = i.id_player
+        WHERE p.id_player = p_id_player;
+
+        IF v_jogador_nivel < v_nivel_minimo THEN
+            RAISE EXCEPTION 'Você precisa ser nível % para comprar esta armadura.', v_nivel_minimo;
+        END IF;
+
+        IF v_dinheiro_disponivel < v_preco_compra THEN
+            RAISE EXCEPTION 'Dinheiro insuficiente para comprar esta armadura.';
+        END IF;
+
+        UPDATE inventario
+        SET dinheiro = dinheiro - v_preco_compra
+        WHERE id_player = p_id_player;
+
+        INSERT INTO armadura_instancia (
+            id_armadura, id_parte_corpo_armadura, id_inventario, raridade_armadura,
+            defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_atual, preco_venda
+        )
+        SELECT 
+            a.id_armadura, a.id_parte_corpo, p_id_player, v_raridade,
+            v_defesa_magica, v_defesa_fisica, v_ataque_magico, v_ataque_fisico, v_durabilidade_max, v_preco_compra
+        FROM armadura a
+        WHERE a.id_armadura = p_id_item;
+
+        RAISE NOTICE 'Armadura comprada e adicionada ao inventário com sucesso!';
+    END;
+    $$;
+    ```
+</details>
+
 ### Versionamento
 
 | Versão | Data | Modificação | Autor |
