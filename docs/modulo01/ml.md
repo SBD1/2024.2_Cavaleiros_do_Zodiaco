@@ -57,7 +57,7 @@ _** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
 
 **Figura 4 - Modelo Lógico Versão 3.0**
 
-![ML](../assets/images/ML V1.1.1.png)
+![ML](../assets/images/mlV4.png)
 
 _** Fonte: [Vinícius Rufino](https://github.com/RufinoVfR) **_
 

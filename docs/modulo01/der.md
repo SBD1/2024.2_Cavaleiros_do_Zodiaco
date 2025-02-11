@@ -61,7 +61,7 @@ _** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
 
 **Figura 4 - DER Versão 3.0**
 
-![DER](../assets/images/DER(1)1.png)
+![DER](../assets/images/DERV$.png)
 
 _** Fonte: [Vinícius Rufino](https://github.com/RufinoVfR) **_
 
