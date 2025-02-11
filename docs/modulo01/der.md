@@ -59,6 +59,12 @@ _** Fonte: [Pedro Lucas](https://github.com/lucasdray) **_
 
 </center>
 
+**Figura 4 - DER Versão 3.0**
+
+![DER](../assets/images/DER(1)1.png)
+
+_** Fonte: [Vinícius Rufino](https://github.com/RufinoVfR) **_
+
 ## Referência Bibliográfica
 
 > [1] ELMASRI, Ramez; NAVATHE, Shamkant B. Sistemas de banco de dados. Tradução: Daniel Vieira. Revisão técnica: Enzo Seraphim; Thatyana de Faria Piola Seraphim. 6. ed. São Paulo: Pearson Addison Wesley, 2011. Capítulo 7. Modelagem de dados usando o modelo Entidade-Relacionamento (ER), páginas 131 e 146.
