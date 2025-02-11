@@ -8,6 +8,11 @@ Segundo Elmasri e Navathe1, a modelagem conceitual é uma etapa essencial no des
 Este documento tem como objetivo detalhar as tabelas, colunas e relacionamentos do banco de dados no contexto do modelo de dados físico. Ele descreve cada entidade do sistema, suas restrições e as relações entre elas, conforme definido no processo de modelagem conceitual. A representação gráfica deste modelo pode ser visualizada no artefato de Diagrama Entidade-Relacionamento (DER), que serve como base para a implementação deste dicionário de dados.
 ## Tabelas e Relações
 
+# Dicionário de Dados
+ Aqui, colocamos as tabelas do dicionário de dados usando o excel.
+
+## Tabelas e Relações
+
 ### Tabela: **Armadura**
 ![Tabela Armadura](../assets/images/Armadura.png)
 
