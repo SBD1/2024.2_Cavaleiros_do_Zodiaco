@@ -967,7 +967,70 @@ A stored procedure adicionar_drop_boss é responsável por adicionar ao inventá
 
 </details>
 
+## Não utilizados
+Abaixo se encontram as procedures que não foram utilizadas quanto ao controle de integralidade pois faltou refatoramento
 
+<details>
+
+    ```sql
+    CREATE OR REPLACE PROCEDURE inserir_item(
+        IN p_tipo_item enum_tipo_item,
+        IN p_nome VARCHAR,
+        IN p_preco_venda INT DEFAULT NULL,
+        IN p_descricao VARCHAR DEFAULT NULL,
+        IN p_id_parte_corpo enum_parte_corpo DEFAULT NULL,
+        IN p_raridade_armadura VARCHAR DEFAULT NULL,
+        IN p_defesa_magica INT DEFAULT NULL,
+        IN p_defesa_fisica INT DEFAULT NULL,
+        IN p_ataque_magico INT DEFAULT NULL,
+        IN p_ataque_fisico INT DEFAULT NULL,
+        IN p_durabilidade_max INT DEFAULT NULL,
+        IN p_saude_restaurada INT DEFAULT NULL, 
+        IN p_magia_restaurada INT DEFAULT NULL, 
+        IN p_saude_maxima INT DEFAULT NULL, 
+        IN p_magia_maxima INT DEFAULT NULL, 
+        IN p_id_habilidade INT DEFAULT NULL 
+    )
+    LANGUAGE plpgsql
+    AS $$
+    DECLARE
+        v_id_item INT;
+    BEGIN
+        
+        INSERT INTO tipo_item (tipo_item) VALUES (p_tipo_item) RETURNING id_item INTO v_id_item;
+
+        
+        CASE p_tipo_item
+            WHEN 'm' THEN 
+                INSERT INTO material (id_material, nome, preco_venda, descricao) 
+                VALUES (v_id_item, p_nome, p_preco_venda, p_descricao);
+            
+            WHEN 'a' THEN 
+                INSERT INTO armadura (id_armadura, id_parte_corpo, nome, raridade_armadura, defesa_magica, defesa_fisica, ataque_magico, ataque_fisico, durabilidade_max, preco_venda, descricao) 
+                VALUES (v_id_item, p_id_parte_corpo, p_nome, p_raridade_armadura, p_defesa_magica, p_defesa_fisica, p_ataque_magico, p_ataque_fisico, p_durabilidade_max, p_preco_venda, p_descricao);
+            
+            WHEN 'i' THEN 
+                INSERT INTO item_missao (id_item, nome, descricao) 
+                VALUES (v_id_item, p_nome, p_descricao);
+            
+            WHEN 'c' THEN 
+                INSERT INTO consumivel (id_item, nome, descricao, preco_venda, saude_restaurada, magia_restaurada, saude_maxima, magia_maxima) 
+                VALUES (v_id_item, p_nome, p_descricao, p_preco_venda, p_saude_restaurada, p_magia_restaurada, p_saude_maxima, p_magia_maxima);
+            
+            WHEN 'l' THEN 
+                INSERT INTO livro (id_item, id_habilidade, nome, descricao, preco_venda) 
+                VALUES (v_id_item, p_id_habilidade, p_nome, p_descricao, p_preco_venda);
+            
+            ELSE 
+                RAISE EXCEPTION 'Tipo de item inválido!';
+        END CASE;
+
+        RAISE NOTICE 'Item inserido com sucesso! ID: %', v_id_item;
+    END;
+    $$;
+    ```
+
+</details>
 
 ## Referência Bibliográfica
 
@@ -980,8 +1043,8 @@ A stored procedure adicionar_drop_boss é responsável por adicionar ao inventá
 
 ## Histórico de Versões
 
-| Versão | Data       | Modificação                   | Autor                                       |
-| ------ | ---------- | ----------------------------- | ------------------------------------------- |
-| 0.1    | 10/02/2025 | Criação do Documento          | Vinícius Rufino                             |
-| 1.0    | 10/02/2025 | Atualização dos Procedures    | Vinícius Rufino                             |
-| 2.0    | 13/02/2025 | Atualização para versão Final | [Pedro Lucas](https://github.com/lucasdray) |
+| Versão | Data       | Modificação                                              | Autor                                       |
+| ------ | ---------- | -------------------------------------------------------- | ------------------------------------------- |
+| 0.1    | 10/02/2025 | Criação do Documento                                     | Vinícius Rufino                             |
+| 1.0    | 10/02/2025 | Atualização dos Procedures                               | Vinícius Rufino                             |
+| 2.0    | 13/02/2025 | Atualização e refatoração do documento para versão final | [Pedro Lucas](https://github.com/lucasdray) |
