@@ -1574,6 +1574,10 @@ Cria a tabela "audios" para armazenar arquivos de áudio.
 
 </details>
 
+## Referência Bibliográfica
+
+> [1] ELMASRI, Ramez; NAVATHE, Shamkant B. Sistemas de banco de dados. Tradução: Daniel Vieira. Revisão técnica: Enzo Seraphim; Thatyana de Faria Piola Seraphim. 6. ed. São Paulo: Pearson Addison Wesley, 2011.
+
 ### Versionamento
 
 | Versão | Data | Modificação | Autor |
