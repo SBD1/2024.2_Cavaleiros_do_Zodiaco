@@ -1,0 +1,2714 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../modulo02/DQL.html">
+      
+      
+        <link rel="next" href="procedures.html">
+      
+      
+      <link rel="icon" href="../assets/images/logo1.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
+    
+    
+      
+        <title>Triggers - Cavaleiros do Zodiaco</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8608ea7d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introducao" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../index.html" title="Cavaleiros do Zodiaco" class="md-header__button md-logo" aria-label="Cavaleiros do Zodiaco" data-md-component="logo">
+      
+  <img src="../assets/images/logo1.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Cavaleiros do Zodiaco
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Triggers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="light-blue"  aria-label="Mudar para o modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Mudar para o modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="light-blue"  aria-label="Mudar para modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Mudar para modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/SBD1/2024.2_Cavaleiros_do_Zodiaco" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    2024.2_Cavaleiros_do_Zodiaco
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../index.html" class="md-tabs__link">
+        
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../modulo01/mer.html" class="md-tabs__link">
+          
+  
+  Módulo 1
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../modulo02/DDL.html" class="md-tabs__link">
+          
+  
+  Módulo 2
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="triggers01.html" class="md-tabs__link">
+          
+  
+  Módulo 3
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../apresentacao/modulo1.html" class="md-tabs__link">
+          
+  
+  Apresentação
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Cavaleiros do Zodiaco" class="md-nav__button md-logo" aria-label="Cavaleiros do Zodiaco" data-md-component="logo">
+      
+  <img src="../assets/images/logo1.png" alt="logo">
+
+    </a>
+    Cavaleiros do Zodiaco
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/SBD1/2024.2_Cavaleiros_do_Zodiaco" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    2024.2_Cavaleiros_do_Zodiaco
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Início
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Módulo 1
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Módulo 1
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modulo01/mer.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Modelo Entidade Relacionamento
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modulo01/der.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Diagrama Entidade Relacionamento
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modulo01/ml.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Modelo Lógico
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modulo01/dicionario.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dicionário de Dados
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Módulo 2
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Módulo 2
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modulo02/DDL.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Definition Language
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modulo02/DML.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Manipulation Language
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modulo02/DQL.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Query Language
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Módulo 3
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Módulo 3
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Triggers
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="triggers01.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Triggers
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introducao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introdução
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objetivo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Triggers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Triggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-parte-do-corpo-de-boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Parte do Corpo de Boss
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-parte-do-corpo-de-cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Parte do Corpo de Cavaleiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-parte-do-corpo-de-player" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Parte do Corpo de Player
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-parte-do-corpo-de-inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Parte do Corpo de Inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integridade-de-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integridade de Personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integridade-de-npc" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integridade de NPC
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integridade-de-itens" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integridade de Itens
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#criar-party" class="md-nav__link">
+    <span class="md-ellipsis">
+      Criar Party
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-player-missao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Player Missao
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-player-missao-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Player Missao 2
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#criar-inventario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Criar Inventário
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-dinheiro-suficiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check dinheiro suficiente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subir-de-nivel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Subir de nível
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#missao-concluida" class="md-nav__link">
+    <span class="md-ellipsis">
+      Missão Concluida
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-item-do-inventario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Remove Item do inventario
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#desbloquear-cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Desbloquear Cavaleiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mover-de-sala-ao-morrer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mover de Sala ao Morrer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verificar-slot-unico" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verificar Slot Único
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remover-cavaleiro-da-party" class="md-nav__link">
+    <span class="md-ellipsis">
+      Remover cavaleiro da party
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remover-livro-apos-aprender-habilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      Remover livro apos aprender habilidade
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#triggers-nao-utilizados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Triggers não utilizados
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumo-dos-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumo dos Triggers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resumo dos Triggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#utilizados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Utilizados
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#triggers-nao-utilizados_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Triggers não utilizados
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencia-bibliografica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Referência Bibliográfica
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bibliografia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bibliografia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historico-de-versoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Historico de Versões
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="procedures.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Procedures
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="funcoes.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Funções
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="pgcron.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extensões
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Apresentação
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Apresentação
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apresentacao/modulo1.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Modulo 01
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apresentacao/modulo2.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Modulo 02
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apresentacao/modulo3.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Modulo 03
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introducao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introdução
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objetivo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Triggers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Triggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-parte-do-corpo-de-boss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Parte do Corpo de Boss
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-parte-do-corpo-de-cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Parte do Corpo de Cavaleiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-parte-do-corpo-de-player" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Parte do Corpo de Player
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-parte-do-corpo-de-inimigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Parte do Corpo de Inimigo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integridade-de-personagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integridade de Personagem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integridade-de-npc" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integridade de NPC
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integridade-de-itens" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integridade de Itens
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#criar-party" class="md-nav__link">
+    <span class="md-ellipsis">
+      Criar Party
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-player-missao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Player Missao
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instanciar-player-missao-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instanciar Player Missao 2
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#criar-inventario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Criar Inventário
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-dinheiro-suficiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check dinheiro suficiente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subir-de-nivel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Subir de nível
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#missao-concluida" class="md-nav__link">
+    <span class="md-ellipsis">
+      Missão Concluida
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-item-do-inventario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Remove Item do inventario
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#desbloquear-cavaleiro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Desbloquear Cavaleiro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mover-de-sala-ao-morrer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mover de Sala ao Morrer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verificar-slot-unico" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verificar Slot Único
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remover-cavaleiro-da-party" class="md-nav__link">
+    <span class="md-ellipsis">
+      Remover cavaleiro da party
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remover-livro-apos-aprender-habilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      Remover livro apos aprender habilidade
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#triggers-nao-utilizados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Triggers não utilizados
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumo-dos-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumo dos Triggers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resumo dos Triggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#utilizados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Utilizados
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#triggers-nao-utilizados_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Triggers não utilizados
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencia-bibliografica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Referência Bibliográfica
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bibliografia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bibliografia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historico-de-versoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Historico de Versões
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>Triggers</h1>
+
+<h2 id="introducao">Introdução</h2>
+<p>De acordo com Sistemas de Banco de Dados de Elmasri e Navathe (2011), regras ativas podem ser disparadas automaticamente por eventos que ocorrem, como atualizações no banco de dados ou certos momentos sendo alcançados, e podem iniciar ações especificadas na declaração da regra, desde que determinadas condições sejam atendidas. </p>
+<p>Diante da necessidade de garantir automação, integridade e consistência nos sistemas de gerenciamento de banco de dados, os triggers se tornaram um mecanismo essencial. Eles permitem a execução de ações automáticas em resposta a eventos específicos, reduzindo a necessidade de intervenção manual e garantindo a aplicação de regras de negócio de maneira eficiente.</p>
+<h2 id="objetivo">Objetivo</h2>
+<p>Este documento apresenta a implementação e utilização de triggers no sistema, detalhando suas funcionalidades, benefícios e aplicabilidades dentro do contexto do gerenciamento de dados.</p>
+<h2 id="triggers">Triggers</h2>
+<h3 id="instanciar-parte-do-corpo-de-boss">Instanciar Parte do Corpo de Boss</h3>
+<p>O trigger trigger_gerar_partes_corpo_boss e sua função associada gerar_partes_corpo_boss são responsáveis pela criação automática das partes do corpo de um boss assim que ele é inserido na tabela boss.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">gerar_partes_corpo_boss</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">BEGIN</span>
+<span class="w">    </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">parte_corpo_boss</span><span class="w"> </span><span class="p">(</span><span class="n">id_boss</span><span class="p">,</span><span class="w"> </span><span class="n">parte_corpo</span><span class="p">,</span><span class="w"> </span><span class="n">defesa_fisica</span><span class="p">,</span><span class="w"> </span><span class="n">defesa_magica</span><span class="p">,</span><span class="w"> </span><span class="n">chance_acerto</span><span class="p">,</span><span class="w"> </span><span class="n">chance_acerto_critico</span><span class="p">)</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_boss</span><span class="p">,</span><span class="w">                     </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">id_parte_corpo</span><span class="p">,</span><span class="w">               </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">defesa_fisica</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">           </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">defesa_magica</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">           </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">chance_acerto</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">            </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">chance_acerto_critico</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="w">     </span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">parte_corpo</span><span class="w"> </span><span class="n">pc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_gerar_partes_corpo_boss</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">boss</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">gerar_partes_corpo_boss</span><span class="p">();</span>
+</code></pre></div>
+
+
+</details>
+
+<h3 id="instanciar-parte-do-corpo-de-cavaleiro">Instanciar Parte do Corpo de Cavaleiro</h3>
+<p>O trigger trigger_gerar_partes_corpo_cavaleiro e sua função associada gerar_partes_corpo_cavaleiro são responsáveis por criar automaticamente as partes do corpo de um cavaleiro assim que ele é inserido na tabela instancia_cavaleiro.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">gerar_partes_corpo_cavaleiro</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">BEGIN</span>
+
+<span class="w">    </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">parte_corpo_cavaleiro</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="n">id_cavaleiro</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">parte_corpo</span><span class="p">,</span><span class="w">  </span>
+<span class="w">        </span><span class="n">id_player</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">defesa_fisica</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">defesa_magica</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">chance_acerto</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">chance_acerto_critico</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_cavaleiro</span><span class="p">,</span><span class="w">        </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">id_parte_corpo</span><span class="p">,</span><span class="w">        </span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="p">,</span><span class="w">            </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">defesa_fisica</span><span class="p">,</span><span class="w">          </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">defesa_magica</span><span class="p">,</span><span class="w">         </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">chance_acerto</span><span class="p">,</span><span class="w">          </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">chance_acerto_critico</span><span class="w">   </span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">parte_corpo</span><span class="w"> </span><span class="n">pc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_gerar_partes_corpo_cavaleiro</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">instancia_cavaleiro</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">gerar_partes_corpo_cavaleiro</span><span class="p">();</span>
+</code></pre></div>
+
+
+</details>
+
+<h3 id="instanciar-parte-do-corpo-de-player">Instanciar Parte do Corpo de Player</h3>
+<p>O trigger trigger_gerar_partes_corpo_player e sua função associada gerar_partes_corpo_player têm a função de criar automaticamente as partes do corpo do jogador assim que ele é inserido na tabela player.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">gerar_partes_corpo_player</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">BEGIN</span>
+
+<span class="w">    </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">parte_corpo_player</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="n">id_player</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">parte_corpo</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">defesa_fisica</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">defesa_magica</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">chance_acerto</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">chance_acerto_critico</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="p">,</span><span class="w">   </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">id_parte_corpo</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">defesa_fisica</span><span class="p">,</span><span class="w">          </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">defesa_magica</span><span class="p">,</span><span class="w">         </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">chance_acerto</span><span class="p">,</span><span class="w">          </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">chance_acerto_critico</span><span class="w"> </span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">parte_corpo</span><span class="w"> </span><span class="n">pc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_gerar_partes_corpo_player</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">player</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">gerar_partes_corpo_player</span><span class="p">();</span>
+</code></pre></div>
+
+
+</details>
+
+<h3 id="instanciar-parte-do-corpo-de-inimigo">Instanciar Parte do Corpo de Inimigo</h3>
+<p>O trigger trigger_gerar_partes_corpo_inimigo e sua função associada gerar_partes_corpo_inimigo são responsáveis por criar automaticamente as partes do corpo de um inimigo assim que ele é inserido na tabela instancia_inimigo.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">gerar_partes_corpo_inimigo</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">BEGIN</span>
+
+<span class="w">    </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">parte_corpo_inimigo</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="n">id_instancia</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">id_inimigo</span><span class="p">,</span>
+<span class="w">        </span><span class="n">parte_corpo</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">defesa_fisica</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">defesa_magica</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">chance_acerto</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">chance_acerto_critico</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_instancia</span><span class="p">,</span><span class="w">      </span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_inimigo</span><span class="p">,</span><span class="w">        </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">id_parte_corpo</span><span class="p">,</span><span class="w">     </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">defesa_fisica</span><span class="p">,</span><span class="w">      </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">defesa_magica</span><span class="p">,</span><span class="w">     </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">chance_acerto</span><span class="p">,</span><span class="w">      </span>
+<span class="w">        </span><span class="n">pc</span><span class="p">.</span><span class="n">chance_acerto_critico</span><span class="w">  </span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">parte_corpo</span><span class="w"> </span><span class="n">pc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_gerar_partes_corpo_inimigo</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">instancia_inimigo</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">gerar_partes_corpo_inimigo</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="integridade-de-personagem">Integridade de Personagem</h3>
+<p>O trigger de integridade trigger_inserir_tipo_personagem e sua função associada inserir_tipo_personagem são responsáveis por registrar automaticamente o tipo de personagem ao inserir um novo player, cavaleiro, inimigo ou boss no banco de dados.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">inserir_tipo_personagem</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">DECLARE</span>
+<span class="w">    </span><span class="n">v_id_personagem</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="n">TG_TABLE_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;player&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Tipo_Personagem</span><span class="w"> </span><span class="p">(</span><span class="n">tipo_personagem</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">RETURNING</span><span class="w"> </span><span class="n">id_personagem</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">v_id_personagem</span><span class="p">;</span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">v_id_personagem</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">ELSIF</span><span class="w"> </span><span class="n">TG_TABLE_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;cavaleiro&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Tipo_Personagem</span><span class="w"> </span><span class="p">(</span><span class="n">tipo_personagem</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">RETURNING</span><span class="w"> </span><span class="n">id_personagem</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">v_id_personagem</span><span class="p">;</span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_cavaleiro</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">v_id_personagem</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">ELSIF</span><span class="w"> </span><span class="n">TG_TABLE_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;inimigo&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Tipo_Personagem</span><span class="w"> </span><span class="p">(</span><span class="n">tipo_personagem</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">RETURNING</span><span class="w"> </span><span class="n">id_personagem</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">v_id_personagem</span><span class="p">;</span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_inimigo</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">v_id_personagem</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">ELSIF</span><span class="w"> </span><span class="n">TG_TABLE_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;boss&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Tipo_Personagem</span><span class="w"> </span><span class="p">(</span><span class="n">tipo_personagem</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">RETURNING</span><span class="w"> </span><span class="n">id_personagem</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">v_id_personagem</span><span class="p">;</span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_boss</span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">v_id_personagem</span><span class="p">;</span>
+<span class="w">    </span><span class="k">ELSE</span>
+<span class="w">        </span><span class="n">RAISE</span><span class="w"> </span><span class="k">EXCEPTION</span><span class="w"> </span><span class="s1">&#39;Tabela desconhecida para a trigger inserir_tipo_personagem&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_inserir_tipo_personagem_personagem</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">Player</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">inserir_tipo_personagem</span><span class="p">();</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_inserir_tipo_personagem_cavaleiro</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">Cavaleiro</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">inserir_tipo_personagem</span><span class="p">();</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_inserir_tipo_personagem_inimigo</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">Inimigo</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">inserir_tipo_personagem</span><span class="p">();</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_inserir_tipo_personagem_boss</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">Boss</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">inserir_tipo_personagem</span><span class="p">();</span>
+</code></pre></div>
+</details>
+
+<h3 id="integridade-de-npc">Integridade de NPC</h3>
+<p>O trigger de integridade trigger_inserir_tipo_npc e sua função associada inserir_tipo_npc têm a função de registrar automaticamente o tipo de NPC ao inserir um novo ferreiro, mercador ou NPC de missão no banco de dados.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">inserir_tipo_npc</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">DECLARE</span>
+<span class="w">    </span><span class="n">v_id_npc</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="w">    </span><span class="n">v_tipo_npc</span><span class="w"> </span><span class="n">enum_tipo_npc</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">    </span><span class="c1">-- Determinar o tipo do NPC com base na tabela de origem</span>
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="n">TG_TABLE_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ferreiro&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="n">v_tipo_npc</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;f&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">ELSIF</span><span class="w"> </span><span class="n">TG_TABLE_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;mercador&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="n">v_tipo_npc</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;m&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">ELSIF</span><span class="w"> </span><span class="n">TG_TABLE_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;quest&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="n">v_tipo_npc</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;q&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">ELSE</span>
+<span class="w">        </span><span class="n">RAISE</span><span class="w"> </span><span class="k">EXCEPTION</span><span class="w"> </span><span class="s1">&#39;Tipo de NPC desconhecido&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">-- Inserir na tabela Tipo_NPC e capturar o id_npc gerado</span>
+<span class="w">    </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Tipo_NPC</span><span class="w"> </span><span class="p">(</span><span class="n">tipo_npc</span><span class="p">)</span>
+<span class="w">    </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">v_tipo_npc</span><span class="p">)</span>
+<span class="w">    </span><span class="n">RETURNING</span><span class="w"> </span><span class="n">id_npc</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">v_id_npc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">-- Atribuir o ID gerado ao campo id_npc da tabela específica</span>
+<span class="w">    </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_npc</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">v_id_npc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">-- Retornar a nova linha para completar a inserção na tabela de destino</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="c1">-- Criar triggers para garantir a integridade referencial em cada tabela</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_inserir_tipo_npc_ferreiro</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">Ferreiro</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">inserir_tipo_npc</span><span class="p">();</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_inserir_tipo_npc_mercador</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">Mercador</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">inserir_tipo_npc</span><span class="p">();</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_inserir_tipo_npc_quest</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">Quest</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">inserir_tipo_npc</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="integridade-de-itens">Integridade de Itens</h3>
+<p>O trigger de interidade before_insert_generic e sua função associada são responsáveis por classificar automaticamente os itens inseridos no banco de dados, garantindo que cada um seja corretamente categorizado como craftável ou não-craftável antes da inserção.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">before_insert_generic</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">DECLARE</span>
+<span class="w">    </span><span class="n">new_id_item</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="w">    </span><span class="k">table_name</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">TG_TABLE_NAME</span><span class="p">;</span><span class="w"> </span><span class="c1">-- Obtém o nome da tabela</span>
+<span class="k">BEGIN</span>
+
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;livro&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tipo_item</span><span class="w"> </span><span class="p">(</span><span class="n">tipo_item</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;nc&#39;</span><span class="p">)</span><span class="w">  </span>
+<span class="w">        </span><span class="n">RETURNING</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">new_id_item</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Nao_Craftavel</span><span class="w"> </span><span class="p">(</span><span class="n">id_nao_craftavel</span><span class="p">,</span><span class="w"> </span><span class="n">tipo_nao_craftavel</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">new_id_item</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;l&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_item</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">new_id_item</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">ELSIF</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;item_missao&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tipo_item</span><span class="w"> </span><span class="p">(</span><span class="n">tipo_item</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;nc&#39;</span><span class="p">)</span><span class="w">  </span>
+<span class="w">        </span><span class="n">RETURNING</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">new_id_item</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Nao_Craftavel</span><span class="w"> </span><span class="p">(</span><span class="n">id_nao_craftavel</span><span class="p">,</span><span class="w"> </span><span class="n">tipo_nao_craftavel</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">new_id_item</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;i&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_item</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">new_id_item</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">ELSIF</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;consumivel&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tipo_item</span><span class="w"> </span><span class="p">(</span><span class="n">tipo_item</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;nc&#39;</span><span class="p">)</span><span class="w">  </span>
+<span class="w">        </span><span class="n">RETURNING</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">new_id_item</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Nao_Craftavel</span><span class="w"> </span><span class="p">(</span><span class="n">id_nao_craftavel</span><span class="p">,</span><span class="w"> </span><span class="n">tipo_nao_craftavel</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">new_id_item</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;c&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_item</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">new_id_item</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">ELSIF</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;armadura&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tipo_item</span><span class="w"> </span><span class="p">(</span><span class="n">tipo_item</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span><span class="w">  </span>
+<span class="w">        </span><span class="n">RETURNING</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">new_id_item</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Craftavel</span><span class="w"> </span><span class="p">(</span><span class="n">id_craftavel</span><span class="p">,</span><span class="w"> </span><span class="n">tipo_craftavel</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">new_id_item</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_armadura</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">new_id_item</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">ELSIF</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;material&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tipo_item</span><span class="w"> </span><span class="p">(</span><span class="n">tipo_item</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span><span class="w">  </span>
+<span class="w">        </span><span class="n">RETURNING</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">new_id_item</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Craftavel</span><span class="w"> </span><span class="p">(</span><span class="n">id_craftavel</span><span class="p">,</span><span class="w"> </span><span class="n">tipo_craftavel</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">new_id_item</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;m&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_material</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">new_id_item</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+
+
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">before_insert_consumivel_trigger</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">consumivel</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">before_insert_generic</span><span class="p">();</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">before_insert_livro_trigger</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">livro</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">before_insert_generic</span><span class="p">();</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">before_insert_item_missao_trigger</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">item_missao</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">before_insert_generic</span><span class="p">();</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">before_insert_material_trigger</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">material</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">before_insert_generic</span><span class="p">();</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">before_insert_armadura_trigger</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">armadura</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">before_insert_generic</span><span class="p">();</span>
+</code></pre></div>
+
+
+</details>
+
+<h3 id="criar-party">Criar Party</h3>
+<p>O trigger de trigger_insert_party e sua função associada insert_party_trigger_function são responsáveis por criar automaticamente um registro na tabela Party sempre que um novo jogador (Player) for inserido no banco de dados.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">insert_party_trigger_function</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">BEGIN</span>
+
+<span class="w">    </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Party</span><span class="w"> </span><span class="p">(</span><span class="n">id_player</span><span class="p">,</span><span class="w"> </span><span class="n">id_sala</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="p">,</span><span class="w"> </span><span class="n">listar_sala_segura</span><span class="p">());</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_insert_party</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">Player</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">insert_party_trigger_function</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="instanciar-player-missao">Instanciar Player Missao</h3>
+<p>O trigger instanciar_player_missao e sua função associada instanciar_player_missao_procedure são responsáveis por associar automaticamente todas as missões disponíveis a um novo jogador assim que ele é inserido no banco de dados.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">instanciar_player_missao_procedure</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">DECLARE</span>
+<span class="w">    </span><span class="n">missao</span><span class="w"> </span><span class="n">RECORD</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+
+<span class="w">    </span><span class="k">FOR</span><span class="w"> </span><span class="n">missao</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id_missao</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Missao</span><span class="w"> </span><span class="n">LOOP</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Player_missao</span><span class="w"> </span><span class="p">(</span><span class="n">id_player</span><span class="p">,</span><span class="w"> </span><span class="n">id_missao</span><span class="p">,</span><span class="w"> </span><span class="n">status_missao</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="p">,</span><span class="w"> </span><span class="n">missao</span><span class="p">.</span><span class="n">id_missao</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ni&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="n">LOOP</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">instanciar_player_missao</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">Player</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">instanciar_player_missao_procedure</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="instanciar-player-missao-2">Instanciar Player Missao 2</h3>
+<p>O trigger instancia_player_missao_new_missoes e sua função associada instanciar_player_missao_new_missao são responsáveis por garantir que toda nova missão adicionada ao banco de dados seja automaticamente associada a todos os jogadores existentes.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">instanciar_player_missao_new_missao</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">DECLARE</span>
+<span class="w">    </span><span class="n">player</span><span class="w"> </span><span class="n">RECORD</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">    </span><span class="k">FOR</span><span class="w"> </span><span class="n">player</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id_player</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Player</span><span class="w"> </span><span class="n">LOOP</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Player_missao</span><span class="w"> </span><span class="p">(</span><span class="n">id_player</span><span class="p">,</span><span class="w"> </span><span class="n">id_missao</span><span class="p">,</span><span class="w"> </span><span class="n">status_missao</span><span class="p">)</span>
+<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="n">id_player</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_missao</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ni&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="n">LOOP</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">instancia_player_missao_new_missoes</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">Missao</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">instanciar_player_missao_new_missao</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="criar-inventario">Criar Inventário</h3>
+<p>O trigger after_player_insert e sua função associada after_player_insert_function têm a função de criar automaticamente um inventário inicial para cada novo jogador que é criado no jogo.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">after_player_insert_function</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">BEGIN</span>
+
+<span class="w">    </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">inventario</span><span class="w"> </span><span class="p">(</span><span class="n">id_player</span><span class="p">,</span><span class="w"> </span><span class="n">dinheiro</span><span class="p">,</span><span class="w"> </span><span class="n">alma_armadura</span><span class="p">)</span>
+<span class="w">    </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">);</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">after_player_insert</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">player</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">after_player_insert_function</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="check-dinheiro-suficiente">Check dinheiro suficiente</h3>
+<p>O trigger trg_verificar_dinheiro e sua função associada verificar_dinheiro garantem que um jogador não possa ter um saldo negativo de dinheiro no inventário.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">verificar_dinheiro</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span>
+<span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span>
+<span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">BEGIN</span>
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">dinheiro</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="n">RAISE</span><span class="w"> </span><span class="k">EXCEPTION</span><span class="w"> </span><span class="s1">&#39;O jogador não pode ter dinheiro negativo.&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="w"> </span><span class="err">$$</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trg_verificar_dinheiro</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">inventario</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">verificar_dinheiro</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="subir-de-nivel">Subir de nível</h3>
+<p>Os triggers trigger_subir_de_nivel_player e trigger_subir_de_nivel_instancia_cavaleiro, juntamente com a função subir_de_nivel, são responsáveis por gerenciar automaticamente a progressão de nível tanto do jogador (player) quanto dos cavaleiros (instancia_cavaleiro) quando acumulam experiência suficiente.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">subir_de_nivel</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">DECLARE</span>
+<span class="w">    </span><span class="n">xp_prox_nivel</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">    </span><span class="n">LOOP</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">xp_necessaria</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">xp_prox_nivel</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">xp_necessaria</span><span class="w"> </span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nivel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">nivel</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">IF</span><span class="w"> </span><span class="n">xp_prox_nivel</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">xp_atual</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">xp_prox_nivel</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">            </span><span class="n">EXIT</span><span class="p">;</span>
+<span class="w">        </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">xp_atual</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">xp_atual</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">xp_prox_nivel</span><span class="p">;</span>
+<span class="w">        </span><span class="k">NEW</span><span class="p">.</span><span class="n">nivel</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">nivel</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="n">LOOP</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_subir_de_nivel_player</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">xp_atual</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">player</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">WHEN</span><span class="w"> </span><span class="p">(</span><span class="k">OLD</span><span class="p">.</span><span class="n">xp_atual</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">xp_atual</span><span class="p">)</span><span class="w"> </span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">subir_de_nivel</span><span class="p">();</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_subir_de_nivel_instancia_cavaleiro</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">xp_atual</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">instancia_cavaleiro</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">WHEN</span><span class="w"> </span><span class="p">(</span><span class="k">OLD</span><span class="p">.</span><span class="n">xp_atual</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">xp_atual</span><span class="p">)</span><span class="w"> </span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">subir_de_nivel</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="missao-concluida">Missão Concluida</h3>
+<p>O trigger trigger_atualizar_status_missao e sua função associada atualizar_status_missao_ao_drop_item são responsáveis por atualizar automaticamente o status de missões do jogador quando ele conclui uma missão adquirindo o item da missão.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">atualizar_status_missao_ao_drop_item</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">DECLARE</span>
+<span class="w">    </span><span class="n">tipo_do_item</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">missao_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">    </span><span class="c1">-- Verificar o tipo do item usando a tabela Tipo_item</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">nc</span><span class="p">.</span><span class="n">tipo_nao_craftavel</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tipo_do_item</span><span class="w"> </span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">tipo_item</span><span class="w"> </span><span class="n">ti</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">nao_craftavel</span><span class="w"> </span><span class="n">nc</span><span class="w"> </span><span class="k">on</span><span class="w">  </span><span class="n">ti</span><span class="p">.</span><span class="n">id_item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nc</span><span class="p">.</span><span class="n">id_nao_craftavel</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_item</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">-- Verificar se o tipo do item é &quot;i&quot; (item missao)</span>
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="n">tipo_do_item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;i&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="c1">-- Verifica se o item é necessário para alguma missão</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id_missao</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">missao_id</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">missao</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">item_necessario</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_item</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">-- Se o item for necessário para uma missão, atualiza o status da missão do jogador</span>
+<span class="w">        </span><span class="k">IF</span><span class="w"> </span><span class="n">missao_id</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">            </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">player_missao</span>
+<span class="w">            </span><span class="k">SET</span><span class="w"> </span><span class="n">status_missao</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;c&#39;</span>
+<span class="w">            </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_inventario</span>
+<span class="w">            </span><span class="k">AND</span><span class="w"> </span><span class="n">id_missao</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">missao_id</span>
+<span class="w">            </span><span class="k">AND</span><span class="w"> </span><span class="n">status_missao</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;i&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">-- Apenas atualiza se não estiver concluída</span>
+<span class="w">        </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_atualizar_status_missao</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">item_armazenado</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">atualizar_status_missao_ao_drop_item</span><span class="p">();</span>
+</code></pre></div>
+</details>
+
+<h3 id="remove-item-do-inventario">Remove Item do inventario</h3>
+<p>O trigger trg_remover_item_se_zero e sua função associada remover_item_se_zero são responsáveis por remover automaticamente um item do inventário do jogador quando sua quantidade chega a zero.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">remover_item_se_zero</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">BEGIN</span>
+
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">quantidade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">item_armazenado</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_inventario</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_inventario</span>
+<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_item</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trg_remover_item_se_zero</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">quantidade</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">item_armazenado</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">WHEN</span><span class="w"> </span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">quantidade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">remover_item_se_zero</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="desbloquear-cavaleiro">Desbloquear Cavaleiro</h3>
+<p>O trigger trigger_liberar_cavaleiro e sua função associada instanciar_cavaleiro são responsáveis por desbloquear e instanciar automaticamente um cavaleiro para um jogador quando ele conclui uma missão específica que concede um cavaleiro como recompensa.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">instanciar_cavaleiro</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">DECLARE</span>
+<span class="w">    </span><span class="n">p_id_cavaleiro</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="w">    </span><span class="n">p_id_player</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="p">;</span>
+<span class="w">    </span><span class="n">p_id_party</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">ID_player</span><span class="p">;</span><span class="w"> </span><span class="c1">-- Defina a lógica correta para a party, se necessário</span>
+<span class="w">    </span><span class="n">p_id_classe</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="w">    </span><span class="n">p_id_elemento</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="w">    </span><span class="n">p_nome</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">p_nivel</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="w">    </span><span class="n">p_hp_max</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="w">    </span><span class="n">p_magia_max</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="w">    </span><span class="n">p_velocidade</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="w">    </span><span class="n">p_ataque_fisico</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="w">    </span><span class="n">p_ataque_magico</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">    </span><span class="c1">-- Obtém o cavaleiro desbloqueado pela missão concluída</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">id_cavaleiro_desbloqueado</span>
+<span class="w">    </span><span class="k">INTO</span><span class="w"> </span><span class="n">p_id_cavaleiro</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">missao</span><span class="w"> </span><span class="n">m</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">id_missao</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_missao</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">-- Se não houver cavaleiro a ser desbloqueado, não faz nada</span>
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="n">p_id_cavaleiro</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">-- Obtém as informações do cavaleiro</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id_classe</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id_elemento</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">nome</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">nivel</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">hp_max</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">magia_max</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="k">c</span><span class="p">.</span><span class="n">velocidade</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">ataque_fisico</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">ataque_magico</span>
+<span class="w">    </span><span class="k">INTO</span><span class="w"> </span><span class="n">p_id_classe</span><span class="p">,</span><span class="w"> </span><span class="n">p_id_elemento</span><span class="p">,</span><span class="w"> </span><span class="n">p_nome</span><span class="p">,</span><span class="w"> </span><span class="n">p_nivel</span><span class="p">,</span><span class="w"> </span><span class="n">p_hp_max</span><span class="p">,</span><span class="w"> </span><span class="n">p_magia_max</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">p_velocidade</span><span class="p">,</span><span class="w"> </span><span class="n">p_ataque_fisico</span><span class="p">,</span><span class="w"> </span><span class="n">p_ataque_magico</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">cavaleiro</span><span class="w"> </span><span class="k">c</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id_cavaleiro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_id_cavaleiro</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">-- Verifica se o jogador já tem este cavaleiro para evitar duplicatas</span>
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">instancia_cavaleiro</span><span class="w"> </span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_id_player</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">id_cavaleiro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_id_cavaleiro</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="c1">-- Insere o cavaleiro na instância do jogador</span>
+<span class="w">        </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">instancia_cavaleiro</span><span class="w"> </span><span class="p">(</span>
+<span class="w">            </span><span class="n">id_cavaleiro</span><span class="p">,</span><span class="w"> </span><span class="n">id_player</span><span class="p">,</span><span class="w"> </span><span class="n">nivel</span><span class="p">,</span><span class="w"> </span><span class="n">tipo_armadura</span><span class="p">,</span><span class="w"> </span><span class="n">xp_atual</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">hp_max</span><span class="p">,</span><span class="w"> </span><span class="n">magia_max</span><span class="p">,</span><span class="w"> </span><span class="n">hp_atual</span><span class="p">,</span><span class="w"> </span><span class="n">magia_atual</span><span class="p">,</span><span class="w"> </span><span class="n">velocidade</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">ataque_fisico</span><span class="p">,</span><span class="w"> </span><span class="n">ataque_magico</span>
+<span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span>
+<span class="w">            </span><span class="n">p_id_cavaleiro</span><span class="p">,</span><span class="w"> </span><span class="n">p_id_player</span><span class="p">,</span><span class="w"> </span><span class="n">p_nivel</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">p_hp_max</span><span class="p">,</span><span class="w"> </span><span class="n">p_magia_max</span><span class="p">,</span><span class="w"> </span><span class="n">p_hp_max</span><span class="p">,</span><span class="w"> </span><span class="n">p_magia_max</span><span class="p">,</span><span class="w"> </span><span class="n">p_velocidade</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">p_ataque_fisico</span><span class="p">,</span><span class="w"> </span><span class="n">p_ataque_magico</span>
+<span class="w">        </span><span class="p">);</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_liberar_cavaleiro</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">player_missao</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">WHEN</span><span class="w"> </span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">status_missao</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;c&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="k">old</span><span class="p">.</span><span class="n">status_missao</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">instanciar_cavaleiro</span><span class="p">();</span>
+</code></pre></div>
+</details>
+
+<h3 id="mover-de-sala-ao-morrer">Mover de Sala ao Morrer</h3>
+<p>O trigger trigger_player_morreu e sua função associada mover_sala_segura_pos_morte são responsáveis por mover automaticamente o jogador para uma sala segura ao ser derrotado, reduzindo seu dinheiro como penalidade e restaurando parcialmente sua vida.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">mover_sala_segura_pos_morte</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">BEGIN</span>
+
+<span class="w">    </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">inventario</span>
+<span class="w">    </span><span class="k">SET</span><span class="w"> </span><span class="n">dinheiro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dinheiro</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">inventario</span><span class="p">.</span><span class="n">id_player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">id_player</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">RAISE</span><span class="w"> </span><span class="n">NOTICE</span><span class="w"> </span><span class="s1">&#39;% foi derrotado, Saori Kido o resgata mas com um custo...&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">nome</span><span class="p">;</span>
+
+
+<span class="w">    </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">party</span>
+<span class="w">    </span><span class="k">SET</span><span class="w"> </span><span class="n">id_sala</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id_sala</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">sala_segura</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">  </span><span class="c1">-- Usar parênteses no SELECT</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">party</span><span class="p">.</span><span class="n">id_player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">NEW</span><span class="p">.</span><span class="n">hp_atual</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">hp_max</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_player_morreu</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">player</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">WHEN</span><span class="w"> </span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">hp_atual</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">mover_sala_segura_pos_morte</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="verificar-slot-unico">Verificar Slot Único</h3>
+<p>O trigger impedir_slots_repetidos e sua função associada verificar_slots_unicos garantem que um jogador não possa atribuir duas habilidades ao mesmo slot na tabela Habilidade_Player.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">verificar_slots_unicos</span><span class="p">()</span><span class="w"> </span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">BEGIN</span>
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Habilidade_Player</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="w"> </span>
+<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="n">slot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">slot</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="n">RAISE</span><span class="w"> </span><span class="k">EXCEPTION</span><span class="w"> </span><span class="s1">&#39;❌ Esse slot já está ocupado! Escolha outro.&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">impedir_slots_repetidos</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">Habilidade_Player</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">verificar_slots_unicos</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="remover-cavaleiro-da-party">Remover cavaleiro da party</h3>
+<p>O trigger trigger_remover_cavaleiro_party e sua função associada remover_cavaleiro_da_party são responsáveis por remover automaticamente um cavaleiro da party do jogador quando seu HP chega a 0.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">remover_cavaleiro_da_party</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">BEGIN</span>
+
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">hp_atual</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">hp_atual</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">id_party</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">THEN</span>
+
+<span class="w">        </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">instancia_cavaleiro</span><span class="w"> </span>
+<span class="w">        </span><span class="k">SET</span><span class="w"> </span><span class="n">id_party</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NULL</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_cavaleiro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_cavaleiro</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">id_player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="p">;</span>
+
+
+<span class="w">        </span><span class="n">RAISE</span><span class="w"> </span><span class="n">NOTICE</span><span class="w"> </span><span class="s1">&#39;O cavaleiro % foi removido da party do player % porque seu HP chegou a 0.&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_cavaleiro</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_remover_cavaleiro_party</span>
+<span class="k">BEFORE</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="n">hp_atual</span>
+<span class="k">ON</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">instancia_cavaleiro</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">remover_cavaleiro_da_party</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h3 id="remover-livro-apos-aprender-habilidade">Remover livro apos aprender habilidade</h3>
+<p>Os triggers trigger_reduzir_item_habilidade_player e trigger_reduzir_item_habilidade_cavaleiro, juntamente com a função reduzir_item_armazenado, são responsáveis por remover automaticamente um livro do inventário do jogador quando uma habilidade é aprendida.</p>
+<details>
+
+    <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">reduzir_item_armazenado</span><span class="p">()</span>
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="k">DECLARE</span>
+<span class="w">    </span><span class="n">id_livro</span><span class="w"> </span><span class="nb">INT</span><span class="p">;</span>
+<span class="w">    </span><span class="n">player_id</span><span class="w"> </span><span class="nb">INT</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="w">    </span><span class="c1">-- Obtém o ID do livro relacionado à habilidade aprendida</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">id_livro</span><span class="w"> </span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">livro</span><span class="w"> </span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_habilidade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_habilidade</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">-- Obtém o ID do player (caso seja um cavaleiro, pegamos do cavaleiro correspondente)</span>
+<span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="n">TG_TABLE_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;habilidade_player&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="n">player_id</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_player</span><span class="p">;</span>
+<span class="w">    </span><span class="k">ELSIF</span><span class="w"> </span><span class="n">TG_TABLE_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;habilidade_cavaleiro&#39;</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id_player</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">player_id</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">instancia_cavaleiro</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_cavaleiro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_cavaleiro</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">-- Atualiza a quantidade do item no inventário do jogador</span>
+<span class="w">    </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">item_armazenado</span>
+<span class="w">    </span><span class="k">SET</span><span class="w"> </span><span class="n">quantidade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantidade</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_inventario</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">player_id</span>
+<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id_livro</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">-- Remove o item do inventário se a quantidade for 0</span>
+<span class="w">    </span><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">item_armazenado</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_inventario</span><span class="o">=</span><span class="w"> </span><span class="n">player_id</span>
+<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id_livro</span>
+<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="n">quantidade</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_reduzir_item_habilidade_player</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">habilidade_player</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">reduzir_item_armazenado</span><span class="p">();</span>
+
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">trigger_reduzir_item_habilidade_cavaleiro</span>
+<span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">habilidade_cavaleiro</span>
+<span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">reduzir_item_armazenado</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h2 id="triggers-nao-utilizados">Triggers não utilizados</h2>
+<p>Abaixo se encontram triggers que não foram utilizadas quanto ao controle de integralidade pois faltou refatoramento:</p>
+<details>
+
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">enforce_tipo_item_exclusivo</span><span class="p">()</span>
+<span class="w">    </span><span class="k">RETURNS</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span>
+<span class="w">    </span><span class="k">DECLARE</span>
+<span class="w">        </span><span class="n">v_id_item</span><span class="w"> </span><span class="nb">INT</span><span class="p">;</span>
+<span class="w">        </span><span class="n">total_subclasses</span><span class="w"> </span><span class="nb">INT</span><span class="p">;</span>
+<span class="w">    </span><span class="k">BEGIN</span>
+<span class="w">        </span><span class="k">CASE</span><span class="w"> </span><span class="n">TG_TABLE_NAME</span>
+<span class="w">            </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">&#39;material&#39;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">v_id_item</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_material</span><span class="p">;</span>
+<span class="w">            </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">&#39;armadura&#39;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">v_id_item</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_armadura</span><span class="p">;</span>
+<span class="w">            </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">&#39;item_missao&#39;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">v_id_item</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_item</span><span class="p">;</span>
+<span class="w">            </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">&#39;consumivel&#39;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">v_id_item</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_item</span><span class="p">;</span>
+<span class="w">            </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">&#39;livro&#39;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">v_id_item</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">id_item</span><span class="p">;</span>
+<span class="w">            </span><span class="k">ELSE</span><span class="w"> </span>
+<span class="w">                </span><span class="n">RAISE</span><span class="w"> </span><span class="k">EXCEPTION</span><span class="w"> </span><span class="s1">&#39;Trigger chamada em uma tabela desconhecida!&#39;</span><span class="p">;</span>
+<span class="w">        </span><span class="k">END</span><span class="w"> </span><span class="k">CASE</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">total_subclasses</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">            </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id_material</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">material</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_material</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v_id_item</span>
+<span class="w">            </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+<span class="w">            </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id_armadura</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">armadura</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_armadura</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v_id_item</span>
+<span class="w">            </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+<span class="w">            </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">item_missao</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v_id_item</span>
+<span class="w">            </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+<span class="w">            </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">consumivel</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v_id_item</span>
+<span class="w">            </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+<span class="w">            </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">livro</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id_item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v_id_item</span>
+<span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sub_tabelas</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">IF</span><span class="w"> </span><span class="n">total_subclasses</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">            </span><span class="n">RAISE</span><span class="w"> </span><span class="k">EXCEPTION</span><span class="w"> </span><span class="s1">&#39;O item deve pertencer a apenas uma subclasse!&#39;</span><span class="p">;</span>
+<span class="w">        </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">RETURN</span><span class="w"> </span><span class="k">NEW</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="p">;</span>
+<span class="w">    </span><span class="err">$$</span><span class="w"> </span><span class="k">LANGUAGE</span><span class="w"> </span><span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">check_tipo_item_exclusivo_material</span>
+<span class="w">    </span><span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">material</span>
+<span class="w">    </span><span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">enforce_tipo_item_exclusivo</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">check_tipo_item_exclusivo_armadura</span>
+<span class="w">    </span><span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">armadura</span>
+<span class="w">    </span><span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">enforce_tipo_item_exclusivo</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">check_tipo_item_exclusivo_item_missao</span>
+<span class="w">    </span><span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">item_missao</span>
+<span class="w">    </span><span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">enforce_tipo_item_exclusivo</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">check_tipo_item_exclusivo_consumivel</span>
+<span class="w">    </span><span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">consumivel</span>
+<span class="w">    </span><span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">enforce_tipo_item_exclusivo</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">check_tipo_item_exclusivo_livro</span>
+<span class="w">    </span><span class="k">BEFORE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">livro</span>
+<span class="w">    </span><span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span><span class="w"> </span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">enforce_tipo_item_exclusivo</span><span class="p">();</span>
+</code></pre></div>
+
+</details>
+
+<h2 id="resumo-dos-triggers">Resumo dos Triggers</h2>
+<h3 id="utilizados">Utilizados</h3>
+<table>
+<thead>
+<tr>
+<th>Trigger</th>
+<th>Tabela Afetada</th>
+<th>Evento</th>
+<th>Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trigger_gerar_partes_corpo_boss</code></td>
+<td><code>boss</code></td>
+<td><code>AFTER INSERT</code></td>
+<td>Cria automaticamente as partes do corpo do boss ao ser inserido.</td>
+</tr>
+<tr>
+<td><code>trigger_gerar_partes_corpo_cavaleiro</code></td>
+<td><code>instancia_cavaleiro</code></td>
+<td><code>AFTER INSERT</code></td>
+<td>Gera automaticamente as partes do corpo dos cavaleiros ao serem instanciados.</td>
+</tr>
+<tr>
+<td><code>trigger_gerar_partes_corpo_player</code></td>
+<td><code>player</code></td>
+<td><code>AFTER INSERT</code></td>
+<td>Cria automaticamente as partes do corpo do jogador ao ser inserido.</td>
+</tr>
+<tr>
+<td><code>trigger_gerar_partes_corpo_inimigo</code></td>
+<td><code>instancia_inimigo</code></td>
+<td><code>AFTER INSERT</code></td>
+<td>Gera automaticamente as partes do corpo dos inimigos ao serem instanciados.</td>
+</tr>
+<tr>
+<td><code>trigger_inserir_tipo_personagem_player</code></td>
+<td><code>player</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Registra automaticamente o tipo de personagem ao inserir um novo jogador.</td>
+</tr>
+<tr>
+<td><code>trigger_inserir_tipo_personagem_cavaleiro</code></td>
+<td><code>cavaleiro</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Registra automaticamente o tipo de personagem ao inserir um novo cavaleiro.</td>
+</tr>
+<tr>
+<td><code>trigger_inserir_tipo_personagem_inimigo</code></td>
+<td><code>inimigo</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Registra automaticamente o tipo de personagem ao inserir um novo inimigo.</td>
+</tr>
+<tr>
+<td><code>trigger_inserir_tipo_personagem_boss</code></td>
+<td><code>boss</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Registra automaticamente o tipo de personagem ao inserir um novo boss.</td>
+</tr>
+<tr>
+<td><code>trigger_inserir_tipo_npc_ferreiro</code></td>
+<td><code>ferreiro</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Registra automaticamente o tipo do NPC ao inserir um ferreiro.</td>
+</tr>
+<tr>
+<td><code>trigger_inserir_tipo_npc_mercador</code></td>
+<td><code>mercador</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Registra automaticamente o tipo do NPC ao inserir um mercador.</td>
+</tr>
+<tr>
+<td><code>trigger_inserir_tipo_npc_quest</code></td>
+<td><code>quest</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Registra automaticamente o tipo do NPC ao inserir um NPC de missão.</td>
+</tr>
+<tr>
+<td><code>trigger_before_insert_consumivel</code></td>
+<td><code>consumivel</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Classifica automaticamente o item como não-craftável antes da inserção.</td>
+</tr>
+<tr>
+<td><code>trigger_before_insert_livro</code></td>
+<td><code>livro</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Classifica automaticamente o item como não-craftável antes da inserção.</td>
+</tr>
+<tr>
+<td><code>trigger_before_insert_item_missao</code></td>
+<td><code>item_missao</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Classifica automaticamente o item como não-craftável antes da inserção.</td>
+</tr>
+<tr>
+<td><code>trigger_before_insert_material</code></td>
+<td><code>material</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Classifica automaticamente o item como craftável antes da inserção.</td>
+</tr>
+<tr>
+<td><code>trigger_before_insert_armadura</code></td>
+<td><code>armadura</code></td>
+<td><code>BEFORE INSERT</code></td>
+<td>Classifica automaticamente o item como craftável antes da inserção.</td>
+</tr>
+<tr>
+<td><code>trigger_insert_party</code></td>
+<td><code>player</code></td>
+<td><code>AFTER INSERT</code></td>
+<td>Cria automaticamente uma party para o jogador ao ser inserido.</td>
+</tr>
+<tr>
+<td><code>trigger_instanciar_player_missao</code></td>
+<td><code>player</code></td>
+<td><code>AFTER INSERT</code></td>
+<td>Associa todas as missões ao jogador quando ele é criado.</td>
+</tr>
+<tr>
+<td><code>trigger_instanciar_player_missao_new_missao</code></td>
+<td><code>missao</code></td>
+<td><code>AFTER INSERT</code></td>
+<td>Associa uma nova missão a todos os jogadores existentes.</td>
+</tr>
+<tr>
+<td><code>trigger_after_player_insert</code></td>
+<td><code>player</code></td>
+<td><code>AFTER INSERT</code></td>
+<td>Cria automaticamente um inventário inicial para o jogador.</td>
+</tr>
+<tr>
+<td><code>trigger_verificar_dinheiro</code></td>
+<td><code>inventario</code></td>
+<td><code>BEFORE UPDATE</code></td>
+<td>Impede que o jogador tenha dinheiro negativo.</td>
+</tr>
+<tr>
+<td><code>trigger_subir_de_nivel_player</code></td>
+<td><code>player</code></td>
+<td><code>BEFORE UPDATE</code></td>
+<td>Gerencia a progressão de nível do jogador com base no XP acumulado.</td>
+</tr>
+<tr>
+<td><code>trigger_subir_de_nivel_instancia_cavaleiro</code></td>
+<td><code>instancia_cavaleiro</code></td>
+<td><code>BEFORE UPDATE</code></td>
+<td>Gerencia a progressão de nível dos cavaleiros com base no XP acumulado.</td>
+</tr>
+<tr>
+<td><code>trigger_atualizar_status_missao</code></td>
+<td><code>item_armazenado</code></td>
+<td><code>AFTER INSERT</code></td>
+<td>Atualiza automaticamente o status da missão ao coletar um item necessário.</td>
+</tr>
+<tr>
+<td><code>trigger_remover_item_se_zero</code></td>
+<td><code>item_armazenado</code></td>
+<td><code>AFTER UPDATE</code></td>
+<td>Remove um item do inventário se sua quantidade chegar a zero.</td>
+</tr>
+<tr>
+<td><code>trigger_liberar_cavaleiro</code></td>
+<td><code>player_missao</code></td>
+<td><code>AFTER UPDATE</code></td>
+<td>Adiciona um cavaleiro ao jogador ao completar uma missão específica.</td>
+</tr>
+<tr>
+<td><code>trigger_player_morreu</code></td>
+<td><code>player</code></td>
+<td><code>BEFORE UPDATE</code></td>
+<td>Move o jogador para uma sala segura e reduz seu dinheiro ao morrer.</td>
+</tr>
+<tr>
+<td><code>impedir_slots_repetidos</code></td>
+<td><code>habilidade_player</code></td>
+<td><code>BEFORE INSERT/UPDATE</code></td>
+<td>Impede que o jogador atribua duas habilidades ao mesmo slot.</td>
+</tr>
+<tr>
+<td><code>trigger_remover_cavaleiro_party</code></td>
+<td><code>instancia_cavaleiro</code></td>
+<td><code>BEFORE UPDATE</code></td>
+<td>Remove um cavaleiro da party se seu HP chegar a zero.</td>
+</tr>
+<tr>
+<td><code>trigger_reduzir_item_habilidade_player</code></td>
+<td><code>habilidade_player</code></td>
+<td><code>AFTER INSERT</code></td>
+<td>Reduz a quantidade do livro de habilidade no inventário ao aprender uma nova.</td>
+</tr>
+<tr>
+<td><code>trigger_reduzir_item_habilidade_cavaleiro</code></td>
+<td><code>habilidade_cavaleiro</code></td>
+<td><code>AFTER INSERT</code></td>
+<td>Reduz a quantidade do livro de habilidade ao ensinar uma a um cavaleiro.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="triggers-nao-utilizados_1">Triggers não utilizados</h3>
+<table>
+<thead>
+<tr>
+<th>Trigger</th>
+<th>Tabela Afetada</th>
+<th>Evento</th>
+<th>Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>check_tipo_item_exclusivo_material</code></td>
+<td><code>material</code></td>
+<td><code>BEFORE INSERT/UPDATE</code></td>
+<td>Impede que um item pertença a mais de uma categoria de tipo de item.</td>
+</tr>
+<tr>
+<td><code>check_tipo_item_exclusivo_armadura</code></td>
+<td><code>armadura</code></td>
+<td><code>BEFORE INSERT/UPDATE</code></td>
+<td>Impede que um item pertença a mais de uma categoria de tipo de item.</td>
+</tr>
+<tr>
+<td><code>check_tipo_item_exclusivo_item_missao</code></td>
+<td><code>item_missao</code></td>
+<td><code>BEFORE INSERT/UPDATE</code></td>
+<td>Impede que um item pertença a mais de uma categoria de tipo de item.</td>
+</tr>
+<tr>
+<td><code>check_tipo_item_exclusivo_consumivel</code></td>
+<td><code>consumivel</code></td>
+<td><code>BEFORE INSERT/UPDATE</code></td>
+<td>Impede que um item pertença a mais de uma categoria de tipo de item.</td>
+</tr>
+<tr>
+<td><code>check_tipo_item_exclusivo_livro</code></td>
+<td><code>livro</code></td>
+<td><code>BEFORE INSERT/UPDATE</code></td>
+<td>Impede que um item pertença a mais de uma categoria de tipo de item.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="referencia-bibliografica">Referência Bibliográfica</h2>
+<blockquote>
+<p>[1] ELMASRI, Ramez; NAVATHE, Shamkant B. Sistemas de banco de dados. Tradução: Daniel Vieira. Revisão técnica: Enzo Seraphim; Thatyana de Faria Piola Seraphim. 6. ed. São Paulo: Pearson Addison Wesley, 2011. Capítulo 26. Modelos de dados avançados para aplicações avançada, página 626.</p>
+<p>[2] SILBERSCHATZ, Abraham; KORTH, Henry F.; SUDARSHAN, S. Database system concepts. 6. ed. New York: McGraw-Hill, 2011. Capítulo 5 Advanced SQL, tópico 5.3 Triggers, página 180</p>
+</blockquote>
+<h2 id="bibliografia">Bibliografia</h2>
+<blockquote>
+<p>Triggers e Stored Procedure Prison Trading. Disponível em: https://sbd1.github.io/2024.1-Prison-Trading/#/Modulo-3/Triggers Acesso em 13 de fevereiro de 2025.</p>
+<p>Triggers e Stored Procedure Ben 10. Disponível em: https://sbd1.github.io/2024.1-Ben10/modulo3/triggers/ Acesso em 13 de fevereiro de 2025.</p>
+</blockquote>
+<h2 id="historico-de-versoes">Historico de Versões</h2>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Data</th>
+<th>Modificação</th>
+<th>Autor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1</td>
+<td>02/02/2025</td>
+<td>Criação do Documento</td>
+<td>Vinícius Rufino</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>03/02/2025</td>
+<td>Atualização dos Triggers</td>
+<td>Vinícius Rufino</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>10/02/2025</td>
+<td>Atualização dos Triggers e Adição da Toggle List</td>
+<td>Vinícius Rufino</td>
+</tr>
+<tr>
+<td>2.0</td>
+<td>13/02/2025</td>
+<td>Atualização e refatoração do documento para versão final</td>
+<td><a href="https://github.com/lucasdray">Pedro Lucas</a></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.top"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>
