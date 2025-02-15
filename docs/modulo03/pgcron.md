@@ -1,4 +1,5 @@
-# `pg_cron`
+<h1 align="center">pg_cron</h1>
+
 
 ## 1. O que é o `pg_cron`?
 O `pg_cron` é uma extensão do PostgreSQL que permite agendar tarefas (jobs) de forma semelhante ao *cron* de sistemas Unix. Ela é especialmente útil quando precisamos automatizar processos recorrentes diretamente no SGBD, sem depender de scripts externos.
@@ -53,6 +54,6 @@ Ambos podem ser configurados para rodar a cada 5 minutos, por exemplo, garantind
 - [Documentação Oficial do PostgreSQL](https://www.postgresql.org/docs/)
 - [Repositório do `pg_cron` no GitHub](https://github.com/citusdata/pg_cron)
 - SILBERSCHATZ, A.; KORTH, H.; SUDARSHAN, S. *Sistemas de Banco de Dados*. 6ª Edição, McGraw Hill, 2020.
-- *Cavaleiros do Zodíaco – O Jogo de Terminal*: Documentação interna da disciplina de Banco de Dados, Universidade XX, 2025.
+- *Jogo Os Cavaleiros do Zodíaco – Sistemas de Banco de Dados 1, Universidade de Brasília, 2025.
 
 ---
