@@ -30,6 +30,7 @@ nav:
       - Triggers: "modulo03/triggers01.md"
       - Procedures: "modulo03/procedures.md"
       - Funções: "modulo03/funcoes.md"
+      - Extensões: "modulo03/pgcron.md"
     - Apresentação: 
       - Modulo 01: "apresentacao/modulo1.md"
       - Modulo 02: "apresentacao/modulo2.md"
